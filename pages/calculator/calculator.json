@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "手牌输入",
+  "usingComponents": {
+    "tile": "/components/tile/tile"
+  }
+}

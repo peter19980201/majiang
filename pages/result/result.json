@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "计算结果",
+  "usingComponents": {
+    "tile": "/components/tile/tile"
+  }
+}

@@ -1,0 +1,61 @@
+<view class="container">
+  <!-- 对局类型 -->
+  <view class="section">
+    <text class="section-title">对局类型</text>
+    <view class="seg-ctrl">
+      <text class="seg {{gameType === 'tonpuu' ? 'active' : ''}}"
+            bindtap="setGameType" data-val="tonpuu">东风战</text>
+      <text class="seg {{gameType === 'hanchan' ? 'active' : ''}}"
+            bindtap="setGameType" data-val="hanchan">半庄战</text>
+    </view>
+  </view>
+
+  <!-- 点数设置 -->
+  <view class="section">
+    <text class="section-title">点数设置</text>
+    <view class="setting-row">
+      <text class="setting-label">起始点棒</text>
+      <view class="stepper">
+        <text class="step-btn" bindtap="changeStartPoints" data-delta="{{-5000}}">-</text>
+        <text class="step-val">{{startPoints}}</text>
+        <text class="step-btn" bindtap="changeStartPoints" data-delta="{{5000}}">+</text>
+      </view>
+    </view>
+    <view class="setting-row">
+      <text class="setting-label">返还点</text>
+      <view class="stepper">
+        <text class="step-btn" bindtap="changeReturnPoints" data-delta="{{-5000}}">-</text>
+        <text class="step-val">{{returnPoints}}</text>
+        <text class="step-btn" bindtap="changeReturnPoints" data-delta="{{5000}}">+</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 顺位马 -->
+  <view class="section">
+    <text class="section-title">顺位马</text>
+    <view class="uma-grid">
+      <text class="uma-btn {{uma === item.value ? 'active' : ''}}"
+            wx:for="{{umaOptions}}" wx:key="value"
+            bindtap="setUma" data-val="{{item.value}}">{{item.label}}</text>
+    </view>
+  </view>
+
+  <!-- 玩家昵称 -->
+  <view class="section">
+    <text class="section-title">玩家昵称</text>
+    <view class="player-list">
+      <view class="player-row" wx:for="{{players}}" wx:key="index">
+        <text class="player-wind">{{windLabels[index]}}</text>
+        <input class="player-input" placeholder="{{item}}"
+               value="{{item}}" data-idx="{{index}}"
+               bindinput="onPlayerInput" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 开始按钮 -->
+  <view class="start-btn" bindtap="startGame">
+    <text>开始对局</text>
+  </view>
+</view>

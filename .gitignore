@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# WeChat DevTools
+node_modules/
+miniprogram_npm/
+project.private.config.json
+
+# Claude Code
+.claude/

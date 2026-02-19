@@ -1,0 +1,76 @@
+<view class="container">
+  <!-- 进行中的对局 -->
+  <view class="current-game" wx:if="{{currentGame}}">
+    <view class="current-header">
+      <view class="current-badge">进行中</view>
+      <text class="current-date">{{currentGame.date}}</text>
+      <text class="current-type">{{currentGame.gameState.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
+    </view>
+    <view class="current-info">
+      <text class="current-round">{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 {{currentGame.gameState.honba}}本场</text>
+      <text class="current-supply" wx:if="{{currentGame.gameState.riichiSticks > 0}}">供托{{currentGame.gameState.riichiSticks}}本</text>
+    </view>
+    <view class="current-players">
+      <view class="cp-item" wx:for="{{currentGame.gameState.players}}" wx:key="index">
+        <text class="cp-name">{{item.name}}</text>
+        <text class="cp-pts {{item.points < currentGame.gameState.config.startPoints ? 'negative' : 'positive'}}">{{item.points}}</text>
+      </view>
+    </view>
+    <view class="current-actions">
+      <text class="current-btn resume" bindtap="resumeGame">继续对局</text>
+      <text class="current-btn abandon" bindtap="abandonGame">结束并结算</text>
+    </view>
+  </view>
+
+  <view class="header" wx:if="{{historyList.length > 0}}">
+    <text class="header-title">共 {{historyList.length}} 场已完成对局</text>
+    <text class="clear-all" bindtap="clearAll">清空</text>
+  </view>
+
+  <view class="list">
+    <view class="card" wx:for="{{historyList}}" wx:key="id">
+      <view class="card-header" bindtap="onExpandTap" data-id="{{item.id}}">
+        <view class="card-info">
+          <text class="card-date">{{item.date}}</text>
+          <text class="card-type">{{item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
+          <text class="card-abandoned" wx:if="{{item.abandoned}}">中断</text>
+        </view>
+        <view class="card-right">
+          <text class="card-delete" catchtap="deleteRecord" data-id="{{item.id}}">删除</text>
+          <text class="card-arrow">{{expandedId === item.id ? '▲' : '▼'}}</text>
+        </view>
+      </view>
+      <!-- 排名摘要 -->
+      <view class="rank-row">
+        <view class="rank-item" wx:for="{{item.result}}" wx:for-item="r" wx:key="rank">
+          <text class="rank-num">{{r.rank}}位</text>
+          <text class="rank-name">{{r.name}}</text>
+          <text class="rank-pt {{r.finalPt >= 0 ? 'positive' : 'negative'}}">{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
+        </view>
+      </view>
+      <!-- 详情 -->
+      <view class="card-detail" wx:if="{{expandedId === item.id}}">
+        <view class="detail-section" wx:if="{{item.rounds.length > 0}}">
+          <text class="detail-title">每局记录</text>
+          <view class="round-item" wx:for="{{item.rounds}}" wx:for-item="rd" wx:key="index">
+            <text class="rd-round">{{rd.round}}</text>
+            <text class="rd-desc" wx:if="{{rd.type === 'ron'}}">{{rd.winner}} 荣和 {{rd.loser}} {{rd.points}}点</text>
+            <text class="rd-desc" wx:if="{{rd.type === 'tsumo'}}">{{rd.winner}} 自摸 {{rd.points}}点</text>
+            <text class="rd-desc" wx:if="{{rd.type === 'draw'}}">流局 ({{rd.tenpai}})</text>
+          </view>
+        </view>
+        <view class="detail-section">
+          <text class="detail-title">结算明细</text>
+          <view class="settle-row" wx:for="{{item.result}}" wx:for-item="r" wx:key="rank">
+            <text class="settle-name">{{r.rank}}位 {{r.name}}</text>
+            <text class="settle-info">{{r.points}}点 | 素点{{r.rawPt >= 0 ? '+' : ''}}{{r.rawPt}} | 马{{r.uma >= 0 ? '+' : ''}}{{r.uma}} | 最终{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{historyList.length === 0 && !currentGame}}">
+    <text class="empty-text">暂无历史对局</text>
+  </view>
+</view>

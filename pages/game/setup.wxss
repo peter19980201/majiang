@@ -1,0 +1,148 @@
+.container {
+  padding: 20rpx;
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+  background: #f0efe8;
+}
+
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  color: #888;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.seg-ctrl {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 10rpx;
+  padding: 4rpx;
+}
+
+.seg {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  padding: 16rpx 0;
+  border-radius: 8rpx;
+  color: #666;
+}
+
+.seg.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: bold;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.setting-row + .setting-row {
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.setting-label {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+}
+
+.step-btn {
+  width: 64rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #333;
+}
+
+.step-btn:active { background: #e0e0e0; }
+
+.step-val {
+  min-width: 120rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.uma-grid {
+  display: flex;
+  gap: 12rpx;
+}
+
+.uma-btn {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  padding: 16rpx 0;
+  border-radius: 10rpx;
+  background: #f5f5f5;
+  color: #666;
+}
+
+.uma-btn.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: bold;
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.player-wind {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+  width: 48rpx;
+  text-align: center;
+}
+
+.player-input {
+  flex: 1;
+  font-size: 28rpx;
+  padding: 16rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+}
+
+.start-btn {
+  margin-top: 32rpx;
+  background: linear-gradient(135deg, #1a6b3c, #2e7d32);
+  color: #fff;
+  text-align: center;
+  padding: 28rpx;
+  border-radius: 16rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  letter-spacing: 8rpx;
+}
+
+.start-btn:active { opacity: 0.9; }

@@ -1,0 +1,4 @@
+<view class="tile {{sizeClass}} {{suitClass}} {{extraClass}}" bindtap="onTap">
+  <text class="tile-num">{{displayNum}}</text>
+  <text class="tile-suit" wx:if="{{displaySuit}}">{{displaySuit}}</text>
+</view>

@@ -1,0 +1,580 @@
+.container {
+  padding: 20rpx;
+  padding-bottom: 120rpx;
+  background: #f0efe8;
+}
+
+/* 通用 section */
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+
+.section-title {
+  font-size: 24rpx;
+  color: #888;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.section-header .section-title { margin-bottom: 0; }
+
+.clear-btn {
+  font-size: 22rpx;
+  color: #e53935;
+  padding: 4rpx 16rpx;
+}
+
+/* 手牌展示 */
+.tile-display-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6rpx;
+  min-height: 90rpx;
+  align-items: center;
+}
+
+.tile-wrapper {
+  display: inline-block;
+}
+
+.placeholder {
+  color: #ccc;
+  font-size: 24rpx;
+  padding: 20rpx;
+  text-align: center;
+  width: 100%;
+}
+
+.placeholder.small {
+  padding: 10rpx;
+  font-size: 22rpx;
+}
+
+/* 和了牌+副露并排 */
+.row-sections {
+  display: flex;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.row-sections .section { margin-bottom: 0; }
+.flex-1 { flex: 1; }
+.flex-2 { flex: 2.5; }
+
+.agari-area { min-height: 90rpx; justify-content: center; }
+
+.add-meld-btn {
+  font-size: 22rpx;
+  color: #1a6b3c;
+  background: #e8f5e9;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+.melds-row {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.meld-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.meld-tiles-row {
+  display: flex;
+  gap: 2rpx;
+}
+
+.meld-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meld-label {
+  font-size: 18rpx;
+  color: #999;
+}
+
+.meld-del {
+  font-size: 24rpx;
+  color: #e53935;
+}
+
+/* 选牌器 */
+.picker-section { padding: 20rpx 16rpx; }
+
+.target-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20rpx;
+  background: #f0f0f0;
+  border-radius: 12rpx;
+  padding: 4rpx;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  padding: 12rpx 0;
+  border-radius: 10rpx;
+  color: #666;
+}
+
+.tab.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: bold;
+}
+
+.picker-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10rpx;
+}
+
+.picker-row.compact { margin-bottom: 6rpx; }
+
+.jihai-row { justify-content: flex-start; gap: 8rpx; }
+
+.picker-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.picker-tile.disabled { pointer-events: none; }
+
+.picker-tile-sm {
+  position: relative;
+}
+
+.remain-badge {
+  font-size: 16rpx;
+  color: #bbb;
+  margin-top: 2rpx;
+  text-align: center;
+}
+
+/* 场况设置 */
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+}
+
+.setting-label {
+  font-size: 26rpx;
+  color: #333;
+  min-width: 80rpx;
+}
+
+.seg-ctrl {
+  display: flex;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+  padding: 3rpx;
+  gap: 0;
+}
+
+.seg {
+  font-size: 24rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 6rpx;
+  color: #666;
+}
+
+.seg.active {
+  background: #1a6b3c;
+  color: #fff;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  background: #f0f0f0;
+  border-radius: 8rpx;
+}
+
+.step-btn {
+  width: 60rpx;
+  height: 52rpx;
+  line-height: 52rpx;
+  text-align: center;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.step-btn:active { background: #e0e0e0; }
+
+.step-val {
+  width: 60rpx;
+  text-align: center;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 附加状态 chip */
+.chip-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.chip {
+  font-size: 24rpx;
+  padding: 10rpx 20rpx;
+  border-radius: 24rpx;
+  background: #f0f0f0;
+  color: #666;
+  transition: all 0.15s;
+}
+
+.chip.on {
+  background: #e65100;
+  color: #fff;
+}
+
+.chip.small {
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+}
+
+.chip.on.red {
+  background: #c62828;
+}
+
+/* ドラ */
+.dora-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+}
+
+.dora-row {
+  display: flex;
+  align-items: center;
+}
+
+.dora-label {
+  font-size: 24rpx;
+  color: #333;
+  min-width: 100rpx;
+}
+
+.dora-tiles {
+  display: flex;
+  gap: 8rpx;
+  align-items: center;
+  flex: 1;
+}
+
+.dora-hint {
+  font-size: 20rpx;
+  color: #bbb;
+}
+
+.red-toggles {
+  display: flex;
+  gap: 10rpx;
+}
+
+/* 宝牌内嵌选牌器 */
+.dora-picker {
+  margin-top: 16rpx;
+  padding: 16rpx;
+  background: #f8f8f5;
+  border-radius: 12rpx;
+}
+
+.dora-picker-hint {
+  display: block;
+  font-size: 24rpx;
+  color: #e65100;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 12rpx;
+}
+
+.dora-picker-grid {
+  padding: 0 4rpx;
+}
+
+.dora-picker-cancel {
+  display: block;
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 12rpx;
+  padding: 8rpx;
+}
+
+.add-btn {
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 48rpx;
+  text-align: center;
+  background: #e8f5e9;
+  color: #1a6b3c;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* 副露弹窗 */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx;
+  width: 100%;
+  max-height: 80vh;
+}
+
+.modal-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.modal-subtitle {
+  font-size: 26rpx;
+  color: #666;
+  text-align: center;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.meld-type-grid {
+  display: flex;
+  gap: 16rpx;
+  flex-wrap: wrap;
+}
+
+.meld-type-btn {
+  flex: 1;
+  min-width: 140rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  padding: 24rpx 16rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.meld-type-btn:active { background: #e8f5e9; }
+
+.meld-type-icon {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+}
+
+.meld-type-desc {
+  font-size: 20rpx;
+  color: #999;
+}
+
+.editing-meld-display {
+  display: flex;
+  justify-content: center;
+  gap: 8rpx;
+  margin-bottom: 20rpx;
+  min-height: 90rpx;
+  align-items: center;
+}
+
+.modal-picker {
+  padding: 0 8rpx;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20rpx;
+}
+
+.modal-btn {
+  font-size: 28rpx;
+  padding: 12rpx 48rpx;
+  border-radius: 8rpx;
+}
+
+.modal-btn.cancel {
+  background: #f5f5f5;
+  color: #666;
+}
+
+/* 记分板模式: 场况信息栏 */
+.board-context {
+  padding: 16rpx 24rpx;
+}
+
+.bc-tags {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.bc-tag {
+  font-size: 24rpx;
+  color: #fff;
+  background: #1a6b3c;
+  padding: 6rpx 16rpx;
+  border-radius: 6rpx;
+  font-weight: bold;
+}
+
+/* 记分板模式: 结果弹窗 */
+.board-result {
+  max-height: 80vh;
+}
+
+.br-score-section {
+  text-align: center;
+  padding: 16rpx 0 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 16rpx;
+}
+
+.br-level {
+  display: block;
+  font-size: 28rpx;
+  color: #e65100;
+  font-weight: bold;
+  margin-bottom: 8rpx;
+}
+
+.br-score-line {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.br-fuhan {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.br-total {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+}
+
+.br-payment {
+  display: block;
+  font-size: 24rpx;
+  color: #888;
+  margin-top: 8rpx;
+}
+
+.br-sticks {
+  display: block;
+  font-size: 24rpx;
+  color: #e65100;
+  font-weight: bold;
+  margin-top: 8rpx;
+}
+
+.br-yaku-list {
+  max-height: 240rpx;
+  margin-bottom: 20rpx;
+}
+
+.br-yaku-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10rpx 8rpx;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.br-yaku-item:last-child {
+  border-bottom: none;
+}
+
+.br-yaku-name {
+  font-size: 26rpx;
+  color: #333;
+}
+
+.br-yaku-han {
+  font-size: 26rpx;
+  color: #e65100;
+  font-weight: bold;
+}
+
+.br-yaku-han.yakuman {
+  color: #c62828;
+}
+
+.br-actions {
+  display: flex;
+  gap: 16rpx;
+}
+
+.br-actions .modal-btn {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  font-weight: bold;
+}
+
+.br-actions .modal-btn.confirm {
+  background: #1a6b3c;
+  color: #fff;
+}
+
+/* 计算按钮 */
+.calc-btn {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: linear-gradient(135deg, #1a6b3c, #2e7d32);
+  color: #fff;
+  text-align: center;
+  padding: 28rpx;
+  font-size: 34rpx;
+  font-weight: bold;
+  z-index: 100;
+  letter-spacing: 8rpx;
+}
+
+.calc-btn:active { opacity: 0.9; }

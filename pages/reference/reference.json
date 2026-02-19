@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "役种速查",
+  "usingComponents": {
+    "tile": "/components/tile/tile"
+  }
+}

@@ -1,0 +1,211 @@
+<view class="container">
+  <!-- 局况信息 -->
+  <view class="round-bar">
+    <text class="round-label">{{roundWindName}}{{roundNum}}局</text>
+    <text class="honba-label">{{honba}}本场</text>
+    <text class="riichi-label" wx:if="{{riichiSticks > 0}}">供托{{riichiSticks}}本</text>
+    <text class="game-over-badge" wx:if="{{gameOver}}">终局</text>
+  </view>
+
+  <!-- 四家点棒 -->
+  <view class="players-grid">
+    <view class="player-card {{index === dealerIdx ? 'dealer' : ''}}"
+          wx:for="{{players}}" wx:key="index">
+      <view class="player-top">
+        <text class="player-wind-badge">{{windLabels[item.seatWind]}}</text>
+        <text class="dealer-mark" wx:if="{{index === dealerIdx}}">庄</text>
+      </view>
+      <text class="player-name">{{item.name}}</text>
+      <text class="player-points {{item.points < 0 ? 'negative' : ''}}">{{item.points}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-area" wx:if="{{!gameOver}}">
+    <view class="main-action-btn" bindtap="showActions">
+      <text>录入本局结果</text>
+    </view>
+  </view>
+
+  <!-- 终局按钮 -->
+  <view class="action-area" wx:if="{{gameOver}}">
+    <view class="main-action-btn result" bindtap="doSettlement">
+      <text>查看结算</text>
+    </view>
+  </view>
+
+  <!-- 局历史 -->
+  <view class="section" wx:if="{{roundHistory.length > 0}}">
+    <text class="section-title">本局记录</text>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{roundHistory}}" wx:key="index">
+        <text class="hist-round">{{item.round}}</text>
+        <view class="hist-content" wx:if="{{item.type === 'ron'}}">
+          <text class="hist-desc">{{item.winner}} 荣和 {{item.loser}} {{item.points}}点</text>
+          <text class="hist-sub" wx:if="{{item.level || item.yakuSummary}}">{{item.level ? item.level + ' ' : ''}}{{item.yakuSummary}}</text>
+        </view>
+        <view class="hist-content" wx:if="{{item.type === 'tsumo'}}">
+          <text class="hist-desc">{{item.winner}} 自摸 {{item.points}}点</text>
+          <text class="hist-sub" wx:if="{{item.level || item.yakuSummary}}">{{item.level ? item.level + ' ' : ''}}{{item.yakuSummary}}</text>
+        </view>
+        <text class="hist-desc" wx:if="{{item.type === 'draw'}}">流局 ({{item.tenpai}})</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作选择弹窗 -->
+  <view class="modal-mask" wx:if="{{showActionModal}}" bindtap="closeActions">
+    <view class="modal-content" catchtap="stopBubble">
+      <text class="modal-title">本局结果</text>
+      <view class="action-grid">
+        <view class="action-item" bindtap="startRon">
+          <text class="action-icon">荣</text>
+          <text class="action-text">荣和</text>
+        </view>
+        <view class="action-item" bindtap="startTsumo">
+          <text class="action-icon">摸</text>
+          <text class="action-text">自摸</text>
+        </view>
+        <view class="action-item" bindtap="startDraw">
+          <text class="action-icon">流</text>
+          <text class="action-text">流局</text>
+        </view>
+      </view>
+      <view class="early-settle" wx:if="{{roundHistory.length > 0}}" bindtap="earlySettlement">
+        <text class="early-settle-text">提前结算</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 荣和弹窗 -->
+  <view class="modal-mask" wx:if="{{showRonModal}}" bindtap="closeRon">
+    <view class="modal-content tall" catchtap="stopBubble">
+      <text class="modal-title">荣和</text>
+      <text class="modal-label">和了者</text>
+      <view class="player-select">
+        <text class="psel {{selectedWinner === index ? 'active' : ''}}"
+              wx:for="{{players}}" wx:key="index"
+              bindtap="selectRonWinner" data-idx="{{index}}">{{item.name}}</text>
+      </view>
+      <text class="modal-label">放铳者</text>
+      <view class="player-select">
+        <text class="psel {{selectedLoser === index ? 'active' : ''}} {{selectedWinner === index ? 'disabled' : ''}}"
+              wx:for="{{players}}" wx:key="index"
+              bindtap="selectRonLoser" data-idx="{{index}}">{{item.name}}</text>
+      </view>
+      <text class="modal-label">本局立直<text class="riichi-info" wx:if="{{riichiSticks > 0}}"> (场上供托{{riichiSticks}}本)</text></text>
+      <view class="riichi-toggle-list">
+        <view class="riichi-toggle-row" wx:for="{{players}}" wx:key="index"
+              bindtap="toggleRoundRiichi" data-idx="{{index}}">
+          <text class="riichi-toggle-name">{{item.name}}</text>
+          <text class="riichi-toggle-check {{roundRiichi[index] ? 'on' : ''}}">{{roundRiichi[index] ? '立直' : '-'}}</text>
+        </view>
+      </view>
+      <view class="modal-actions">
+        <text class="modal-btn cancel" bindtap="closeRon">取消</text>
+        <text class="modal-btn confirm" bindtap="goToCalcRon">计算点数</text>
+      </view>
+      <view class="manual-divider" bindtap="toggleManualInput">
+        <view class="divider-line"></view>
+        <text class="divider-text">{{showManualInput ? '收起' : '已知点数？手动输入'}}</text>
+        <view class="divider-line"></view>
+      </view>
+      <view wx:if="{{showManualInput}}" class="manual-area">
+        <input class="points-input" type="number" placeholder="点数 (不含本场)"
+               value="{{inputPoints}}" bindinput="onPointsInput" />
+        <text class="manual-confirm-btn" bindtap="confirmRon">手动确认</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 自摸弹窗 -->
+  <view class="modal-mask" wx:if="{{showTsumoModal}}" bindtap="closeTsumo">
+    <view class="modal-content tall" catchtap="stopBubble">
+      <text class="modal-title">自摸</text>
+      <text class="modal-label">和了者</text>
+      <view class="player-select">
+        <text class="psel {{selectedWinner === index ? 'active' : ''}}"
+              wx:for="{{players}}" wx:key="index"
+              bindtap="selectTsumoWinner" data-idx="{{index}}">{{item.name}}</text>
+      </view>
+      <text class="modal-label">本局立直<text class="riichi-info" wx:if="{{riichiSticks > 0}}"> (场上供托{{riichiSticks}}本)</text></text>
+      <view class="riichi-toggle-list">
+        <view class="riichi-toggle-row" wx:for="{{players}}" wx:key="index"
+              bindtap="toggleRoundRiichi" data-idx="{{index}}">
+          <text class="riichi-toggle-name">{{item.name}}</text>
+          <text class="riichi-toggle-check {{roundRiichi[index] ? 'on' : ''}}">{{roundRiichi[index] ? '立直' : '-'}}</text>
+        </view>
+      </view>
+      <view class="modal-actions">
+        <text class="modal-btn cancel" bindtap="closeTsumo">取消</text>
+        <text class="modal-btn confirm" bindtap="goToCalcTsumo">计算点数</text>
+      </view>
+      <view class="manual-divider" bindtap="toggleManualInput">
+        <view class="divider-line"></view>
+        <text class="divider-text">{{showManualInput ? '收起' : '已知点数？手动输入'}}</text>
+        <view class="divider-line"></view>
+      </view>
+      <view wx:if="{{showManualInput}}" class="manual-area">
+        <input class="points-input" type="number" placeholder="总点数 (不含本场)"
+               value="{{inputPoints}}" bindinput="onPointsInput" />
+        <text class="manual-confirm-btn" bindtap="confirmTsumo">手动确认</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 流局弹窗 -->
+  <view class="modal-mask" wx:if="{{showDrawModal}}" bindtap="closeDraw">
+    <view class="modal-content tall" catchtap="stopBubble">
+      <text class="modal-title">流局</text>
+      <text class="modal-label">本局立直<text class="riichi-info" wx:if="{{riichiSticks > 0}}"> (场上供托{{riichiSticks}}本)</text></text>
+      <view class="riichi-toggle-list">
+        <view class="riichi-toggle-row" wx:for="{{players}}" wx:key="index"
+              bindtap="toggleRoundRiichi" data-idx="{{index}}">
+          <text class="riichi-toggle-name">{{item.name}}</text>
+          <text class="riichi-toggle-check {{roundRiichi[index] ? 'on' : ''}}">{{roundRiichi[index] ? '立直' : '-'}}</text>
+        </view>
+      </view>
+      <text class="modal-label">听牌情况</text>
+      <view class="tenpai-list">
+        <view class="tenpai-row" wx:for="{{players}}" wx:key="index"
+              bindtap="toggleTenpai" data-idx="{{index}}">
+          <text class="tenpai-name">{{item.name}}</text>
+          <text class="tenpai-check {{drawTenpai[index] ? 'on' : ''}}">{{drawTenpai[index] ? '听牌' : '不听'}}</text>
+        </view>
+      </view>
+      <view class="modal-actions">
+        <text class="modal-btn cancel" bindtap="closeDraw">取消</text>
+        <text class="modal-btn confirm" bindtap="confirmDraw">确认</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 结算弹窗 -->
+  <view class="modal-mask" wx:if="{{showResultModal}}" bindtap="closeResult">
+    <view class="modal-content tall" catchtap="stopBubble">
+      <text class="modal-title">对局结算</text>
+      <view class="result-table">
+        <view class="result-header">
+          <text class="res-col rank">顺位</text>
+          <text class="res-col name">玩家</text>
+          <text class="res-col pts">点棒</text>
+          <text class="res-col pt">素点</text>
+          <text class="res-col uma">马</text>
+          <text class="res-col final">最终</text>
+        </view>
+        <view class="result-row" wx:for="{{finalResult}}" wx:key="rank">
+          <text class="res-col rank">{{item.rank}}位</text>
+          <text class="res-col name">{{item.name}}</text>
+          <text class="res-col pts">{{item.points}}</text>
+          <text class="res-col pt {{item.rawPt >= 0 ? 'positive' : 'negative'}}">{{item.rawPt >= 0 ? '+' : ''}}{{item.rawPt}}</text>
+          <text class="res-col uma {{item.uma >= 0 ? 'positive' : 'negative'}}">{{item.uma >= 0 ? '+' : ''}}{{item.uma}}</text>
+          <text class="res-col final bold {{item.finalPt >= 0 ? 'positive' : 'negative'}}">{{item.finalPt >= 0 ? '+' : ''}}{{item.finalPt}}</text>
+        </view>
+      </view>
+      <view class="modal-actions">
+        <text class="modal-btn cancel" bindtap="goHistory">历史记录</text>
+        <text class="modal-btn confirm" bindtap="goHome">返回首页</text>
+      </view>
+    </view>
+  </view>
+</view>

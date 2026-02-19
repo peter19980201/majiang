@@ -1,0 +1,332 @@
+<view class="container">
+  <!-- 手牌展示区 -->
+  <view class="section">
+    <view class="section-header">
+      <text class="section-title">手牌 {{handCount}}/{{maxHandCount}}</text>
+      <text class="clear-btn" wx:if="{{hand.length > 0}}" bindtap="clearHand">清空</text>
+    </view>
+    <view class="tile-display-area">
+      <block wx:if="{{hand.length > 0}}">
+        <view wx:for="{{hand}}" wx:key="index" class="tile-wrapper"
+              bindtap="removeHandTile" data-index="{{index}}">
+          <tile tid="{{item}}" size="normal"></tile>
+        </view>
+      </block>
+      <view wx:else class="placeholder">
+        <text>点击下方选牌区添加手牌</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 和了牌 + 副露 并排 -->
+  <view class="row-sections">
+    <!-- 和了牌 -->
+    <view class="section flex-1">
+      <text class="section-title">和了牌</text>
+      <view class="tile-display-area agari-area">
+        <view wx:if="{{agariTile !== null}}" class="tile-wrapper" bindtap="removeAgari">
+          <tile tid="{{agariTile}}" size="normal" extra="agari"></tile>
+        </view>
+        <view wx:else class="placeholder small">
+          <text>待选择</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 副露摘要 -->
+    <view class="section flex-2">
+      <view class="section-header">
+        <text class="section-title">副露 {{melds.length}}/4</text>
+        <text class="add-meld-btn" wx:if="{{melds.length < 4}}" bindtap="showMeldPanel">+添加</text>
+      </view>
+      <view class="melds-row">
+        <view class="meld-group" wx:for="{{melds}}" wx:key="index">
+          <view class="meld-tiles-row">
+            <tile wx:for="{{item.tiles}}" wx:for-item="t" wx:key="*this"
+                  tid="{{t}}" size="mini"
+                  extra="{{item.type === 'ankan' ? 'dark' : ''}}"></tile>
+          </view>
+          <view class="meld-bottom">
+            <text class="meld-label">{{meldTypeNames[item.type]}}</text>
+            <text class="meld-del" bindtap="removeMeld" data-index="{{index}}">×</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 输入目标切换 -->
+  <view class="section picker-section">
+    <view class="target-tabs">
+      <text class="tab {{inputTarget === 'hand' ? 'active' : ''}}"
+            bindtap="switchTarget" data-target="hand">选手牌</text>
+      <text class="tab {{inputTarget === 'agari' ? 'active' : ''}}"
+            bindtap="switchTarget" data-target="agari">选和了牌</text>
+    </view>
+
+    <!-- 选牌器: 万子 -->
+    <view class="picker-row">
+      <view class="picker-tile {{tileRemaining[index] <= 0 ? 'disabled' : ''}}"
+            wx:for="{{9}}" wx:key="*this"
+            data-id="{{index}}" bindtap="selectTile">
+        <tile tid="{{index}}" size="picker" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge">{{tileRemaining[index]}}</text>
+      </view>
+    </view>
+    <!-- 筒子 -->
+    <view class="picker-row">
+      <view class="picker-tile {{tileRemaining[index+9] <= 0 ? 'disabled' : ''}}"
+            wx:for="{{9}}" wx:key="*this"
+            data-id="{{index + 9}}" bindtap="selectTile">
+        <tile tid="{{index + 9}}" size="picker" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge">{{tileRemaining[index + 9]}}</text>
+      </view>
+    </view>
+    <!-- 索子 -->
+    <view class="picker-row">
+      <view class="picker-tile {{tileRemaining[index+18] <= 0 ? 'disabled' : ''}}"
+            wx:for="{{9}}" wx:key="*this"
+            data-id="{{index + 18}}" bindtap="selectTile">
+        <tile tid="{{index + 18}}" size="picker" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge">{{tileRemaining[index + 18]}}</text>
+      </view>
+    </view>
+    <!-- 字牌 -->
+    <view class="picker-row jihai-row">
+      <view class="picker-tile {{tileRemaining[index+27] <= 0 ? 'disabled' : ''}}"
+            wx:for="{{7}}" wx:key="*this"
+            data-id="{{index + 27}}" bindtap="selectTile">
+        <tile tid="{{index + 27}}" size="picker" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge">{{tileRemaining[index + 27]}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 记分板模式: 场况信息栏 -->
+  <view class="section board-context" wx:if="{{boardMode}}">
+    <view class="bc-tags">
+      <text class="bc-tag">{{windNames[bakaze]}}场</text>
+      <text class="bc-tag">{{windNames[jikaze]}}家</text>
+      <text class="bc-tag">{{agariType === 'tsumo' ? '自摸' : '荣和'}}</text>
+      <text class="bc-tag" wx:if="{{honba > 0}}">{{honba}}本场</text>
+    </view>
+  </view>
+
+  <!-- 场况设置 (非记分板模式) -->
+  <view class="section" wx:if="{{!boardMode}}">
+    <text class="section-title">场况</text>
+    <view class="settings-grid">
+      <view class="setting-item">
+        <text class="setting-label">场风</text>
+        <view class="seg-ctrl">
+          <text class="seg {{bakaze === 27 ? 'active' : ''}}" bindtap="setBakaze" data-val="27">東</text>
+          <text class="seg {{bakaze === 28 ? 'active' : ''}}" bindtap="setBakaze" data-val="28">南</text>
+        </view>
+      </view>
+      <view class="setting-item">
+        <text class="setting-label">自风</text>
+        <view class="seg-ctrl">
+          <text class="seg {{jikaze === 27 ? 'active' : ''}}" bindtap="setJikaze" data-val="27">東</text>
+          <text class="seg {{jikaze === 28 ? 'active' : ''}}" bindtap="setJikaze" data-val="28">南</text>
+          <text class="seg {{jikaze === 29 ? 'active' : ''}}" bindtap="setJikaze" data-val="29">西</text>
+          <text class="seg {{jikaze === 30 ? 'active' : ''}}" bindtap="setJikaze" data-val="30">北</text>
+        </view>
+      </view>
+      <view class="setting-item">
+        <text class="setting-label">和了</text>
+        <view class="seg-ctrl">
+          <text class="seg {{agariType === 'tsumo' ? 'active' : ''}}" bindtap="setAgariType" data-val="tsumo">自摸</text>
+          <text class="seg {{agariType === 'ron' ? 'active' : ''}}" bindtap="setAgariType" data-val="ron">荣和</text>
+        </view>
+      </view>
+      <view class="setting-item">
+        <text class="setting-label">本场</text>
+        <view class="stepper">
+          <text class="step-btn" bindtap="changeHonba" data-delta="{{-1}}">−</text>
+          <text class="step-val">{{honba}}</text>
+          <text class="step-btn" bindtap="changeHonba" data-delta="{{1}}">+</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 附加状态 -->
+  <view class="section">
+    <text class="section-title">附加状态</text>
+    <view class="chip-grid">
+      <text class="chip {{riichi ? 'on' : ''}}" bindtap="toggleFlag" data-flag="riichi">立直</text>
+      <text class="chip {{doubleRiichi ? 'on' : ''}}" bindtap="toggleFlag" data-flag="doubleRiichi">W立直</text>
+      <text class="chip {{ippatsu ? 'on' : ''}}" bindtap="toggleFlag" data-flag="ippatsu">一发</text>
+      <text class="chip {{haitei ? 'on' : ''}}" bindtap="toggleFlag" data-flag="haitei">海底/河底</text>
+      <text class="chip {{rinshan ? 'on' : ''}}" bindtap="toggleFlag" data-flag="rinshan">岭上</text>
+      <text class="chip {{chankan ? 'on' : ''}}" bindtap="toggleFlag" data-flag="chankan">抢杠</text>
+      <text class="chip {{tenhou ? 'on' : ''}}" bindtap="toggleFlag" data-flag="tenhou">天和</text>
+      <text class="chip {{chihou ? 'on' : ''}}" bindtap="toggleFlag" data-flag="chihou">地和</text>
+    </view>
+  </view>
+
+  <!-- ドラ -->
+  <view class="section">
+    <text class="section-title">宝牌 (ドラ指示牌)</text>
+    <view class="dora-section">
+      <view class="dora-row">
+        <text class="dora-label">表ドラ</text>
+        <view class="dora-tiles">
+          <view wx:for="{{dora}}" wx:key="index" class="tile-wrapper"
+                bindtap="removeDora" data-type="dora" data-index="{{index}}">
+            <tile tid="{{item}}" size="small"></tile>
+          </view>
+          <text class="add-btn" wx:if="{{dora.length < 4 && !doraInputType}}"
+                bindtap="startDoraInput" data-type="dora">+</text>
+        </view>
+      </view>
+      <view class="dora-row">
+        <text class="dora-label">里ドラ</text>
+        <view class="dora-tiles">
+          <view wx:for="{{uraDora}}" wx:key="index" class="tile-wrapper"
+                bindtap="removeDora" data-type="uraDora" data-index="{{index}}">
+            <tile tid="{{item}}" size="small"></tile>
+          </view>
+          <text class="add-btn" wx:if="{{uraDora.length < 4 && (riichi || doubleRiichi) && !doraInputType}}"
+                bindtap="startDoraInput" data-type="uraDora">+</text>
+          <text class="dora-hint" wx:if="{{!riichi && !doubleRiichi}}">需立直</text>
+        </view>
+      </view>
+      <!-- 宝牌内嵌选牌器 -->
+      <view wx:if="{{doraInputType}}" class="dora-picker">
+        <text class="dora-picker-hint">选择{{doraInputType === 'dora' ? '表' : '里'}}ドラ指示牌 (点击选择)</text>
+        <view class="dora-picker-grid">
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index}}" bindtap="selectDoraTile">
+              <tile tid="{{index}}" size="small" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index+9}}" bindtap="selectDoraTile">
+              <tile tid="{{index+9}}" size="small" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index+18}}" bindtap="selectDoraTile">
+              <tile tid="{{index+18}}" size="small" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact jihai-row">
+            <view class="picker-tile-sm" wx:for="{{7}}" wx:key="*this"
+                  data-id="{{index+27}}" bindtap="selectDoraTile">
+              <tile tid="{{index+27}}" size="small" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+        </view>
+        <text class="dora-picker-cancel" bindtap="cancelDoraInput">取消</text>
+      </view>
+      <view class="dora-row" wx:if="{{!doraInputType}}">
+        <text class="dora-label">赤ドラ</text>
+        <view class="red-toggles">
+          <text class="chip small {{redM5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redM5">赤五万</text>
+          <text class="chip small {{redP5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redP5">赤五筒</text>
+          <text class="chip small {{redS5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redS5">赤五索</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view style="height: 120rpx"></view>
+
+  <!-- 副露弹窗 -->
+  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel">
+    <view class="modal-content" catchtap="stopBubble">
+      <text class="modal-title">添加副露 - 选择类型</text>
+      <view class="meld-type-grid" wx:if="{{!editingMeldType}}">
+        <view class="meld-type-btn" bindtap="startMeldInput" data-type="chi">
+          <text class="meld-type-icon">吃</text>
+          <text class="meld-type-desc">顺子 (3张)</text>
+        </view>
+        <view class="meld-type-btn" bindtap="startMeldInput" data-type="pon">
+          <text class="meld-type-icon">碰</text>
+          <text class="meld-type-desc">刻子 (3张)</text>
+        </view>
+        <view class="meld-type-btn" bindtap="startMeldInput" data-type="minkan">
+          <text class="meld-type-icon">明杠</text>
+          <text class="meld-type-desc">明杠 (4张)</text>
+        </view>
+        <view class="meld-type-btn" bindtap="startMeldInput" data-type="ankan">
+          <text class="meld-type-icon">暗杠</text>
+          <text class="meld-type-desc">暗杠 (4张)</text>
+        </view>
+      </view>
+      <view wx:else>
+        <text class="modal-subtitle">{{meldTypeNames[editingMeldType]}} - 请选择{{meldNeedCount - editingMeldTiles.length}}张牌</text>
+        <view class="editing-meld-display">
+          <tile wx:for="{{editingMeldTiles}}" wx:key="index" tid="{{item}}" size="normal"></tile>
+        </view>
+        <!-- 弹窗内选牌器 -->
+        <view class="modal-picker">
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index}}" bindtap="selectMeldTile">
+              <tile tid="{{index}}" size="small" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index+9}}" bindtap="selectMeldTile">
+              <tile tid="{{index+9}}" size="small" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact">
+            <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
+                  data-id="{{index+18}}" bindtap="selectMeldTile">
+              <tile tid="{{index+18}}" size="small" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+          <view class="picker-row compact jihai-row">
+            <view class="picker-tile-sm" wx:for="{{7}}" wx:key="*this"
+                  data-id="{{index+27}}" bindtap="selectMeldTile">
+              <tile tid="{{index+27}}" size="small" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+            </view>
+          </view>
+        </view>
+        <view class="modal-actions">
+          <text class="modal-btn cancel" bindtap="cancelMeldInput">取消</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 记分板模式: 结果弹窗 -->
+  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult">
+    <view class="modal-content board-result" catchtap="stopBubble">
+      <text class="modal-title">计算结果</text>
+      <view class="br-score-section">
+        <text class="br-level" wx:if="{{boardResult.level}}">{{boardResult.level}}</text>
+        <view class="br-score-line">
+          <text class="br-fuhan" wx:if="{{boardResult.han > 0}}">{{boardResult.fu}}符 {{boardResult.han}}番</text>
+          <text class="br-total">{{boardResult.payment.total}}点</text>
+        </view>
+        <text class="br-payment">{{boardResult.payment.description}}</text>
+        <text class="br-sticks" wx:if="{{boardSticks > 0}}">+ 供托收入 {{boardSticks * 1000}}点 ({{boardSticks}}本)</text>
+      </view>
+      <scroll-view class="br-yaku-list" scroll-y="{{true}}">
+        <view class="br-yaku-item" wx:for="{{boardResult.yaku}}" wx:key="index">
+          <text class="br-yaku-name">{{item.name}}</text>
+          <text class="br-yaku-han" wx:if="{{!item.isYakuman}}">{{item.han}}番</text>
+          <text class="br-yaku-han yakuman" wx:elif="{{item.yakumanTimes >= 2}}">双倍役满</text>
+          <text class="br-yaku-han yakuman" wx:else>役满</text>
+        </view>
+      </scroll-view>
+      <view class="br-actions">
+        <text class="modal-btn cancel" bindtap="cancelBoardResult">重新输入</text>
+        <text class="modal-btn confirm" bindtap="confirmBoardResult">确认录入</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 计算按钮 -->
+  <view class="calc-btn" bindtap="doCalculate">
+    <text>{{boardMode ? '计算点数' : '计 算'}}</text>
+  </view>
+</view>

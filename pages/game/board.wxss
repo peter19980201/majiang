@@ -1,0 +1,470 @@
+.container {
+  padding: 20rpx;
+  padding-bottom: 40rpx;
+  min-height: 100vh;
+  background: #f0efe8;
+}
+
+/* 局况信息 */
+.round-bar {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  background: #1a6b3c;
+  padding: 16rpx 24rpx;
+  border-radius: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.round-label {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.honba-label {
+  font-size: 24rpx;
+  color: rgba(255,255,255,0.8);
+}
+
+.riichi-label {
+  font-size: 24rpx;
+  color: #ffeb3b;
+}
+
+.game-over-badge {
+  font-size: 24rpx;
+  background: #e65100;
+  color: #fff;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  margin-left: auto;
+}
+
+/* 四家点棒 */
+.players-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.player-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  position: relative;
+}
+
+.player-card.dealer {
+  border: 3rpx solid #e65100;
+}
+
+.player-top {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.player-wind-badge {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+}
+
+.dealer-mark {
+  font-size: 20rpx;
+  background: #e65100;
+  color: #fff;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+}
+
+.player-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.player-points {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+}
+
+.player-points.negative {
+  color: #c62828;
+}
+
+/* 操作按钮 */
+.action-area {
+  margin-bottom: 20rpx;
+}
+
+.main-action-btn {
+  background: linear-gradient(135deg, #1a6b3c, #2e7d32);
+  color: #fff;
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.main-action-btn.result {
+  background: linear-gradient(135deg, #e65100, #ef6c00);
+}
+
+.main-action-btn:active { opacity: 0.9; }
+
+/* 历史记录 */
+.section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.section-title {
+  font-size: 26rpx;
+  color: #888;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 12rpx;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.history-item {
+  display: flex;
+  gap: 12rpx;
+  align-items: baseline;
+  padding: 8rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.history-item:last-child { border-bottom: none; }
+
+.hist-round {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.hist-desc {
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* 弹窗通用 */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx;
+  width: 100%;
+  max-height: 70vh;
+}
+
+.modal-content.tall {
+  max-height: 85vh;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  display: block;
+  margin-bottom: 24rpx;
+}
+
+.modal-label {
+  font-size: 26rpx;
+  color: #666;
+  display: block;
+  margin-bottom: 12rpx;
+  margin-top: 16rpx;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 24rpx;
+}
+
+.modal-btn {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.modal-btn.cancel { background: #f5f5f5; color: #666; }
+.modal-btn.confirm { background: #1a6b3c; color: #fff; }
+
+/* 操作选择 */
+.action-grid {
+  display: flex;
+  gap: 16rpx;
+}
+
+.action-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 32rpx 16rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+}
+
+.action-item:active { background: #e8f5e9; }
+
+.early-settle {
+  margin-top: 20rpx;
+  text-align: center;
+  padding: 16rpx;
+}
+
+.early-settle-text {
+  font-size: 24rpx;
+  color: #999;
+  text-decoration: underline;
+}
+
+.action-icon {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #1a6b3c;
+}
+
+.action-text {
+  font-size: 26rpx;
+  color: #666;
+}
+
+/* 玩家选择 */
+.player-select {
+  display: flex;
+  gap: 10rpx;
+}
+
+.psel {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  border-radius: 10rpx;
+  background: #f5f5f5;
+  font-size: 26rpx;
+  color: #333;
+}
+
+.psel.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: bold;
+}
+
+.psel.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.points-input {
+  width: 100%;
+  padding: 16rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* 手动输入折叠区 */
+.manual-divider {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  padding: 0 8rpx;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1rpx;
+  background: #e0e0e0;
+}
+
+.divider-text {
+  font-size: 22rpx;
+  color: #999;
+  white-space: nowrap;
+}
+
+.manual-area {
+  margin-top: 16rpx;
+  display: flex;
+  gap: 12rpx;
+  align-items: center;
+}
+
+.manual-area .points-input {
+  flex: 1;
+  font-size: 28rpx;
+}
+
+.manual-confirm-btn {
+  font-size: 24rpx;
+  color: #fff;
+  background: #1a6b3c;
+  padding: 14rpx 24rpx;
+  border-radius: 10rpx;
+  white-space: nowrap;
+}
+
+/* 历史记录增强 */
+.hist-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.hist-sub {
+  font-size: 20rpx;
+  color: #999;
+}
+
+/* 流局 */
+.tenpai-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.tenpai-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 10rpx;
+}
+
+.tenpai-name {
+  font-size: 28rpx;
+  color: #333;
+}
+
+.tenpai-check {
+  font-size: 24rpx;
+  color: #999;
+  padding: 4rpx 16rpx;
+  border-radius: 6rpx;
+}
+
+.tenpai-check.on {
+  background: #1a6b3c;
+  color: #fff;
+}
+
+/* 结算表 */
+.result-table {
+  margin-bottom: 8rpx;
+}
+
+.result-header {
+  display: flex;
+  padding: 12rpx 0;
+  border-bottom: 2rpx solid #e0e0e0;
+}
+
+.result-row {
+  display: flex;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.result-row:last-child { border-bottom: none; }
+
+.res-col {
+  font-size: 24rpx;
+  color: #333;
+}
+
+.res-col.rank { width: 60rpx; font-weight: bold; }
+.res-col.name { flex: 1; }
+.res-col.pts { width: 120rpx; text-align: right; }
+.res-col.pt { width: 90rpx; text-align: right; }
+.res-col.uma { width: 80rpx; text-align: right; }
+.res-col.final { width: 90rpx; text-align: right; }
+
+.result-header .res-col {
+  font-size: 22rpx;
+  color: #999;
+}
+
+.positive { color: #1a6b3c; }
+.negative { color: #c62828; }
+.bold { font-weight: bold; }
+
+/* 立直切换 */
+.riichi-info {
+  font-size: 22rpx;
+  color: #e65100;
+}
+
+.riichi-toggle-list {
+  display: flex;
+  gap: 10rpx;
+}
+
+.riichi-toggle-row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+  padding: 10rpx 0;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+}
+
+.riichi-toggle-name {
+  font-size: 22rpx;
+  color: #666;
+}
+
+.riichi-toggle-check {
+  font-size: 22rpx;
+  color: #ccc;
+  padding: 2rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.riichi-toggle-check.on {
+  background: #e65100;
+  color: #fff;
+  font-weight: bold;
+}
