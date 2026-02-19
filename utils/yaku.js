@@ -273,7 +273,7 @@ function judgeNormalYaku(decomp, melds, ctx) {
   // 役牌
   checkYakuhai(allMentsu, ctx, list)
 
-  // 一盃口 / 二盃口 (门前限定)
+  // 一杯口 / 二杯口 (门前限定)
   if (isMenzen) {
     checkIipeikou(decomp, list)
   }
@@ -396,7 +396,7 @@ function checkYakuhai(allMentsu, ctx, list) {
   }
 }
 
-/** 一盃口 / 二盃口 */
+/** 一杯口 / 二杯口 */
 function checkIipeikou(decomp, list) {
   if (decomp.type !== 'regular') return
   const shuntsuList = decomp.mentsu.filter(m => m.type === 'shuntsu').map(m => m.tile)
@@ -406,9 +406,9 @@ function checkIipeikou(decomp, list) {
   }
   const pairCount = Object.values(counts).filter(c => c >= 2).length
   if (pairCount >= 2) {
-    list.push({ name: '二盃口', nameJa: 'リャンペーコー', han: 3 })
+    list.push({ name: '二杯口', nameJa: 'リャンペーコー', han: 3 })
   } else if (pairCount === 1) {
-    list.push({ name: '一盃口', nameJa: 'イーペーコー', han: 1 })
+    list.push({ name: '一杯口', nameJa: 'イーペーコー', han: 1 })
   }
 }
 

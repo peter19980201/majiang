@@ -89,37 +89,49 @@ function calculateForDecomposition(decomp, melds, ctx, input) {
   // 如果没有成立的役(不含ドラ)，暂时不算
   // 注: ドラ本身不是役，需要至少1个役才能和牌
 
-  // 计算ドラ
+  // 计算宝牌
   const allTileIds = getAllTilesFlat(input.hand, melds, input.agariTile)
   let doraCount = 0
+  let uraDoraCount = 0
+  let redDoraCount = 0
 
   if (input.context.dora && input.context.dora.length > 0) {
-    doraCount += countDora(allTileIds, input.context.dora, null)
+    doraCount = countDora(allTileIds, input.context.dora, null)
   }
   if (input.context.uraDora && input.context.uraDora.length > 0 &&
       (ctx.isRiichi || ctx.isDoubleRiichi)) {
-    doraCount += countDora(allTileIds, input.context.uraDora, null)
+    uraDoraCount = countDora(allTileIds, input.context.uraDora, null)
   }
 
-  // 赤ドラ
+  // 赤宝牌
   if (input.context.redDora) {
     const rd = input.context.redDora
-    doraCount += (rd.m5 || 0) + (rd.p5 || 0) + (rd.s5 || 0)
+    redDoraCount = (rd.m5 || 0) + (rd.p5 || 0) + (rd.s5 || 0)
   }
 
-  // 没有役 → 不能和牌 (ドラ不算役)
+  const totalDoraCount = doraCount + uraDoraCount + redDoraCount
+
+  // 没有役 → 不能和牌 (宝牌不算役)
   const isYakuman = yakuList.some(y => y.isYakuman)
-  if (yakuList.length === 0 && doraCount === 0) {
+  if (yakuList.length === 0 && totalDoraCount === 0) {
     return null
   }
   if (yakuList.length === 0) {
-    // 只有ドラ没有役 → 无法和牌
+    // 只有宝牌没有役 → 无法和牌
     return null
   }
 
-  // 添加ドラ
-  if (!isYakuman && doraCount > 0) {
-    yakuList.push({ name: 'ドラ', nameJa: 'ドラ', han: doraCount })
+  // 分别添加宝牌、里宝牌、赤宝牌
+  if (!isYakuman) {
+    if (doraCount > 0) {
+      yakuList.push({ name: '宝牌', nameJa: 'ドラ', han: doraCount })
+    }
+    if (uraDoraCount > 0) {
+      yakuList.push({ name: '里宝牌', nameJa: '裏ドラ', han: uraDoraCount })
+    }
+    if (redDoraCount > 0) {
+      yakuList.push({ name: '赤宝牌', nameJa: '赤ドラ', han: redDoraCount })
+    }
   }
 
   // 计算符数

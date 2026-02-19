@@ -33,7 +33,7 @@ const YAKU_DATA = [
     example: { hand: '123m456p789s23p', melds: [], agari: '1p', note: '1p-4p双面听' }
   },
   {
-    name: '一盃口', nameJa: 'イーペーコー', han: 1, hanOpen: null,
+    name: '一杯口', nameJa: 'イーペーコー', han: 1, hanOpen: null,
     category: '1番', menzenOnly: true,
     desc: '两组相同的顺子',
     condition: '门前状态下有两组完全相同的顺子（同花色同数字）',
@@ -176,11 +176,11 @@ const YAKU_DATA = [
 
   // === 3番役 ===
   {
-    name: '二盃口', nameJa: 'リャンペーコー', han: 3, hanOpen: null,
+    name: '二杯口', nameJa: 'リャンペーコー', han: 3, hanOpen: null,
     category: '3番', menzenOnly: true,
-    desc: '两组一盃口',
-    condition: '门前状态下有两组不同的一盃口（即4组顺子两两相同）',
-    example: { hand: '112233m556677p', melds: [], agari: '7p', note: '两组一盃口' }
+    desc: '两组一杯口',
+    condition: '门前状态下有两组不同的一杯口（即4组顺子两两相同）',
+    example: { hand: '112233m556677p', melds: [], agari: '7p', note: '两组一杯口' }
   },
   {
     name: '纯全带幺九', nameJa: 'ジュンチャン', han: 3, hanOpen: 2,
