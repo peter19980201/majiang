@@ -32,6 +32,11 @@
   height: 88rpx;
 }
 
+.tile.large {
+  width: 88rpx;
+  height: 112rpx;
+}
+
 /* Suit colors */
 .tile .tile-num {
   font-weight: bold;
@@ -73,6 +78,9 @@
 .tile.picker .tile-num { font-size: 34rpx; }
 .tile.picker .tile-suit { font-size: 16rpx; margin-top: 2rpx; }
 
+.tile.large .tile-num { font-size: 40rpx; }
+.tile.large .tile-suit { font-size: 18rpx; margin-top: 2rpx; }
+
 /* Interactive state */
 .tile.clickable:active {
   background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
@@ -84,6 +92,20 @@
   border-color: #f59e0b;
   background: linear-gradient(180deg, #fff8e1 0%, #ffe0b2 100%);
   box-shadow: 0 0 0 2rpx #fbbf24, 0 2rpx 8rpx rgba(245,158,11,0.2);
+}
+
+/* Red 5 dora tile */
+.tile.red5 {
+  background: linear-gradient(180deg, #fff1f2 0%, #fecdd3 100%);
+  border-color: #fca5a5;
+}
+.tile.red5 .tile-num,
+.tile.red5 .tile-suit {
+  color: #dc2626 !important;
+}
+.tile.red5-on {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3rpx #ef4444, 0 2rpx 8rpx rgba(239,68,68,0.3);
 }
 
 /* Dark tile (ankan) */

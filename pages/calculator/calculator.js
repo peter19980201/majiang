@@ -7,6 +7,7 @@ Page({
     melds: [],
     agariTile: null,
     inputTarget: 'hand',
+    pickerSuit: 'man',
 
     // 场况
     bakaze: 27,
@@ -135,6 +136,10 @@ Page({
 
   switchTarget(e) {
     this.setData({ inputTarget: e.currentTarget.dataset.target })
+  },
+
+  switchSuit(e) {
+    this.setData({ pickerSuit: e.currentTarget.dataset.suit })
   },
 
   stopBubble() {},

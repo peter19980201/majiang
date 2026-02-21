@@ -18,6 +18,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12rpx;
+  min-height: 44rpx;
 }
 
 .section-title {
@@ -43,8 +44,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: 6rpx;
-  min-height: 90rpx;
-  align-items: center;
+  min-height: 180rpx;
+  align-items: flex-start;
+  align-content: flex-start;
   background: #fff;
   border-radius: 24rpx;
   padding: 16rpx;
@@ -160,12 +162,74 @@
 }
 
 .tab.active {
-  background: #fff;
-  color: #1a6b3c;
+  background: #1a6b3c;
+  color: #fff;
   font-weight: 600;
-  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
+  box-shadow: 0 2rpx 6rpx rgba(26,107,60,0.3);
 }
 
+/* Suit tabs */
+.suit-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20rpx;
+  background: #fafaf9;
+  border-radius: 16rpx;
+  padding: 6rpx;
+}
+
+.suit-tab {
+  flex: 1;
+  text-align: center;
+  font-size: 28rpx;
+  padding: 14rpx 0;
+  border-radius: 12rpx;
+  color: #78716c;
+  font-weight: 500;
+}
+
+.suit-tab.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2rpx 6rpx rgba(26,107,60,0.3);
+}
+
+/* Large picker grid (5 per row, 2 rows) */
+.picker-row-lg {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10rpx 8rpx;
+  padding: 8rpx 0;
+}
+
+.jihai-row-lg {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.picker-tile-lg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+}
+
+.remain-badge-lg {
+  font-size: 22rpx;
+  color: #a8a29e;
+  text-align: center;
+}
+
+.red-badge {
+  color: #f87171;
+  font-weight: 600;
+}
+
+.red-badge-on {
+  color: #dc2626;
+}
+
+/* Legacy small picker (modal/dora) */
 .picker-row {
   display: flex;
   justify-content: space-between;

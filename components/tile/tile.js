@@ -1,7 +1,7 @@
 Component({
   properties: {
     tid: { type: Number, value: -1 },     // 牌种ID (0-33)
-    size: { type: String, value: 'normal' }, // normal|small|mini|picker
+    size: { type: String, value: 'normal' }, // normal|small|mini|picker|large
     extra: { type: String, value: '' },      // 额外class: agari|dark|clickable|disabled
   },
 

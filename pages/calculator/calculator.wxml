@@ -64,40 +64,57 @@
             bindtap="switchTarget" data-target="agari">选和了牌</text>
     </view>
 
-    <!-- 选牌器: 万子 -->
-    <view class="picker-row">
-      <view class="picker-tile {{tileRemaining[index] <= 0 ? 'disabled' : ''}}"
-            wx:for="{{9}}" wx:key="*this"
+    <!-- 花色页签 -->
+    <view class="suit-tabs">
+      <text class="suit-tab {{pickerSuit === 'man' ? 'active' : ''}}"
+            bindtap="switchSuit" data-suit="man">万</text>
+      <text class="suit-tab {{pickerSuit === 'pin' ? 'active' : ''}}"
+            bindtap="switchSuit" data-suit="pin">饼</text>
+      <text class="suit-tab {{pickerSuit === 'sou' ? 'active' : ''}}"
+            bindtap="switchSuit" data-suit="sou">条</text>
+      <text class="suit-tab {{pickerSuit === 'jihai' ? 'active' : ''}}"
+            bindtap="switchSuit" data-suit="jihai">字</text>
+    </view>
+
+    <!-- 选牌器: 按花色显示 -->
+    <view class="picker-row-lg" wx:if="{{pickerSuit === 'man'}}">
+      <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index}}" bindtap="selectTile">
-        <tile tid="{{index}}" size="picker" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge">{{tileRemaining[index]}}</text>
+        <tile tid="{{index}}" size="large" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge-lg">{{tileRemaining[index]}}</text>
+      </view>
+      <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redM5">
+        <tile tid="{{4}}" size="large" extra="red5{{redM5 ? ' red5-on' : ''}}"></tile>
+        <text class="remain-badge-lg red-badge {{redM5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
-    <!-- 筒子 -->
-    <view class="picker-row">
-      <view class="picker-tile {{tileRemaining[index+9] <= 0 ? 'disabled' : ''}}"
-            wx:for="{{9}}" wx:key="*this"
+    <view class="picker-row-lg" wx:if="{{pickerSuit === 'pin'}}">
+      <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 9}}" bindtap="selectTile">
-        <tile tid="{{index + 9}}" size="picker" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge">{{tileRemaining[index + 9]}}</text>
+        <tile tid="{{index + 9}}" size="large" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge-lg">{{tileRemaining[index + 9]}}</text>
+      </view>
+      <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redP5">
+        <tile tid="{{13}}" size="large" extra="red5{{redP5 ? ' red5-on' : ''}}"></tile>
+        <text class="remain-badge-lg red-badge {{redP5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
-    <!-- 索子 -->
-    <view class="picker-row">
-      <view class="picker-tile {{tileRemaining[index+18] <= 0 ? 'disabled' : ''}}"
-            wx:for="{{9}}" wx:key="*this"
+    <view class="picker-row-lg" wx:if="{{pickerSuit === 'sou'}}">
+      <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 18}}" bindtap="selectTile">
-        <tile tid="{{index + 18}}" size="picker" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge">{{tileRemaining[index + 18]}}</text>
+        <tile tid="{{index + 18}}" size="large" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge-lg">{{tileRemaining[index + 18]}}</text>
+      </view>
+      <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redS5">
+        <tile tid="{{22}}" size="large" extra="red5{{redS5 ? ' red5-on' : ''}}"></tile>
+        <text class="remain-badge-lg red-badge {{redS5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
-    <!-- 字牌 -->
-    <view class="picker-row jihai-row">
-      <view class="picker-tile {{tileRemaining[index+27] <= 0 ? 'disabled' : ''}}"
-            wx:for="{{7}}" wx:key="*this"
+    <view class="picker-row-lg jihai-row-lg" wx:if="{{pickerSuit === 'jihai'}}">
+      <view class="picker-tile-lg" wx:for="{{7}}" wx:key="*this"
             data-id="{{index + 27}}" bindtap="selectTile">
-        <tile tid="{{index + 27}}" size="picker" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge">{{tileRemaining[index + 27]}}</text>
+        <tile tid="{{index + 27}}" size="large" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <text class="remain-badge-lg">{{tileRemaining[index + 27]}}</text>
       </view>
     </view>
   </view>
@@ -167,10 +184,10 @@
 
   <!-- ドラ -->
   <view class="section">
-    <text class="section-title">宝牌 (ドラ指示牌)</text>
+    <text class="section-title">宝牌（指示牌）</text>
     <view class="dora-section">
       <view class="dora-row">
-        <text class="dora-label">表ドラ</text>
+        <text class="dora-label">表宝牌</text>
         <view class="dora-tiles">
           <view wx:for="{{dora}}" wx:key="index" class="tile-wrapper"
                 bindtap="removeDora" data-type="dora" data-index="{{index}}">
@@ -181,7 +198,7 @@
         </view>
       </view>
       <view class="dora-row">
-        <text class="dora-label">里ドラ</text>
+        <text class="dora-label">里宝牌</text>
         <view class="dora-tiles">
           <view wx:for="{{uraDora}}" wx:key="index" class="tile-wrapper"
                 bindtap="removeDora" data-type="uraDora" data-index="{{index}}">
@@ -194,7 +211,7 @@
       </view>
       <!-- 宝牌内嵌选牌器 -->
       <view wx:if="{{doraInputType}}" class="dora-picker">
-        <text class="dora-picker-hint">选择{{doraInputType === 'dora' ? '表' : '里'}}ドラ指示牌 (点击选择)</text>
+        <text class="dora-picker-hint">选择{{doraInputType === 'dora' ? '表' : '里'}}宝牌指示牌（点击选择）</text>
         <view class="dora-picker-grid">
           <view class="picker-row compact">
             <view class="picker-tile-sm" wx:for="{{9}}" wx:key="*this"
@@ -222,14 +239,6 @@
           </view>
         </view>
         <text class="dora-picker-cancel" bindtap="cancelDoraInput">取消</text>
-      </view>
-      <view class="dora-row" wx:if="{{!doraInputType}}">
-        <text class="dora-label">赤ドラ</text>
-        <view class="red-toggles">
-          <text class="chip small {{redM5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redM5">赤五万</text>
-          <text class="chip small {{redP5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redP5">赤五筒</text>
-          <text class="chip small {{redS5 ? 'on red' : ''}}" bindtap="toggleRed" data-flag="redS5">赤五索</text>
-        </view>
       </view>
     </view>
   </view>
