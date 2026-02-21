@@ -1,7 +1,7 @@
 .container {
   padding: 20rpx;
   min-height: 100vh;
-  background: #f0efe8;
+  background: #f7f5f0;
 }
 
 .header {
@@ -13,13 +13,15 @@
 
 .header-title {
   font-size: 26rpx;
-  color: #888;
+  color: #a8a29e;
+  font-weight: 500;
 }
 
 .clear-all {
   font-size: 24rpx;
-  color: #e53935;
+  color: #dc2626;
   padding: 4rpx 16rpx;
+  font-weight: 500;
 }
 
 .list {
@@ -28,10 +30,13 @@
   gap: 16rpx;
 }
 
+/* History cards */
 .card {
   background: #fff;
-  border-radius: 16rpx;
-  padding: 20rpx 24rpx;
+  border-radius: 32rpx;
+  padding: 24rpx 28rpx;
+  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
+  border: 2rpx solid #fafaf9;
 }
 
 .card-header {
@@ -48,24 +53,26 @@
 
 .card-date {
   font-size: 28rpx;
-  color: #333;
-  font-weight: bold;
+  color: #292524;
+  font-weight: 600;
 }
 
 .card-type {
   font-size: 22rpx;
-  background: #e8f5e9;
+  background: #dcf5e5;
   color: #1a6b3c;
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 200rpx;
+  font-weight: 600;
 }
 
 .card-abandoned {
   font-size: 20rpx;
-  background: #fff3e0;
-  color: #e65100;
-  padding: 2rpx 10rpx;
-  border-radius: 4rpx;
+  background: #fef3c7;
+  color: #b45309;
+  padding: 4rpx 12rpx;
+  border-radius: 200rpx;
+  font-weight: 500;
 }
 
 .card-right {
@@ -76,19 +83,20 @@
 
 .card-delete {
   font-size: 22rpx;
-  color: #e53935;
+  color: #dc2626;
   padding: 4rpx 12rpx;
 }
 
 .card-arrow {
   font-size: 24rpx;
-  color: #999;
+  color: #d6d3d1;
 }
 
+/* Ranking row */
 .rank-row {
   display: flex;
-  gap: 8rpx;
-  margin-top: 12rpx;
+  gap: 10rpx;
+  margin-top: 16rpx;
 }
 
 .rank-item {
@@ -97,31 +105,41 @@
   flex-direction: column;
   align-items: center;
   gap: 2rpx;
+  background: #fdfcfb;
+  border-radius: 12rpx;
+  padding: 10rpx 0;
 }
 
 .rank-num {
+  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
   font-size: 20rpx;
-  color: #999;
+  color: #d6d3d1;
+  font-weight: 700;
 }
 
 .rank-name {
   font-size: 24rpx;
-  color: #333;
-  font-weight: bold;
+  color: #57534e;
+  font-weight: 500;
 }
 
 .rank-pt {
   font-size: 24rpx;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .positive { color: #1a6b3c; }
-.negative { color: #c62828; }
+.negative { color: #dc2626; }
 
+/* Expanded detail */
 .card-detail {
   margin-top: 16rpx;
   padding-top: 16rpx;
-  border-top: 1rpx solid #f0f0f0;
+  border-top: 2rpx solid #fafaf9;
+  background: #fdfcfb;
+  margin: 16rpx -28rpx 0;
+  padding: 20rpx 28rpx;
+  border-radius: 0 0 32rpx 32rpx;
 }
 
 .detail-section {
@@ -129,28 +147,31 @@
 }
 
 .detail-title {
-  font-size: 24rpx;
-  color: #999;
+  font-size: 22rpx;
+  color: #a8a29e;
   display: block;
   margin-bottom: 8rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
 }
 
 .round-item {
   display: flex;
   gap: 10rpx;
   align-items: baseline;
-  padding: 4rpx 0;
+  padding: 6rpx 0;
 }
 
 .rd-round {
   font-size: 22rpx;
-  color: #aaa;
+  color: #a8a29e;
   white-space: nowrap;
+  font-weight: 600;
 }
 
 .rd-desc {
   font-size: 24rpx;
-  color: #333;
+  color: #44403c;
 }
 
 .settle-row {
@@ -159,14 +180,14 @@
 
 .settle-name {
   font-size: 24rpx;
-  color: #333;
-  font-weight: bold;
+  color: #292524;
+  font-weight: 600;
   display: block;
 }
 
 .settle-info {
   font-size: 22rpx;
-  color: #888;
+  color: #a8a29e;
   display: block;
 }
 
@@ -174,18 +195,19 @@
   display: block;
   text-align: center;
   font-size: 24rpx;
-  color: #e53935;
+  color: #dc2626;
   padding: 12rpx 0;
   margin-top: 8rpx;
 }
 
-/* 进行中对局 */
+/* Active game card */
 .current-game {
   background: #fff;
-  border-radius: 16rpx;
-  padding: 20rpx 24rpx;
+  border-radius: 32rpx;
+  padding: 24rpx 28rpx;
   margin-bottom: 20rpx;
-  border: 3rpx solid #e65100;
+  border: 4rpx solid #f59e0b;
+  box-shadow: 0 2rpx 8rpx rgba(28,25,23,0.06), 0 1rpx 2rpx rgba(28,25,23,0.04);
 }
 
 .current-header {
@@ -197,25 +219,26 @@
 
 .current-badge {
   font-size: 22rpx;
-  background: #e65100;
+  background: #f59e0b;
   color: #fff;
-  padding: 4rpx 14rpx;
-  border-radius: 6rpx;
-  font-weight: bold;
+  padding: 6rpx 16rpx;
+  border-radius: 200rpx;
+  font-weight: 600;
 }
 
 .current-date {
   font-size: 26rpx;
-  color: #333;
-  font-weight: bold;
+  color: #292524;
+  font-weight: 600;
 }
 
 .current-type {
   font-size: 22rpx;
-  background: #e8f5e9;
+  background: #dcf5e5;
   color: #1a6b3c;
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
+  padding: 6rpx 14rpx;
+  border-radius: 200rpx;
+  font-weight: 600;
 }
 
 .current-info {
@@ -233,12 +256,12 @@
 
 .current-supply {
   font-size: 24rpx;
-  color: #e65100;
+  color: #d97706;
 }
 
 .current-players {
   display: flex;
-  gap: 8rpx;
+  gap: 10rpx;
   margin-bottom: 16rpx;
 }
 
@@ -248,14 +271,14 @@
   flex-direction: column;
   align-items: center;
   gap: 2rpx;
-  background: #f8f8f5;
-  border-radius: 8rpx;
-  padding: 8rpx 0;
+  background: #fdfcfb;
+  border-radius: 16rpx;
+  padding: 12rpx 0;
 }
 
 .cp-name {
   font-size: 22rpx;
-  color: #666;
+  color: #78716c;
 }
 
 .cp-pts {
@@ -271,22 +294,24 @@
 .current-btn {
   flex: 1;
   text-align: center;
-  padding: 16rpx;
-  border-radius: 10rpx;
+  padding: 18rpx;
+  border-radius: 16rpx;
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .current-btn.resume {
-  background: linear-gradient(135deg, #1a6b3c, #2e7d32);
+  background: linear-gradient(135deg, #14522b, #22884c);
   color: #fff;
+  box-shadow: 0 2rpx 8rpx rgba(26,107,60,0.3);
 }
 
 .current-btn.abandon {
-  background: #f5f5f5;
-  color: #999;
+  background: #fafaf9;
+  color: #a8a29e;
 }
 
+/* Empty state */
 .empty {
   text-align: center;
   padding: 120rpx 0;
@@ -294,5 +319,5 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: #bbb;
+  color: #d6d3d1;
 }

@@ -1,53 +1,52 @@
 <view class="container" wx:if="{{result}}">
-  <!-- 点数头部 -->
-  <view class="score-header">
-    <text class="level" wx:if="{{result.level}}">{{result.level}}</text>
-    <view class="score-main">
-      <text class="fu-han" wx:if="{{result.han > 0}}">{{result.fu}}符 {{result.han}}番</text>
-      <text class="total-points">{{result.payment.total}}点</text>
+  <!-- Hero: Points display -->
+  <view class="result-hero">
+    <view class="hero-badge" wx:if="{{result.level}}">
+      <text class="badge-text">{{result.level}}</text>
     </view>
-    <text class="payment-desc">{{result.payment.description}}</text>
+    <text class="result-fuban" wx:if="{{result.han > 0}}">{{result.fu}}符 {{result.han}}番</text>
+    <text class="result-points">{{result.payment.total}}点</text>
+    <text class="result-payment">{{result.payment.description}}</text>
   </view>
 
-  <!-- 和牌展示 -->
-  <view class="section" wx:if="{{result.input}}">
-    <text class="section-title">和牌</text>
-    <view class="hand-display">
-      <!-- 手牌 -->
-      <view class="hand-tiles">
+  <!-- Hand display card -->
+  <view class="result-hand" wx:if="{{result.input}}">
+    <view class="hand-card">
+      <view class="hand-tiles-row">
+        <!-- Hand tiles -->
         <tile wx:for="{{result.input.hand}}" wx:key="index"
               tid="{{item}}" size="normal"></tile>
-      </view>
-      <!-- 和了牌 -->
-      <view class="agari-tile-wrap">
+        <!-- Separator -->
+        <view class="hand-sep"></view>
+        <!-- Agari tile -->
         <tile tid="{{result.input.agariTile}}" size="normal" extra="agari"></tile>
       </view>
-    </view>
-    <!-- 副露 -->
-    <view class="melds-display" wx:if="{{result.input.melds.length > 0}}">
-      <view class="meld-group" wx:for="{{result.input.melds}}" wx:key="index">
-        <view class="meld-tiles-row">
-          <tile wx:for="{{item.tiles}}" wx:for-item="t" wx:key="*this"
-                tid="{{t}}" size="small"
-                extra="{{item.type === 'ankan' ? 'dark' : ''}}"></tile>
+      <!-- Melds -->
+      <view class="melds-row" wx:if="{{result.input.melds.length > 0}}">
+        <view class="meld-group" wx:for="{{result.input.melds}}" wx:key="index">
+          <view class="meld-tiles-row">
+            <tile wx:for="{{item.tiles}}" wx:for-item="t" wx:key="*this"
+                  tid="{{t}}" size="small"
+                  extra="{{item.type === 'ankan' ? 'dark' : ''}}"></tile>
+          </view>
+          <text class="meld-label">{{meldTypeNames[item.type]}}</text>
         </view>
-        <text class="meld-label">{{meldTypeNames[item.type]}}</text>
       </view>
-    </view>
-    <!-- 场况信息 -->
-    <view class="context-info">
-      <text class="ctx-tag">{{windNames[result.input.bakaze]}}场</text>
-      <text class="ctx-tag">{{windNames[result.input.jikaze]}}家</text>
-      <text class="ctx-tag">{{result.input.agariType === 'tsumo' ? '自摸' : '荣和'}}</text>
+      <!-- Context tags -->
+      <view class="context-tags">
+        <text class="ctx-tag">{{windNames[result.input.bakaze]}}场</text>
+        <text class="ctx-tag">{{windNames[result.input.jikaze]}}家</text>
+        <text class="ctx-tag">{{result.input.agariType === 'tsumo' ? '自摸' : '荣和'}}</text>
+      </view>
     </view>
   </view>
 
-  <!-- 役种列表 -->
-  <view class="section">
-    <text class="section-title">成立役种</text>
-    <view class="yaku-list">
+  <!-- Yaku list -->
+  <view class="yaku-section">
+    <text class="yaku-section-title">成立役种</text>
+    <view class="yaku-card">
       <view class="yaku-item" wx:for="{{result.yaku}}" wx:key="index">
-        <view class="yaku-name">
+        <view class="yaku-name-col">
           <text class="yaku-cn">{{item.name}}</text>
           <text class="yaku-ja">{{item.nameJa}}</text>
         </view>
@@ -58,30 +57,32 @@
     </view>
   </view>
 
-  <!-- 符数明细 -->
-  <view class="section" wx:if="{{result.fuDetail && result.fuDetail.length > 0 && result.han > 0}}">
-    <view class="section-header" bindtap="toggleFuDetail">
-      <text class="section-title">符数明细</text>
-      <text class="toggle-arrow">{{showFuDetail ? '▲' : '▼'}}</text>
-    </view>
-    <view class="fu-detail" wx:if="{{showFuDetail}}">
-      <view class="fu-item" wx:for="{{result.fuDetail}}" wx:key="index">
-        <text class="fu-name">{{item.name}}</text>
-        <text class="fu-val">{{item.fu}}符</text>
+  <!-- Fu detail (collapsible) -->
+  <view class="fu-section" wx:if="{{result.fuDetail && result.fuDetail.length > 0 && result.han > 0}}">
+    <view class="fu-card">
+      <view class="fu-header" bindtap="toggleFuDetail">
+        <text class="fu-title">符数明细</text>
+        <text class="fu-arrow">{{showFuDetail ? '▲' : '▼'}}</text>
       </view>
-      <view class="fu-total">
-        <text class="fu-name">合计 (取整)</text>
-        <text class="fu-val bold">{{result.fu}}符</text>
+      <view class="fu-detail" wx:if="{{showFuDetail}}">
+        <view class="fu-row" wx:for="{{result.fuDetail}}" wx:key="index">
+          <text class="fu-name">{{item.name}}</text>
+          <text class="fu-val">{{item.fu}}符</text>
+        </view>
+        <view class="fu-row fu-total">
+          <text class="fu-name">合计 (取整)</text>
+          <text class="fu-val">{{result.fu}}符</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 操作按钮 -->
-  <view class="actions">
-    <view class="action-btn secondary" bindtap="goBack">
+  <!-- Action buttons -->
+  <view class="result-actions">
+    <view class="btn-back" bindtap="goBack">
       <text>返回修改</text>
     </view>
-    <view class="action-btn primary" bindtap="goHome">
+    <view class="btn-home" bindtap="goHome">
       <text>返回首页</text>
     </view>
   </view>

@@ -1,0 +1,197 @@
+/* ========== Design Tokens Reference ==========
+ *
+ * Primary - Deep Forest Green:
+ *   green-900: #0d3b1f   green-800: #14522b   green-700: #1a6b3c
+ *   green-600: #22884c   green-500: #2da660   green-400: #4cba78
+ *   green-100: #dcf5e5   green-50:  #eefbf2
+ *
+ * Accent - Warm Amber/Gold:
+ *   amber-700: #b45309   amber-600: #d97706   amber-500: #f59e0b
+ *   amber-400: #fbbf24   amber-100: #fef3c7   amber-50:  #fffbeb
+ *
+ * Danger:
+ *   red-700: #b91c1c   red-600: #dc2626   red-500: #ef4444   red-100: #fee2e2
+ *
+ * Neutrals - Warm Tones:
+ *   warm-950: #1c1917   warm-900: #292524   warm-800: #44403c
+ *   warm-700: #57534e   warm-600: #78716c   warm-500: #a8a29e
+ *   warm-400: #d6d3d1   warm-300: #e7e5e4   warm-200: #f5f5f4
+ *   warm-100: #fafaf9   warm-50:  #fdfcfb
+ *
+ * Surfaces:
+ *   bg-page: #f7f5f0   bg-card: #ffffff
+ *
+ * Shadows:
+ *   shadow-sm: 0 1rpx 2rpx rgba(28,25,23,0.04)
+ *   shadow-md: 0 2rpx 8rpx rgba(28,25,23,0.06), 0 1rpx 2rpx rgba(28,25,23,0.04)
+ *   shadow-lg: 0 4rpx 16rpx rgba(28,25,23,0.08), 0 2rpx 4rpx rgba(28,25,23,0.04)
+ *   shadow-xl: 0 8rpx 32rpx rgba(28,25,23,0.12), 0 2rpx 8rpx rgba(28,25,23,0.06)
+ *
+ * Radius:
+ *   sm: 16rpx   md: 24rpx   lg: 32rpx   xl: 40rpx   2xl: 48rpx
+ *
+ * Fonts:
+ *   serif: 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'SimSun', serif
+ *   sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
+ * ========== */
+
+/* ========== Shared Components ========== */
+
+/* Card */
+.card {
+  background: #ffffff;
+  border-radius: 32rpx;
+  padding: 24rpx;
+  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
+}
+
+/* Primary Button */
+.btn-primary {
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 700;
+  background: linear-gradient(135deg, #14522b, #22884c);
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(26,107,60,0.35);
+  letter-spacing: 2rpx;
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  font-weight: 600;
+  background: #fafaf9;
+  color: #57534e;
+}
+
+.btn-secondary:active {
+  background: #f5f5f4;
+}
+
+/* Chip / Pill tag */
+.chip {
+  padding: 14rpx 28rpx;
+  border-radius: 200rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  background: #fafaf9;
+  color: #78716c;
+  border: 3rpx solid transparent;
+  transition: all 0.15s;
+}
+
+.chip.on, .chip.active {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fbbf24;
+}
+
+/* Segment Control */
+.seg-ctrl {
+  display: flex;
+  background: #fafaf9;
+  border-radius: 16rpx;
+  padding: 6rpx;
+  gap: 0;
+}
+
+.seg {
+  flex: 1;
+  text-align: center;
+  font-size: 26rpx;
+  padding: 16rpx 0;
+  border-radius: 12rpx;
+  color: #78716c;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.seg.active {
+  background: #1a6b3c;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2rpx 8rpx rgba(26,107,60,0.3);
+}
+
+/* Badge variants */
+.badge {
+  font-size: 20rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 200rpx;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.badge-han {
+  background: #dcf5e5;
+  color: #1a6b3c;
+}
+
+.badge-furo {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.badge-menzen {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge-yakuman {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge-double-yakuman {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Modal / Bottom Sheet */
+.modal-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 48rpx 48rpx 0 0;
+  padding: 16rpx 32rpx 48rpx;
+  width: 100%;
+  max-height: 80vh;
+}
+
+.modal-handle {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: #e7e5e4;
+  margin: 0 auto 24rpx;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #292524;
+  text-align: center;
+  display: block;
+  margin-bottom: 24rpx;
+}

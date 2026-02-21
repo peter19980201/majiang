@@ -1,5 +1,6 @@
 {
   "navigationBarTitleText": "计算结果",
+  "navigationBarBackgroundColor": "#0d3b1f",
   "usingComponents": {
     "tile": "/components/tile/tile"
   }

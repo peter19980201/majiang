@@ -1,15 +1,16 @@
 .container {
   padding: 20rpx;
-  padding-bottom: 120rpx;
-  background: #f0efe8;
+  padding-bottom: 140rpx;
+  background: #f7f5f0;
 }
 
-/* 通用 section */
+/* Section cards */
 .section {
   background: #fff;
-  border-radius: 16rpx;
+  border-radius: 32rpx;
   padding: 24rpx;
   margin-bottom: 16rpx;
+  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
 }
 
 .section-header {
@@ -21,27 +22,34 @@
 
 .section-title {
   font-size: 24rpx;
-  color: #888;
-  font-weight: bold;
+  color: #57534e;
+  font-weight: 600;
   display: block;
   margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
 }
 
 .section-header .section-title { margin-bottom: 0; }
 
 .clear-btn {
   font-size: 22rpx;
-  color: #e53935;
+  color: #dc2626;
   padding: 4rpx 16rpx;
+  font-weight: 500;
 }
 
-/* 手牌展示 */
+/* Hand tiles display */
 .tile-display-area {
   display: flex;
   flex-wrap: wrap;
   gap: 6rpx;
   min-height: 90rpx;
   align-items: center;
+  background: #fff;
+  border-radius: 24rpx;
+  padding: 16rpx;
+  border: 3rpx solid #f5f5f4;
+  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
 }
 
 .tile-wrapper {
@@ -49,7 +57,7 @@
 }
 
 .placeholder {
-  color: #ccc;
+  color: #d6d3d1;
   font-size: 24rpx;
   padding: 20rpx;
   text-align: center;
@@ -61,7 +69,7 @@
   font-size: 22rpx;
 }
 
-/* 和了牌+副露并排 */
+/* Agari + Meld row */
 .row-sections {
   display: flex;
   gap: 12rpx;
@@ -72,14 +80,20 @@
 .flex-1 { flex: 1; }
 .flex-2 { flex: 2.5; }
 
-.agari-area { min-height: 90rpx; justify-content: center; }
+.agari-area {
+  min-height: 90rpx;
+  justify-content: center;
+  border: 3rpx solid #f5f5f4;
+  border-radius: 24rpx;
+}
 
 .add-meld-btn {
   font-size: 22rpx;
   color: #1a6b3c;
-  background: #e8f5e9;
+  background: #eefbf2;
   padding: 6rpx 16rpx;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
+  font-weight: 600;
 }
 
 .melds-row {
@@ -108,39 +122,48 @@
 
 .meld-label {
   font-size: 18rpx;
-  color: #999;
+  color: #a8a29e;
+  background: #fafaf9;
+  padding: 2rpx 8rpx;
+  border-radius: 6rpx;
 }
 
 .meld-del {
   font-size: 24rpx;
-  color: #e53935;
+  color: #dc2626;
 }
 
-/* 选牌器 */
-.picker-section { padding: 20rpx 16rpx; }
+/* Tile picker */
+.picker-section {
+  padding: 20rpx 16rpx;
+  border: 3rpx solid #f5f5f4;
+}
 
 .target-tabs {
   display: flex;
   gap: 0;
   margin-bottom: 20rpx;
-  background: #f0f0f0;
-  border-radius: 12rpx;
-  padding: 4rpx;
+  background: #fafaf9;
+  border-radius: 16rpx;
+  padding: 6rpx;
 }
 
 .tab {
   flex: 1;
   text-align: center;
   font-size: 26rpx;
-  padding: 12rpx 0;
-  border-radius: 10rpx;
-  color: #666;
+  padding: 14rpx 0;
+  border-radius: 12rpx;
+  color: #78716c;
+  font-weight: 500;
+  transition: all 0.2s;
 }
 
 .tab.active {
-  background: #1a6b3c;
-  color: #fff;
-  font-weight: bold;
+  background: #fff;
+  color: #1a6b3c;
+  font-weight: 600;
+  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
 }
 
 .picker-row {
@@ -168,12 +191,12 @@
 
 .remain-badge {
   font-size: 16rpx;
-  color: #bbb;
+  color: #a8a29e;
   margin-top: 2rpx;
   text-align: center;
 }
 
-/* 场况设置 */
+/* Context settings */
 .settings-grid {
   display: flex;
   flex-direction: column;
@@ -187,56 +210,51 @@
 
 .setting-label {
   font-size: 26rpx;
-  color: #333;
+  color: #44403c;
   min-width: 80rpx;
+  font-weight: 500;
+  flex-shrink: 0;
 }
 
-.seg-ctrl {
-  display: flex;
-  background: #f0f0f0;
-  border-radius: 8rpx;
-  padding: 3rpx;
-  gap: 0;
+.setting-item .seg-ctrl {
+  flex: 1;
 }
 
-.seg {
-  font-size: 24rpx;
-  padding: 10rpx 24rpx;
-  border-radius: 6rpx;
-  color: #666;
-}
-
-.seg.active {
-  background: #1a6b3c;
-  color: #fff;
+.setting-item .stepper {
+  flex: 1;
 }
 
 .stepper {
   display: flex;
   align-items: center;
-  background: #f0f0f0;
-  border-radius: 8rpx;
+  background: #fafaf9;
+  border-radius: 16rpx;
+  overflow: hidden;
 }
 
 .step-btn {
-  width: 60rpx;
-  height: 52rpx;
-  line-height: 52rpx;
+  width: 64rpx;
+  height: 56rpx;
+  line-height: 56rpx;
   text-align: center;
   font-size: 32rpx;
-  color: #333;
+  color: #78716c;
 }
 
-.step-btn:active { background: #e0e0e0; }
+.step-btn:active { background: #f5f5f4; }
 
 .step-val {
-  width: 60rpx;
+  min-width: 60rpx;
   text-align: center;
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 600;
+  color: #292524;
+  background: #fff;
+  height: 56rpx;
+  line-height: 56rpx;
 }
 
-/* 附加状态 chip */
+/* Chip tags */
 .chip-grid {
   display: flex;
   flex-wrap: wrap;
@@ -245,16 +263,18 @@
 
 .chip {
   font-size: 24rpx;
-  padding: 10rpx 20rpx;
-  border-radius: 24rpx;
-  background: #f0f0f0;
-  color: #666;
+  padding: 12rpx 22rpx;
+  border-radius: 200rpx;
+  background: #fafaf9;
+  color: #78716c;
+  border: 3rpx solid transparent;
   transition: all 0.15s;
 }
 
 .chip.on {
-  background: #e65100;
-  color: #fff;
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fbbf24;
 }
 
 .chip.small {
@@ -263,10 +283,12 @@
 }
 
 .chip.on.red {
-  background: #c62828;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-color: #ef4444;
 }
 
-/* ドラ */
+/* Dora */
 .dora-section {
   display: flex;
   flex-direction: column;
@@ -280,8 +302,9 @@
 
 .dora-label {
   font-size: 24rpx;
-  color: #333;
+  color: #44403c;
   min-width: 100rpx;
+  font-weight: 500;
 }
 
 .dora-tiles {
@@ -293,7 +316,7 @@
 
 .dora-hint {
   font-size: 20rpx;
-  color: #bbb;
+  color: #a8a29e;
 }
 
 .red-toggles {
@@ -301,19 +324,20 @@
   gap: 10rpx;
 }
 
-/* 宝牌内嵌选牌器 */
+/* Dora inline picker */
 .dora-picker {
   margin-top: 16rpx;
   padding: 16rpx;
-  background: #f8f8f5;
-  border-radius: 12rpx;
+  background: #fdfcfb;
+  border-radius: 24rpx;
+  border: 2rpx solid #f5f5f4;
 }
 
 .dora-picker-hint {
   display: block;
   font-size: 24rpx;
-  color: #e65100;
-  font-weight: bold;
+  color: #b45309;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 12rpx;
 }
@@ -326,7 +350,7 @@
   display: block;
   text-align: center;
   font-size: 24rpx;
-  color: #999;
+  color: #a8a29e;
   margin-top: 12rpx;
   padding: 8rpx;
 }
@@ -336,18 +360,18 @@
   height: 48rpx;
   line-height: 48rpx;
   text-align: center;
-  background: #e8f5e9;
+  background: #eefbf2;
   color: #1a6b3c;
-  border-radius: 8rpx;
+  border-radius: 12rpx;
   font-size: 28rpx;
   font-weight: bold;
 }
 
-/* 副露弹窗 */
+/* Meld modal */
 .modal-mask {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
   z-index: 200;
   display: flex;
   align-items: flex-end;
@@ -356,16 +380,24 @@
 
 .modal-content {
   background: #fff;
-  border-radius: 24rpx 24rpx 0 0;
-  padding: 32rpx;
+  border-radius: 48rpx 48rpx 0 0;
+  padding: 16rpx 32rpx 48rpx;
   width: 100%;
   max-height: 80vh;
 }
 
+.modal-handle {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 4rpx;
+  background: #e7e5e4;
+  margin: 0 auto 24rpx;
+}
+
 .modal-title {
   font-size: 30rpx;
-  font-weight: bold;
-  color: #333;
+  font-weight: 700;
+  color: #292524;
   text-align: center;
   display: block;
   margin-bottom: 24rpx;
@@ -373,32 +405,34 @@
 
 .modal-subtitle {
   font-size: 26rpx;
-  color: #666;
+  color: #57534e;
   text-align: center;
   display: block;
   margin-bottom: 20rpx;
 }
 
 .meld-type-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16rpx;
-  flex-wrap: wrap;
 }
 
 .meld-type-btn {
-  flex: 1;
-  min-width: 140rpx;
-  background: #f5f5f5;
-  border-radius: 12rpx;
-  padding: 24rpx 16rpx;
+  background: #fdfcfb;
+  border-radius: 24rpx;
+  padding: 28rpx 16rpx;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8rpx;
+  border: 3rpx solid #f5f5f4;
 }
 
-.meld-type-btn:active { background: #e8f5e9; }
+.meld-type-btn:active {
+  background: #eefbf2;
+  border-color: #4cba78;
+}
 
 .meld-type-icon {
   font-size: 36rpx;
@@ -408,7 +442,7 @@
 
 .meld-type-desc {
   font-size: 20rpx;
-  color: #999;
+  color: #a8a29e;
 }
 
 .editing-meld-display {
@@ -432,16 +466,16 @@
 
 .modal-btn {
   font-size: 28rpx;
-  padding: 12rpx 48rpx;
-  border-radius: 8rpx;
+  padding: 16rpx 48rpx;
+  border-radius: 16rpx;
 }
 
 .modal-btn.cancel {
-  background: #f5f5f5;
-  color: #666;
+  background: #fafaf9;
+  color: #78716c;
 }
 
-/* 记分板模式: 场况信息栏 */
+/* Board mode context bar */
 .board-context {
   padding: 16rpx 24rpx;
 }
@@ -457,11 +491,11 @@
   color: #fff;
   background: #1a6b3c;
   padding: 6rpx 16rpx;
-  border-radius: 6rpx;
-  font-weight: bold;
+  border-radius: 12rpx;
+  font-weight: 600;
 }
 
-/* 记分板模式: 结果弹窗 */
+/* Board result modal */
 .board-result {
   max-height: 80vh;
 }
@@ -469,14 +503,14 @@
 .br-score-section {
   text-align: center;
   padding: 16rpx 0 24rpx;
-  border-bottom: 1rpx solid #f0f0f0;
+  border-bottom: 2rpx solid #f5f5f4;
   margin-bottom: 16rpx;
 }
 
 .br-level {
   display: block;
   font-size: 28rpx;
-  color: #e65100;
+  color: #d97706;
   font-weight: bold;
   margin-bottom: 8rpx;
 }
@@ -490,11 +524,12 @@
 
 .br-fuhan {
   font-size: 26rpx;
-  color: #666;
+  color: #78716c;
 }
 
 .br-total {
-  font-size: 48rpx;
+  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
+  font-size: 56rpx;
   font-weight: bold;
   color: #1a6b3c;
 }
@@ -502,14 +537,14 @@
 .br-payment {
   display: block;
   font-size: 24rpx;
-  color: #888;
+  color: #a8a29e;
   margin-top: 8rpx;
 }
 
 .br-sticks {
   display: block;
   font-size: 24rpx;
-  color: #e65100;
+  color: #d97706;
   font-weight: bold;
   margin-top: 8rpx;
 }
@@ -523,7 +558,7 @@
   display: flex;
   justify-content: space-between;
   padding: 10rpx 8rpx;
-  border-bottom: 1rpx solid #f5f5f5;
+  border-bottom: 2rpx solid #fafaf9;
 }
 
 .br-yaku-item:last-child {
@@ -532,17 +567,17 @@
 
 .br-yaku-name {
   font-size: 26rpx;
-  color: #333;
+  color: #292524;
 }
 
 .br-yaku-han {
   font-size: 26rpx;
-  color: #e65100;
+  color: #1a6b3c;
   font-weight: bold;
 }
 
 .br-yaku-han.yakuman {
-  color: #c62828;
+  color: #d97706;
 }
 
 .br-actions {
@@ -554,27 +589,33 @@
   flex: 1;
   text-align: center;
   padding: 20rpx;
-  border-radius: 10rpx;
+  border-radius: 16rpx;
   font-weight: bold;
 }
 
 .br-actions .modal-btn.confirm {
-  background: #1a6b3c;
+  background: linear-gradient(135deg, #14522b, #22884c);
   color: #fff;
+  box-shadow: 0 2rpx 8rpx rgba(26,107,60,0.3);
 }
 
-/* 计算按钮 */
+/* Calculate button - floating rounded */
 .calc-btn {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: linear-gradient(135deg, #1a6b3c, #2e7d32);
+  bottom: 40rpx;
+  left: 40rpx;
+  right: 40rpx;
+  height: 100rpx;
+  background: linear-gradient(135deg, #14522b, #22884c);
   color: #fff;
   text-align: center;
-  padding: 28rpx;
-  font-size: 34rpx;
-  font-weight: bold;
+  line-height: 100rpx;
+  font-size: 32rpx;
+  font-weight: 700;
   z-index: 100;
   letter-spacing: 8rpx;
+  border-radius: 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(26,107,60,0.35);
 }
 
 .calc-btn:active { opacity: 0.9; }

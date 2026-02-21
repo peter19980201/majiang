@@ -3,15 +3,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #fffff8 0%, #f0edd8 100%);
-  border: 2rpx solid #c8c0a0;
-  border-radius: 8rpx;
-  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.12), inset 0 1rpx 0 rgba(255,255,255,0.8);
+  background: linear-gradient(180deg, #fffff8 0%, #f5f2e8 100%);
+  border: 2rpx solid #e0dcc8;
+  border-radius: 10rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.08), inset 0 2rpx 0 rgba(255,255,255,0.6);
   position: relative;
   box-sizing: border-box;
 }
 
-/* 尺寸 */
+/* Sizes */
 .tile.normal {
   width: 64rpx;
   height: 84rpx;
@@ -32,7 +32,7 @@
   height: 88rpx;
 }
 
-/* 花色颜色 */
+/* Suit colors */
 .tile .tile-num {
   font-weight: bold;
   line-height: 1;
@@ -42,99 +42,61 @@
   line-height: 1;
 }
 
-/* 万子 - 红色 */
-.tile.man .tile-num {
-  color: #c62828;
-}
-.tile.man .tile-suit {
-  color: #c62828;
-}
+/* Man - Red */
+.tile.man .tile-num { color: #c62828; }
+.tile.man .tile-suit { color: #c62828; }
 
-/* 筒子 - 蓝色 */
-.tile.pin .tile-num {
-  color: #1565c0;
-}
-.tile.pin .tile-suit {
-  color: #1565c0;
-}
+/* Pin - Blue */
+.tile.pin .tile-num { color: #1565c0; }
+.tile.pin .tile-suit { color: #1565c0; }
 
-/* 索子 - 绿色 */
-.tile.sou .tile-num {
-  color: #2e7d32;
-}
-.tile.sou .tile-suit {
-  color: #2e7d32;
-}
+/* Sou - Green */
+.tile.sou .tile-num { color: #2e7d32; }
+.tile.sou .tile-suit { color: #2e7d32; }
 
-/* 字牌 - 黑色, 三元牌特殊颜色 */
-.tile.jihai .tile-num {
-  color: #333;
-}
-.tile.jihai-haku .tile-num {
-  color: #666;
-}
-.tile.jihai-hatsu .tile-num {
-  color: #2e7d32;
-}
-.tile.jihai-chun .tile-num {
-  color: #c62828;
-}
+/* Jihai - Honor tiles */
+.tile.jihai .tile-num { color: #333; }
+.tile.jihai-haku .tile-num { color: #999; }
+.tile.jihai-hatsu .tile-num { color: #2e7d32; }
+.tile.jihai-chun .tile-num { color: #c62828; }
 
-/* 尺寸对应字号 */
-.tile.normal .tile-num {
-  font-size: 32rpx;
-}
-.tile.normal .tile-suit {
-  font-size: 16rpx;
-  margin-top: 2rpx;
-}
+/* Font sizes per size */
+.tile.normal .tile-num { font-size: 32rpx; }
+.tile.normal .tile-suit { font-size: 16rpx; margin-top: 2rpx; }
 
-.tile.small .tile-num {
-  font-size: 24rpx;
-}
-.tile.small .tile-suit {
-  font-size: 12rpx;
-  margin-top: 1rpx;
-}
+.tile.small .tile-num { font-size: 24rpx; }
+.tile.small .tile-suit { font-size: 12rpx; margin-top: 1rpx; }
 
-.tile.mini .tile-num {
-  font-size: 20rpx;
-}
-.tile.mini .tile-suit {
-  font-size: 10rpx;
-}
+.tile.mini .tile-num { font-size: 20rpx; }
+.tile.mini .tile-suit { font-size: 10rpx; }
 
-.tile.picker .tile-num {
-  font-size: 34rpx;
-}
-.tile.picker .tile-suit {
-  font-size: 16rpx;
-  margin-top: 2rpx;
-}
+.tile.picker .tile-num { font-size: 34rpx; }
+.tile.picker .tile-suit { font-size: 16rpx; margin-top: 2rpx; }
 
-/* 交互态 */
+/* Interactive state */
 .tile.clickable:active {
   background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
   border-color: #1a6b3c;
 }
 
-/* 选中态 - 和了牌 */
+/* Agari tile - amber/gold highlight */
 .tile.agari {
-  border-color: #e65100;
+  border-color: #f59e0b;
   background: linear-gradient(180deg, #fff8e1 0%, #ffe0b2 100%);
+  box-shadow: 0 0 0 2rpx #fbbf24, 0 2rpx 8rpx rgba(245,158,11,0.2);
 }
 
-/* 暗牌(暗杠) */
+/* Dark tile (ankan) */
 .tile.dark {
   background: linear-gradient(180deg, #5c6bc0 0%, #3949ab 100%);
-  border-color: #283593;
+  border-color: #3949ab;
 }
 .tile.dark .tile-num,
 .tile.dark .tile-suit {
   color: #fff !important;
 }
 
-/* 禁用态 */
+/* Disabled state */
 .tile.disabled {
   opacity: 0.3;
 }
