@@ -246,7 +246,7 @@
   <view style="height: 120rpx"></view>
 
   <!-- 副露弹窗 -->
-  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel">
+  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel" catchtouchmove="stopBubble">
     <view class="modal-content" catchtap="stopBubble">
       <view class="modal-handle"></view>
       <text class="modal-title">添加副露 - 选择类型</text>
@@ -308,8 +308,8 @@
   </view>
 
   <!-- 记分板模式: 结果弹窗 -->
-  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult">
-    <view class="modal-content board-result" catchtap="stopBubble">
+  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult" catchtouchmove="stopBubble">
+    <view class="modal-content board-result" catchtap="stopBubble" catchtouchmove="stopBubble">
       <view class="modal-handle"></view>
       <text class="modal-title">计算结果</text>
       <view class="br-score-section">
