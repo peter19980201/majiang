@@ -26,6 +26,8 @@ Page({
     selectedWinner: -1,
     selectedLoser: -1,
     inputPoints: '',
+    inputKoPayment: '',
+    inputOyaPayment: '',
     showManualInput: false,
     // 本局立直
     roundRiichi: [false, false, false, false],
@@ -311,7 +313,8 @@ Page({
       this.setData({
         showTsumoModal: true,
         selectedWinner: -1,
-        inputPoints: '',
+        inputKoPayment: '',
+        inputOyaPayment: '',
         showManualInput: false,
         roundRiichi: [false, false, false, false]
       })
@@ -319,43 +322,62 @@ Page({
   },
 
   selectTsumoWinner(e) {
-    this.setData({ selectedWinner: parseInt(e.currentTarget.dataset.idx) })
+    const selectedWinner = parseInt(e.currentTarget.dataset.idx)
+    if (selectedWinner !== this.data.selectedWinner) {
+      this.setData({ selectedWinner, inputKoPayment: '', inputOyaPayment: '' })
+    }
+  },
+
+  onKoPaymentInput(e) {
+    this.setData({ inputKoPayment: e.detail.value })
+  },
+
+  onOyaPaymentInput(e) {
+    this.setData({ inputOyaPayment: e.detail.value })
   },
 
   confirmTsumo() {
-    const { selectedWinner, inputPoints } = this.data
-    const pts = parseInt(inputPoints)
-    if (selectedWinner < 0 || !pts || pts <= 0) {
-      wx.showToast({ title: '请完善信息', icon: 'none' }); return
+    const { selectedWinner, inputKoPayment, inputOyaPayment } = this.data
+    if (!Number.isInteger(selectedWinner) || selectedWinner < 0 || selectedWinner >= this.data.players.length) {
+      wx.showToast({ title: '请选择和了者', icon: 'none' }); return
     }
 
     const isOya = selectedWinner === this.data.dealerIdx
+    const koPayment = Number(inputKoPayment)
+    const oyaPayment = isOya ? koPayment : Number(inputOyaPayment)
+    const validPayment = value => Number.isSafeInteger(value) && value > 0 && value % 100 === 0
+    if (!validPayment(koPayment) || !validPayment(oyaPayment)) {
+      wx.showToast({ title: '支付额须为正数且是100的倍数', icon: 'none' }); return
+    }
     const honbaBonus = this.data.honba * 100
     const players = this.data.players.slice().map(p => ({ ...p }))
 
     const newSticks = this._applyRiichi(players)
     const allSticks = this.data.riichiSticks + newSticks
 
-    // 自摸分账: 输入的是总点数，需要拆分
+    // 直接使用各家支付额，本场另加，供托单独领取。
+    let pts = 0
     let desc = ''
     if (isOya) {
-      const each = Math.ceil(pts / 3 / 100) * 100
+      const each = koPayment
       for (let i = 0; i < 4; i++) {
         if (i !== selectedWinner) {
           const pay = each + honbaBonus
           players[i].points -= pay
           players[selectedWinner].points += pay
+          pts += pay
         }
       }
       desc = `子家各付${each + honbaBonus}点`
     } else {
-      const oyaPay = Math.ceil(pts / 2 / 100) * 100
-      const koPay = Math.ceil(pts / 4 / 100) * 100
+      const oyaPay = oyaPayment
+      const koPay = koPayment
       for (let i = 0; i < 4; i++) {
         if (i === selectedWinner) continue
         const pay = (i === this.data.dealerIdx ? oyaPay : koPay) + honbaBonus
         players[i].points -= pay
         players[selectedWinner].points += pay
+        pts += pay
       }
       desc = `庄家${oyaPay + honbaBonus}点/子家${koPay + honbaBonus}点`
     }

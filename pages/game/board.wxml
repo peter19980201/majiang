@@ -90,16 +90,26 @@
       </view>
       <view class="modal-actions">
         <text class="modal-btn cancel" bindtap="closeTsumo">取消</text>
-        <text class="modal-btn confirm" bindtap="goToCalcTsumo">计算点数</text>
+        <text class="modal-btn confirm" bindtap="goToCalcTsumo">录入手牌</text>
       </view>
       <view class="manual-divider" bindtap="toggleManualInput">
         <view class="divider-line"></view>
         <text class="divider-text">{{showManualInput ? '收起' : '已知点数？手动输入'}}</text>
         <view class="divider-line"></view>
       </view>
-      <view wx:if="{{showManualInput}}" class="manual-area">
-        <input class="points-input" type="number" placeholder="总点数 (不含本场)"
-               value="{{inputPoints}}" bindinput="onPointsInput" />
+      <view wx:if="{{showManualInput}}" class="manual-area tsumo-manual-area">
+        <text wx:if="{{selectedWinner < 0}}" class="payment-hint">请先选择和了者</text>
+        <view wx:else class="payment-fields">
+          <text class="modal-label">闲家各付</text>
+          <input class="points-input" type="number" placeholder="如 700（不含本场）"
+                 value="{{inputKoPayment}}" bindinput="onKoPaymentInput" />
+          <block wx:if="{{selectedWinner !== dealerIdx}}">
+            <text class="modal-label">庄家支付</text>
+            <input class="points-input" type="number" placeholder="如 1300（不含本场）"
+                   value="{{inputOyaPayment}}" bindinput="onOyaPaymentInput" />
+          </block>
+          <text class="payment-hint">本场自动追加：每家 {{honba * 100}} 点。场上及本局立直棒自动计入。</text>
+        </view>
         <text class="manual-confirm-btn" bindtap="confirmTsumo">手动确认</text>
       </view>
     </view>

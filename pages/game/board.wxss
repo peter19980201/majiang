@@ -334,6 +334,28 @@ page {
   font-size:30rpx;
 }
 
+.tsumo-manual-area,
+.payment-fields {
+  display:flex;
+  flex-direction:column;
+  gap:14rpx;
+}
+
+.payment-fields .points-input {
+  flex:none;
+}
+
+.payment-hint {
+  font-size:24rpx;
+  line-height:1.6;
+  color:#4a6145;
+}
+
+.tsumo-manual-area .manual-confirm-btn {
+  justify-content:center;
+  min-height:72rpx;
+}
+
 .manual-confirm-btn {
   display:flex;
   align-items:center;
