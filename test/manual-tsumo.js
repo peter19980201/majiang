@@ -5,6 +5,7 @@ let definition
 let toast
 global.Page = value => { definition = value }
 global.wx = {
+  getStorageSync() { return '' },
   setStorageSync() {},
   showToast(options) { toast = options.title }
 }

@@ -1,5 +1,7 @@
 const T = require('../../utils/tiles')
 const { calculate } = require('../../utils/calculator')
+const CALCULATOR_INPUT_KEYS = ['hand', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
+  'haitei', 'rinshan', 'chankan', 'tenhou', 'chihou', 'dora', 'uraDora', 'redM5', 'redP5', 'redS5']
 
 Page({
   data: {
@@ -72,6 +74,14 @@ Page({
         boardSticks: sticks
       })
       wx.setNavigationBarTitle({ title: '录入和牌' })
+      this.getOpenerEventChannel().on('restoreInput', input => {
+        const restored = {}
+        CALCULATOR_INPUT_KEYS.forEach(key => {
+          if (input[key] !== undefined) restored[key] = JSON.parse(JSON.stringify(input[key]))
+        })
+        this.setData(restored)
+        this.updateRemaining()
+      })
     }
     this.updateRemaining()
   },
@@ -351,6 +361,11 @@ Page({
 
     // 记分板模式: 弹窗展示结果
     if (this.data.boardMode) {
+      result.calculatorInput = {}
+      CALCULATOR_INPUT_KEYS.forEach(key => {
+        result.calculatorInput[key] = JSON.parse(JSON.stringify(this.data[key]))
+      })
+      result.calculatorInput.riichi = this.data.riichi
       this.setData({ showBoardResult: true, boardResult: result })
       return
     }

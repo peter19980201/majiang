@@ -6,7 +6,8 @@
     "pages/reference/reference",
     "pages/game/setup",
     "pages/game/board",
-    "pages/game/history"
+    "pages/game/history",
+    "pages/game/round-detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

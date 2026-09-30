@@ -61,10 +61,11 @@ Page({
       return { rank: rank + 1, name: p.name, points: p.points, rawPt, uma: umaVal, finalPt: rawPt + umaVal }
     })
     const record = {
-      id: Date.now(), date: saved.date, config, result,
-      rounds: state.roundHistory, abandoned: true
+      id: state.gameId || Date.now(), date: saved.date, config, result,
+      rounds: state.roundHistory, abandoned: true,
+      gameState: { ...state, gameOver: true, endedEarly: true, finalResult: result }
     }
-    const history = wx.getStorageSync('gameHistory') || []
+    const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
     history.unshift(record)
     if (history.length > 50) history.length = 50
     wx.setStorageSync('gameHistory', history)

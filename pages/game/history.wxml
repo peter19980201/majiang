@@ -52,6 +52,9 @@
       </view>
       <!-- 详情 -->
       <view class="card-detail" wx:if="{{expandedId === item.id}}"><view class="record-config">起始 {{item.config.startPoints}} · 返还 {{item.config.returnPoints}} · 顺位马 {{item.config.uma}}</view>
+        <view class="current-actions" wx:if="{{item.gameState && item.rounds.length > 0 && item.rounds[item.rounds.length - 1].before}}">
+          <text class="current-btn resume" bindtap="correctLastRound" data-id="{{item.id}}">查看并纠正最近一局</text>
+        </view>
         <view class="detail-section" wx:if="{{item.rounds.length > 0}}">
           <text class="detail-title">每局记录</text>
           <view class="round-item" wx:for="{{item.rounds}}" wx:for-item="rd" wx:key="index">

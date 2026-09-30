@@ -46,14 +46,15 @@ Page({
 
           // 存入历史
           const record = {
-            id: Date.now(),
+            id: state.gameId || Date.now(),
             date: saved.date,
             config,
             result,
             rounds: state.roundHistory,
-            abandoned: true
+            abandoned: true,
+            gameState: { ...state, gameOver: true, endedEarly: true, finalResult: result }
           }
-          const history = wx.getStorageSync('gameHistory') || []
+          const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
           history.unshift(record)
           if (history.length > 50) history.length = 50
           wx.setStorageSync('gameHistory', history)
@@ -66,23 +67,33 @@ Page({
   },
 
   onExpandTap(e) {
-    const id = parseInt(e.currentTarget.dataset.id)
+    const record = this.data.historyList.find(h => String(h.id) === String(e.currentTarget.dataset.id))
+    if (!record) return
+    const id = record.id
     this.setData({ expandedId: this.data.expandedId === id ? -1 : id })
   },
 
   deleteRecord(e) {
-    const id = parseInt(e.currentTarget.dataset.id)
+    const id = e.currentTarget.dataset.id
     wx.showModal({
       title: '确认删除',
       content: '删除后无法恢复',
       success: (res) => {
         if (res.confirm) {
-          const list = this.data.historyList.filter(h => h.id !== id)
+          const list = this.data.historyList.filter(h => String(h.id) !== String(id))
           wx.setStorageSync('gameHistory', list)
           this.setData({ historyList: list })
         }
       }
     })
+  },
+
+  correctLastRound(e) {
+    if (this.data.currentGame) {
+      wx.showToast({ title: '请先结束当前对局再修改历史', icon: 'none' })
+      return
+    }
+    wx.navigateTo({ url: `/pages/game/board?historyId=${encodeURIComponent(e.currentTarget.dataset.id)}` })
   },
 
   clearAll() {
