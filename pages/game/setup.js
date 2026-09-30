@@ -37,7 +37,7 @@ Page({
   onPlayerInput(e) {
     const idx = parseInt(e.currentTarget.dataset.idx)
     const players = this.data.players.slice()
-    players[idx] = e.detail.value || ['東家', '南家', '西家', '北家'][idx]
+    players[idx] = e.detail.value
     this.setData({ players })
   },
 
@@ -47,7 +47,8 @@ Page({
       startPoints: this.data.startPoints,
       returnPoints: this.data.returnPoints,
       uma: this.data.uma,
-      players: this.data.players
+      players: this.data.players.map((name, index) =>
+        name.trim() ? name : this.data.windLabels[index] + '家')
     }
     wx.redirectTo({
       url: `/pages/game/board?config=${encodeURIComponent(JSON.stringify(config))}`

@@ -137,11 +137,11 @@ page {
   border:1rpx solid #829b7e;
   background:linear-gradient(145deg,#2c5d49,#194a37);
   border-radius:22rpx;
-  padding:24rpx 8rpx;
+  min-height:96rpx;
+  padding:22rpx 8rpx;
   display:flex;
-  flex-direction:column;
   align-items:center;
-  gap:16rpx;
+  justify-content:center;
   font-size:34rpx;
   font-weight:600;
 }
