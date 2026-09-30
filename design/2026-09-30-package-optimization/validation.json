@@ -1,0 +1,14 @@
+{
+  "runtimeResourceBytes": 1281099,
+  "largestResourceBytes": 143385,
+  "mainPackageQualityCheck": "passed in WeChat DevTools at 2026-09-30 17:42",
+  "imageAudioQualityCheck": "not passed: tool sums all packaged image/audio bytes; limit 200 KiB",
+  "verification": [
+    "all 34 tile faces",
+    "three red-five toggles",
+    "agari highlight",
+    "four-tile limit",
+    "UI state tests passed"
+  ],
+  "storageModified": false
+}

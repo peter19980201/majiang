@@ -1,0 +1,344 @@
+[
+  {
+    "file": "assets/tiles/engraved-v1/honor-east.png",
+    "beforeBytes": 26518,
+    "afterBytes": 21465,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-green.png",
+    "beforeBytes": 28263,
+    "afterBytes": 24095,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-north.png",
+    "beforeBytes": 27639,
+    "afterBytes": 22854,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-red.png",
+    "beforeBytes": 25551,
+    "afterBytes": 21623,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-south.png",
+    "beforeBytes": 29056,
+    "afterBytes": 23241,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-west.png",
+    "beforeBytes": 27954,
+    "afterBytes": 20453,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/honor-white.png",
+    "beforeBytes": 26895,
+    "afterBytes": 16782,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-1.png",
+    "beforeBytes": 26192,
+    "afterBytes": 22121,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-2.png",
+    "beforeBytes": 26404,
+    "afterBytes": 21466,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-3.png",
+    "beforeBytes": 26959,
+    "afterBytes": 23345,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-4.png",
+    "beforeBytes": 26378,
+    "afterBytes": 22223,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-5-red.png",
+    "beforeBytes": 31256,
+    "afterBytes": 25445,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-5.png",
+    "beforeBytes": 27307,
+    "afterBytes": 22691,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-6.png",
+    "beforeBytes": 27998,
+    "afterBytes": 23156,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-7.png",
+    "beforeBytes": 26437,
+    "afterBytes": 21712,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-8.png",
+    "beforeBytes": 26880,
+    "afterBytes": 21972,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/man-9.png",
+    "beforeBytes": 28033,
+    "afterBytes": 22578,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-1.png",
+    "beforeBytes": 25637,
+    "afterBytes": 21823,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-2.png",
+    "beforeBytes": 27416,
+    "afterBytes": 22289,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-3.png",
+    "beforeBytes": 25708,
+    "afterBytes": 21384,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-4.png",
+    "beforeBytes": 27578,
+    "afterBytes": 22208,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-5-red.png",
+    "beforeBytes": 31615,
+    "afterBytes": 25717,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-5.png",
+    "beforeBytes": 29036,
+    "afterBytes": 24111,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-6.png",
+    "beforeBytes": 29134,
+    "afterBytes": 24248,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-7.png",
+    "beforeBytes": 29081,
+    "afterBytes": 24051,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-8.png",
+    "beforeBytes": 33613,
+    "afterBytes": 27863,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/pin-9.png",
+    "beforeBytes": 30767,
+    "afterBytes": 25912,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-1.png",
+    "beforeBytes": 30431,
+    "afterBytes": 25132,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-2.png",
+    "beforeBytes": 26537,
+    "afterBytes": 19258,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-3.png",
+    "beforeBytes": 26907,
+    "afterBytes": 21558,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-4.png",
+    "beforeBytes": 30374,
+    "afterBytes": 25395,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-5-red.png",
+    "beforeBytes": 28874,
+    "afterBytes": 24396,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-5.png",
+    "beforeBytes": 27719,
+    "afterBytes": 23381,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-6.png",
+    "beforeBytes": 30043,
+    "afterBytes": 25715,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-7.png",
+    "beforeBytes": 28673,
+    "afterBytes": 23616,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-8.png",
+    "beforeBytes": 29385,
+    "afterBytes": 25073,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/tiles/engraved-v1/sou-9.png",
+    "beforeBytes": 30108,
+    "afterBytes": 24654,
+    "dimensions": [
+      168,
+      231
+    ]
+  },
+  {
+    "file": "assets/art/table-texture.jpg",
+    "beforeBytes": 250827,
+    "afterBytes": 59571,
+    "dimensions": [
+      600,
+      900
+    ]
+  }
+]

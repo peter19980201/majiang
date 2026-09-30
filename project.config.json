@@ -3,8 +3,8 @@
   "packOptions": {
     "ignore": [
       {
-        "value": "test/**",
-        "type": "file"
+        "value": "test",
+        "type": "folder"
       },
       {
         "value": "DESIGN.md",
