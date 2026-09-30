@@ -6,16 +6,17 @@
     <view class="result-score" wx:if="{{record.type !== 'draw'}}">{{fmt.points(record.points)}}<text>点</text></view>
     <text class="detail-note" wx:if="{{record.type === 'ron'}}">放铳者 · {{record.loser}}</text>
     <text class="detail-note" wx:if="{{record.desc}}">{{record.desc}}</text>
+    <view wx:for="{{record.winners}}" wx:key="idx"><text class="detail-note">{{item.name}} · {{fmt.points(item.payment)}}点</text><view class="detail-tags"><text class="yaku-tag" wx:for="{{item.yaku}}" wx:for-item="y" wx:key="name">{{y.name}}</text></view></view>
     <text class="detail-note" wx:if="{{record.type === 'draw'}}">{{record.tenpai}}</text>
     <view class="result-meta" wx:if="{{record.level || record.han || record.fu}}"><text wx:if="{{record.level}}">{{record.level}}</text><text wx:if="{{record.han}}">{{record.han}}番</text><text wx:if="{{record.fu}}">{{record.fu}}符</text></view>
     <text class="detail-note" wx:if="{{record.riichiCollected > 0}}">收取供托 · {{record.riichiCollected}}本</text>
   </view>
-  <view class="detail-card" wx:if="{{record.type !== 'draw'}}"><text class="detail-title">役种</text><view class="detail-tags" wx:if="{{record.tags.length}}"><text class="yaku-tag" wx:for="{{record.tags}}" wx:key="*this">{{item}}</text></view><text class="detail-note" wx:else>手动录入的记录未保存役种</text></view>
+  <view class="detail-card" wx:if="{{record.type !== 'draw' && !record.winners}}"><text class="detail-title">役种</text><view class="detail-tags" wx:if="{{record.tags.length}}"><text class="yaku-tag" wx:for="{{record.tags}}" wx:key="*this">{{item}}</text></view><text class="detail-note" wx:else>手动录入的记录未保存役种</text></view>
   <view class="detail-card" wx:if="{{record.changes.length}}">
     <text class="detail-title">点棒变化</text>
     <view class="points-row" wx:for="{{record.changes}}" wx:key="index"><view class="points-player"><text>{{item.name}}</text><text class="points-transition">{{fmt.points(item.before)}} → {{fmt.points(item.after)}}</text></view><text class="points-delta {{item.delta < 0 ? 'negative' : 'positive'}}">{{item.delta > 0 ? '+' : ''}}{{fmt.points(item.delta)}}</text></view>
     <text class="detail-note">包含本局立直支出及收取的供托</text>
   </view>
-  <text class="legacy-note" wx:if="{{!record.canChange}}">这条旧记录未保存局前数据，暂不支持修改或删除。</text>
+  <text class="legacy-note" wx:if="{{!record.canChange}}">{{record.latest ? '这条旧记录未保存局前数据，暂不支持修改或删除。' : '仅最新一局支持修改和删除，本局可查看详情。'}}</text>
   <view class="detail-actions"><button class="delete-button" disabled="{{!record.canChange || busy}}" bindtap="deleteRecord">删除记录</button><button class="edit-button" disabled="{{!record.canChange || busy}}" bindtap="editRecord">修改本局</button></view>
 </view>

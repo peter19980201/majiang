@@ -42,6 +42,15 @@
     </view>
   </view>
 
+  <view class="section">
+    <text class="section-title">对局规则</text>
+    <view class="rule-row" wx:for="{{ruleOptions}}" wx:key="key">
+      <view class="rule-copy"><text class="setting-label">{{item.label}}</text><text class="rule-note">{{item.note}}</text></view>
+      <switch checked="{{rules[item.key]}}" color="#285342" bindchange="toggleRule" data-key="{{item.key}}" />
+    </view>
+    <text class="rule-note">规则在本场对局开始后固定，关闭特殊规则则使用基础流程。</text>
+  </view>
+
   <!-- 玩家昵称 -->
   <view class="section">
     <text class="section-title">玩家设置</text>

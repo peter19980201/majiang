@@ -230,6 +230,14 @@ page {
 .record-detail-link text:last-child { font-size:30rpx; line-height:1; }
 .record-pressed { background:#f2f3e9; }
 
+.multi-ron-fields { display:flex; flex-direction:column; gap:18rpx; }
+.multi-ron-row { display:flex; flex-wrap:wrap; align-items:center; gap:14rpx; padding:18rpx; background:#eff1e8; border-radius:14rpx; }
+.multi-ron-row input { width:100%; flex:none; box-sizing:border-box; }
+.multi-calc-link { margin-left:auto; color:#365d47; font-size:24rpx; }
+.abort-reasons { display:flex; flex-wrap:wrap; gap:12rpx; margin-bottom:20rpx; }
+.abort-reasons text { padding:14rpx; border:1rpx solid #d2d9c4; border-radius:12rpx; font-size:24rpx; }
+.abort-reasons .active { background:#eff1e8; border-color:#99ab89; }
+
 .edit-type-tabs {
   display:flex;
   gap:12rpx;

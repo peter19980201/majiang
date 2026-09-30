@@ -1,3 +1,49 @@
+.history-page {
+  padding:0 24rpx calc(36rpx + env(safe-area-inset-bottom));
+}
+
+.history-heading {
+  position:relative;
+  height:280rpx;
+  margin:0 -24rpx 8rpx;
+  padding:42rpx 32rpx 0;
+  overflow:hidden;
+}
+
+.history-art {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+.history-title-row {
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:18rpx;
+}
+
+.history-title {
+  font-family:'Songti SC','STSong',serif;
+  font-size:48rpx;
+  font-weight:800;
+  letter-spacing:2rpx;
+  color:#142f29;
+}
+
+.history-seal {
+  font-family:'Songti SC','STSong',serif;
+  font-size:28rpx;
+  line-height:1.12;
+  padding:5rpx;
+  border:2rpx solid #315647;
+  border-radius:4rpx;
+  color:#315647;
+}
+
 .current-game {
   background:linear-gradient(130deg,#eef2e7,#e2e9d8);
   border:1rpx solid #d6dfca;
@@ -5,6 +51,7 @@
   padding:26rpx;
   margin-bottom:30rpx;
 }
+
 
 .current-header {
   display:flex;
@@ -123,7 +170,7 @@
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:16rpx;
+  margin:0 8rpx 18rpx;
 }
 
 .header-title {
@@ -138,7 +185,34 @@
 }
 
 .card {
+  position:relative;
+  overflow:hidden;
   padding:24rpx;
+  margin-bottom:20rpx;
+  box-shadow:0 4rpx 14rpx rgba(48,47,25,.045);
+}
+
+.card-bamboo {
+  position:absolute;
+  top:0;
+  right:100rpx;
+  width:210rpx;
+  height:74rpx;
+  overflow:hidden;
+  opacity:.18;
+  pointer-events:none;
+}
+
+.card-bamboo image {
+  position:absolute;
+  top:0;
+  right:0;
+  width:420rpx;
+  height:175rpx;
+}
+
+.card-header,.rank-row,.card-detail {
+  position:relative;
 }
 
 .card-header {
@@ -193,9 +267,8 @@
 
 .rank-row {
   display:flex;
-  gap:10rpx;
-  margin-top:20rpx;
-  padding-top:20rpx;
+  margin-top:18rpx;
+  padding:26rpx 0 6rpx;
   border-top:1rpx solid #e6e7da;
 }
 
@@ -203,31 +276,32 @@
   flex:1;
   min-width:0;
   text-align:center;
+  padding:0 4rpx;
+  border-right:1rpx solid #e8e5dc;
+}
+
+.rank-item:last-child {
+  border-right:0;
 }
 
 .rank-num {
   display:inline-block;
-  width:31rpx;
-  height:35rpx;
-  line-height:34rpx;
-  color:#fff;
-  background:#a1a898;
-  border-radius:6rpx;
-  font-size:23rpx;
+  font-family:'Songti SC','STSong',serif;
+  font-size:24rpx;
+  line-height:1.4;
+  color:#7c8a82;
+  border-bottom:1rpx solid #dfe3da;
+  padding-bottom:3rpx;
 }
 
 .rank-num.rank-1 {
-  background:#b3984a;
-}
-
-.rank-num.rank-3 {
-  background:#b68e70;
+  color:#204e40;
 }
 
 .rank-name {
   display:block;
   font-size:23rpx;
-  margin-top:8rpx;
+  margin-top:12rpx;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -235,15 +309,16 @@
 
 .rank-points {
   display:block;
-  font-size:27rpx;
+  font-size:29rpx;
   margin-top:5rpx;
   font-weight:500;
+  font-variant-numeric:tabular-nums;
 }
 
 .rank-pt {
   display:block;
   font-size:22rpx;
-  margin-top:4rpx;
+  margin-top:8rpx;
 }
 
 .card-detail {
@@ -321,6 +396,3 @@
 .current-header,.current-info,.current-players,.current-actions { position:relative; z-index:1; }
 .cp-tile { margin-bottom:14rpx; line-height:0; }
 .current-round { font-family:'Songti SC','STSong',serif; font-weight:700; }
-.rank-num { background:linear-gradient(135deg,#bec4bb,#8e978d); box-shadow:inset 0 1rpx 1rpx #fff9; }
-.rank-num.rank-1 { background:linear-gradient(135deg,#e1c371,#ad7c29); }
-.rank-num.rank-3 { background:linear-gradient(135deg,#ceab88,#9b7559); }

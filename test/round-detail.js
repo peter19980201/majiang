@@ -32,8 +32,8 @@ assert.strictEqual(board.data.historyCards[0].roundTitle, '東1局')
 assert.strictEqual(board.data.historyCards[0].honbaLabel, '0本场')
 assert(board.data.historyCards[0].latest)
 
-function open() {
-  board.openRoundDetail({ currentTarget: { dataset: { index: board.data.roundHistory.length - 1 } } })
+function open(index = board.data.roundHistory.length - 1) {
+  board.openRoundDetail({ currentTarget: { dataset: { index } } })
   assert.strictEqual(navigation.url, '/pages/game/round-detail')
   const detail = page('pages/game/round-detail.js')
   let listener
@@ -77,14 +77,14 @@ board.setData({ roundHistory: [{ round: '東1局 0本场', type: 'tsumo', winner
   yakuSummary: '门前清自摸和 一气通贯' }] })
 board._refreshHistoryCards()
 detail = open()
-assert.deepStrictEqual(detail.data.record.tags, ['门前清自摸和', '一气通贯'])
+assert.deepStrictEqual(detail.data.record.tags, ['一气通贯', '门前清自摸和'])
 assert.strictEqual(detail.data.record.canChange, false)
 detail.editRecord()
 detail.deleteRecord()
 assert.strictEqual(board.data.roundHistory.length, 1)
 assert.strictEqual(detail.data.busy, false)
 
-// Earlier cards do not navigate, and stale detail callbacks cannot change a newer result.
+// Earlier cards are read-only, and stale callbacks cannot change a newer result.
 board.setData({ roundHistory: original })
 board._autoSave()
 open()
@@ -96,9 +96,33 @@ stale.editRound()
 stale.deleteRound()
 assert.deepStrictEqual(board.data.roundHistory, current)
 assert.strictEqual(board.data.editingLastRound, false)
+detail = open(0)
+assert.strictEqual(detail.data.record.canChange, false)
+assert.strictEqual(detail.data.record.latest, false)
+assert.deepStrictEqual(detail.data.record.changes.map(p => p.delta), [-3900, 3900, 0, 0])
+detail.editRecord()
+detail.deleteRecord()
+// Even if a stale or forged UI event reaches the board, earlier rounds stay immutable.
+navigation.events.editRound()
+navigation.events.deleteRound()
+assert.deepStrictEqual(board.data.roundHistory, current)
+assert.strictEqual(board.data.editingLastRound, false)
 navigation = null
-board.openRoundDetail({ currentTarget: { dataset: { index: 0 } } })
+board.openRoundDetail({ currentTarget: { dataset: { index: -1 } } })
 assert.strictEqual(navigation, null)
 assert.deepStrictEqual(board.data.historyCards.map(r => r.latest), [false, true])
 assert.strictEqual(View.describe({ type: 'draw', tenpai: '全员不听' }).name, '流局')
 console.log('Round detail passed: navigation, edit/cancel, delete/cancel, failed return, score restore, legacy and stale-record guards.')
+
+// Stable descending order for legacy names and actual recorded open-hand/dora han.
+assert.deepStrictEqual(View.describe({ yakuSummary: '平和 一杯口 一气通贯 清一色' }).tags,
+  ['清一色', '一气通贯', '平和', '一杯口'])
+const ranked = { yaku: [{ name: '三色同顺', han: 1 }, { name: '三暗刻', han: 2 },
+  { name: '宝牌', han: 4 }, { name: '断幺九', han: 1 }] }
+assert.deepStrictEqual(View.describe(ranked).tags, ['宝牌', '三暗刻', '三色同顺', '断幺九'])
+assert.strictEqual(ranked.yaku[0].name, '三色同顺', 'display sorting must not mutate storage')
+assert.deepStrictEqual(View.describe({ yaku: [{ name: '天和', han: -1, isYakuman: true, yakumanTimes: 1 },
+  { name: '四暗刻单骑', han: -1, isYakuman: true, yakumanTimes: 2 }] }).tags, ['四暗刻单骑', '天和'])
+assert.deepStrictEqual(View.describe({ yakuSummary: '三色同顺 三暗刻',
+  input: { calculatorInput: { melds: [{ type: 'chi' }] } } }).tags, ['三暗刻', '三色同顺'])
+console.log('All rounds are viewable; only latest is editable; yaku sort by actual han with legacy fallback.')

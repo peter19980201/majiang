@@ -1,3 +1,4 @@
+const { settle } = require('../../utils/game-settlement')
 Page({
   data: { currentGame: null },
   onShow() {
@@ -51,15 +52,7 @@ Page({
   _settleAndSave(saved) {
     const state = saved.gameState
     const config = state.config
-    const uma = config.uma.split('-').map(Number)
-    const umaValues = [uma[1], uma[0], -uma[0], -uma[1]]
-    const sorted = state.players.map((p, i) => ({ ...p, idx: i }))
-      .sort((a, b) => b.points - a.points)
-    const result = sorted.map((p, rank) => {
-      const rawPt = (p.points - config.returnPoints) / 1000
-      const umaVal = umaValues[rank]
-      return { rank: rank + 1, name: p.name, points: p.points, rawPt, uma: umaVal, finalPt: rawPt + umaVal }
-    })
+    const result = settle(config, state.players)
     const record = {
       id: state.gameId || Date.now(), date: saved.date, config, result,
       rounds: state.roundHistory, abandoned: true,
@@ -67,7 +60,6 @@ Page({
     }
     const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
     history.unshift(record)
-    if (history.length > 50) history.length = 50
     wx.setStorageSync('gameHistory', history)
     wx.removeStorageSync('currentGame')
   },

@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Chinese ranks",
+    "history list",
+    "tap expand and collapse",
+    "active game",
+    "empty state"
+  ],
+  "records": 3,
+  "errors": [],
+  "storageModified": false
+}

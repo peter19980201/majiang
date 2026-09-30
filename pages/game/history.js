@@ -1,7 +1,10 @@
+const { settle } = require('../../utils/game-settlement')
+const { summary } = require('../../utils/game-rules')
 Page({
   data: {
     currentGame: null,
     windLabels: ['東', '南', '西', '北'],
+    rankLabels: ['一位', '二位', '三位', '四位'],
     historyList: [],
     expandedId: -1
   },
@@ -9,7 +12,7 @@ Page({
   onShow() {
     const currentGame = wx.getStorageSync('currentGame') || null
     const list = wx.getStorageSync('gameHistory') || []
-    this.setData({ currentGame, historyList: list })
+    this.setData({ currentGame, historyList: list.map(game => ({ ...game, ruleSummary: summary(game.config || {}) })) })
   },
 
   resumeGame() {
@@ -27,22 +30,7 @@ Page({
           const config = state.config
 
           // 结算
-          const uma = config.uma.split('-').map(Number)
-          const umaValues = [uma[1], uma[0], -uma[0], -uma[1]]
-          const sorted = state.players.map((p, i) => ({ ...p, idx: i }))
-            .sort((a, b) => b.points - a.points)
-          const result = sorted.map((p, rank) => {
-            const rawPt = (p.points - config.returnPoints) / 1000
-            const umaVal = umaValues[rank]
-            return {
-              rank: rank + 1,
-              name: p.name,
-              points: p.points,
-              rawPt,
-              uma: umaVal,
-              finalPt: rawPt + umaVal
-            }
-          })
+          const result = settle(config, state.players)
 
           // 存入历史
           const record = {
@@ -56,11 +44,10 @@ Page({
           }
           const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
           history.unshift(record)
-          if (history.length > 50) history.length = 50
           wx.setStorageSync('gameHistory', history)
 
           wx.removeStorageSync('currentGame')
-          this.setData({ currentGame: null, historyList: history })
+          this.onShow()
         }
       }
     })
@@ -82,7 +69,7 @@ Page({
         if (res.confirm) {
           const list = this.data.historyList.filter(h => String(h.id) !== String(id))
           wx.setStorageSync('gameHistory', list)
-          this.setData({ historyList: list })
+          this.onShow()
         }
       }
     })
@@ -103,7 +90,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.setStorageSync('gameHistory', [])
-          this.setData({ historyList: [] })
+          this.onShow()
         }
       }
     })
