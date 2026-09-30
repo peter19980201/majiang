@@ -362,7 +362,8 @@ Page({
       agariTile,
       agariType: this.data.agariType,
       bakaze: this.data.bakaze,
-      jikaze: this.data.jikaze
+      jikaze: this.data.jikaze,
+      honba: this.data.honba
     }
 
     wx.navigateTo({

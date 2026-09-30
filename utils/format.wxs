@@ -1,0 +1,14 @@
+// Presentation only. Keep all score arithmetic in JavaScript.
+function points(value) {
+  if (value === undefined || value === null) return '—';
+  var source = '' + value;
+  var sign = source.charAt(0) === '-' ? '-' : '';
+  if (sign) source = source.slice(1);
+  var result = '';
+  for (var i = 0; i < source.length; i++) {
+    if (i > 0 && (source.length - i) % 3 === 0) result += ',';
+    result += source.charAt(i);
+  }
+  return sign + result;
+}
+module.exports = { points: points };

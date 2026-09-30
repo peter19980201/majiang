@@ -1,0 +1,224 @@
+[
+  {
+    "file": "honor-east.png",
+    "beforeBytes": 82688,
+    "afterBytes": 26518,
+    "quantized": true
+  },
+  {
+    "file": "honor-green.png",
+    "beforeBytes": 90079,
+    "afterBytes": 28263,
+    "quantized": true
+  },
+  {
+    "file": "honor-north.png",
+    "beforeBytes": 81034,
+    "afterBytes": 27639,
+    "quantized": true
+  },
+  {
+    "file": "honor-red.png",
+    "beforeBytes": 75497,
+    "afterBytes": 25551,
+    "quantized": true
+  },
+  {
+    "file": "honor-south.png",
+    "beforeBytes": 82458,
+    "afterBytes": 29056,
+    "quantized": true
+  },
+  {
+    "file": "honor-west.png",
+    "beforeBytes": 81456,
+    "afterBytes": 27954,
+    "quantized": true
+  },
+  {
+    "file": "honor-white.png",
+    "beforeBytes": 57033,
+    "afterBytes": 26895,
+    "quantized": true
+  },
+  {
+    "file": "man-1.png",
+    "beforeBytes": 83247,
+    "afterBytes": 26192,
+    "quantized": true
+  },
+  {
+    "file": "man-2.png",
+    "beforeBytes": 84861,
+    "afterBytes": 26404,
+    "quantized": true
+  },
+  {
+    "file": "man-3.png",
+    "beforeBytes": 87219,
+    "afterBytes": 26959,
+    "quantized": true
+  },
+  {
+    "file": "man-4.png",
+    "beforeBytes": 88131,
+    "afterBytes": 26378,
+    "quantized": true
+  },
+  {
+    "file": "man-5-red.png",
+    "beforeBytes": 90809,
+    "afterBytes": 31256,
+    "quantized": true
+  },
+  {
+    "file": "man-5.png",
+    "beforeBytes": 90724,
+    "afterBytes": 27307,
+    "quantized": true
+  },
+  {
+    "file": "man-6.png",
+    "beforeBytes": 88023,
+    "afterBytes": 27998,
+    "quantized": true
+  },
+  {
+    "file": "man-7.png",
+    "beforeBytes": 86923,
+    "afterBytes": 26437,
+    "quantized": true
+  },
+  {
+    "file": "man-8.png",
+    "beforeBytes": 86369,
+    "afterBytes": 26880,
+    "quantized": true
+  },
+  {
+    "file": "man-9.png",
+    "beforeBytes": 86525,
+    "afterBytes": 28033,
+    "quantized": true
+  },
+  {
+    "file": "pin-1.png",
+    "beforeBytes": 86233,
+    "afterBytes": 25637,
+    "quantized": true
+  },
+  {
+    "file": "pin-2.png",
+    "beforeBytes": 84928,
+    "afterBytes": 27416,
+    "quantized": true
+  },
+  {
+    "file": "pin-3.png",
+    "beforeBytes": 85847,
+    "afterBytes": 25708,
+    "quantized": true
+  },
+  {
+    "file": "pin-4.png",
+    "beforeBytes": 91108,
+    "afterBytes": 27578,
+    "quantized": true
+  },
+  {
+    "file": "pin-5-red.png",
+    "beforeBytes": 102278,
+    "afterBytes": 31615,
+    "quantized": true
+  },
+  {
+    "file": "pin-5.png",
+    "beforeBytes": 102651,
+    "afterBytes": 29036,
+    "quantized": true
+  },
+  {
+    "file": "pin-6.png",
+    "beforeBytes": 106183,
+    "afterBytes": 29134,
+    "quantized": true
+  },
+  {
+    "file": "pin-7.png",
+    "beforeBytes": 107474,
+    "afterBytes": 29081,
+    "quantized": true
+  },
+  {
+    "file": "pin-8.png",
+    "beforeBytes": 112260,
+    "afterBytes": 33613,
+    "quantized": true
+  },
+  {
+    "file": "pin-9.png",
+    "beforeBytes": 116954,
+    "afterBytes": 30767,
+    "quantized": true
+  },
+  {
+    "file": "sou-1.png",
+    "beforeBytes": 101187,
+    "afterBytes": 30431,
+    "quantized": true
+  },
+  {
+    "file": "sou-2.png",
+    "beforeBytes": 76221,
+    "afterBytes": 26537,
+    "quantized": true
+  },
+  {
+    "file": "sou-3.png",
+    "beforeBytes": 80264,
+    "afterBytes": 26907,
+    "quantized": true
+  },
+  {
+    "file": "sou-4.png",
+    "beforeBytes": 85372,
+    "afterBytes": 30374,
+    "quantized": true
+  },
+  {
+    "file": "sou-5-red.png",
+    "beforeBytes": 89233,
+    "afterBytes": 28874,
+    "quantized": true
+  },
+  {
+    "file": "sou-5.png",
+    "beforeBytes": 88779,
+    "afterBytes": 27719,
+    "quantized": true
+  },
+  {
+    "file": "sou-6.png",
+    "beforeBytes": 93276,
+    "afterBytes": 30043,
+    "quantized": true
+  },
+  {
+    "file": "sou-7.png",
+    "beforeBytes": 91632,
+    "afterBytes": 28673,
+    "quantized": true
+  },
+  {
+    "file": "sou-8.png",
+    "beforeBytes": 95718,
+    "afterBytes": 29385,
+    "quantized": true
+  },
+  {
+    "file": "sou-9.png",
+    "beforeBytes": 93665,
+    "afterBytes": 30108,
+    "quantized": true
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "01-home",
+    "title": "首页",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-f792bd5a-0d47-44fb-be33-2ba39e454efc.png",
+    "file": "01-home.png"
+  },
+  {
+    "id": "02-calculator",
+    "title": "快速计分",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-2cbf8440-fed2-47d6-9979-541935c7dc1a.png",
+    "file": "02-calculator.png"
+  },
+  {
+    "id": "03-result",
+    "title": "计分结果",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-b3b2100d-ee18-41a9-8098-1290223cf353.png",
+    "file": "03-result.png"
+  },
+  {
+    "id": "04-setup",
+    "title": "新建对局",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-cfec95f6-6ba7-403b-8b7d-b1bf776c0777.png",
+    "file": "04-setup.png"
+  },
+  {
+    "id": "05-board",
+    "title": "对局记分板",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-91c269de-7531-4769-b873-80e1b5d4d0f6.png",
+    "file": "05-board.png"
+  },
+  {
+    "id": "06-reference",
+    "title": "役种速查",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-d3500456-3c21-4a98-9077-51ebd9a20744.png",
+    "file": "06-reference.png"
+  },
+  {
+    "id": "07-history",
+    "title": "历史对局",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-c21b78fe-7773-47c6-82d0-5689c1aeb42b.png",
+    "file": "07-history.png"
+  },
+  {
+    "id": "08-dialogs",
+    "title": "对局操作弹窗",
+    "source": "/Users/david/.codex/generated_images/01a0f045-3560-7a21-811a-24f58a10f986/exec-8b5c1110-790a-4c91-9be0-b32a98c3553d.png",
+    "file": "08-dialogs.png"
+  }
+]

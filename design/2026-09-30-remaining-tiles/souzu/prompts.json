@@ -1,0 +1,80 @@
+{
+  "tool": "image_gen built-in",
+  "source": "https://shop.taiyo-chemicals.co.jp/blog/?p=1288",
+  "jobs": [
+    {
+      "name": "sou-1",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject: ONE BAMBOO (一索), not one bamboo stick. Reference 2 is the exact traditional AMOS bird motif layout: an upright stylized peacock with tall teardrop fan tail at upper center, rounded many small ivory eyelets, bird body below with side wings, tiny red beak and two red feet, ivory openings engraved into deep emerald green dark enamel silhouette. Use reference 2 for bird silhouette and structure, but render it with reference 1's real engraved resin enamel material, not flat clipart or black outlines. Large centered bird occupies central 70% width, 75% height.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png",
+        "/Users/david/Program/majiang/design/2026-09-30-remaining-tiles/souzu/references/1s.png"
+      ]
+    },
+    {
+      "name": "sou-2",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject TWO BAMBOO 二索. Exactly TWO identical deep emerald green engraved bamboo rods stacked vertically on the central axis: ONE upper center and ONE lower center. NOT side by side. Each rod tall with two tapered ivory openings, thick rounded enamel rim and center bamboo node like the reference. Symbol group centered, fills 72% tile height with modest gap between the two. No red.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-4",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject FOUR BAMBOO 四索. Exactly FOUR identical deep emerald green engraved bamboo rods. Arrangement TWO columns by TWO rows: top left, top right, bottom left, bottom right. Each vertical rod has two ivory inner openings and a center joint. All four same size and upright. Balanced modest gaps, substantial large symbols fill central 66% width and 76% height. No red.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-5",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject FIVE BAMBOO 五索. Exactly FIVE bamboo rods in traditional quincunx: FOUR dark emerald GREEN upright rods at top-left top-right bottom-left bottom-right, and ONE vivid vermilion RED upright rod at the exact center. All five identical sizes/shapes. Center red sits between outer columns and vertically halfway between upper and lower pair. Every rod has two tapered ivory interior openings and one center joint like reference. Symbols fill central 72% width,76% height. Count5,4green1red.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-6",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject SIX BAMBOO 六索. Exactly SIX equal deep emerald GREEN bamboo rods in TWO ROWS of THREE rods. Grid3columns2rows. Each upright rod has the double hourglass ivory inner openings and central joint of the reference. All six equal size and upright. Balanced dense substantial layout, symbols occupy72%width76%height. No red. Ensure count6, not 2columns3rows.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-7",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject SEVEN BAMBOO 七索, traditional AMOS arrangement. Exactly SEVEN upright bamboo rods in three levels: upper level ONE vermilion RED rod centered; middle level THREE dark emerald GREEN rods across; bottom level THREE dark emerald GREEN rods across. Total1red+6green. All7same size, with two ivory inner hourglass openings and center node. Top one at x50%y26%, middle row x27/50/73%y50%, bottom row x27/50/73%y75%. Rods large and balanced with clear small vertical gaps, group occupies70%width76%height. No extra marks.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-8",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject EIGHT BAMBOO 八索. Reference2 is the EXACT traditional AMOS eight-bamboo layout; use it for motif geometry ONLY, not flat style or black color. ALL bamboo deep emerald GREEN like reference1. Two separate symmetric horizontal groups. Upper group: vertical rod on left and right, with TWO diagonally tilted bamboo rods BETWEEN them rising toward a central peak, forming an arch / inverted V between side rods. Lower group is vertically mirrored: vertical rod at left and right, with TWO diagonal bamboo rods BETWEEN them descending toward a central trough, V shape. There are exactly8rods total:4outervertical+4innerdiagonal. Each rod retains carved double ivory openings and center node. Group members meet closely at their ends as in reference2. Do NOT make eight rods in a rectangular grid. Do NOT make letters or infinity signs. Motif bold, fills central72%width76%height, two groups separated by modest clear horizontal ivory gap.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png",
+        "/Users/david/Program/majiang/design/2026-09-30-remaining-tiles/souzu/references/8s.png"
+      ]
+    },
+    {
+      "name": "sou-9",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Subject NINE BAMBOO 九索 traditional AMOS. Exactly NINE equal upright bamboo rods in regular THREE columns by THREE rows. Color by COLUMN: left column all3deepemeraldGREEN, CENTER COLUMN all3vermilionRED, right column all3deepemeraldGREEN. Therefore every horizontal row is GREEN RED GREEN. Each rod has two tapered ivory interior openings and one node. Bold close balanced layout, count9 total6green3red, central72%width76%height. Do not use red middle ROW.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png"
+      ]
+    },
+    {
+      "name": "sou-9",
+      "prompt": "Use case: product-mockup. Generate exactly ONE mahjong tile game asset, complete upright ivory tile on true transparent alpha. Match reference 1's exact creamy ivory resin body, rounded corners, straight front orthographic view, bevel, soft lighting and polished deeply engraved enamel style. Keep silhouette and framing consistent. Replace ONLY face symbols. All symbols large, bold and readable at 42px wide. Bamboo symbols are traditional hourglass rods with two ivory interior openings and a central joint exactly like reference 1. No type, numbers, labels, watermark, background, table or drop shadow outside tile. Create NINE BAMBOO 九索. Reference2 gives mandatory EXACT motif count and layout. Copy reference2's THREE ROWS OF THREE, making NINE small equal upright bamboo rods total. Each rod is SHORT, about18%tileheight, so ALL THREE ROWS FIT. Top row at y27% contains GREEN,RED,GREEN. Middle row y50% contains GREEN,RED,GREEN. Bottom row y73% contains GREEN,RED,GREEN. Left x27%, center50%, right73%. Dark emerald green and vermilion enamel colors, NOT black illustration style. Each short rod has two ivory openings and a middle joint like reference1. Mandatory final check: count nine rods,3green/red/green in each of3horizontalrows. NOT six large rods! Do not copy three-reference count, only its tile body material. All9symbols occupy central72%width74%height.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/sou-3.png",
+        "/Users/david/Program/majiang/design/2026-09-30-remaining-tiles/souzu/references/9s.png"
+      ],
+      "revision": 2
+    },
+    {
+      "name": "sou-5-red",
+      "prompt": "Use case: precise-object-edit. Create red five bamboo 赤五索 from this exact tile image. Change ONLY the FOUR GREEN bamboo symbols to exactly the same vermilion RED as the center bamboo. ALL FIVE bamboo symbols must now be RED, retain EXACT existing five-rod quincunx layout, same shapes, same engraving, ivory openings, same ivory resin body, lighting, straight front view, corners and framing. True transparent alpha outside tile. No other edits, no extra text or red badge. This is a professional mahjong miniprogram tile asset.",
+      "refs": [
+        "/Users/david/Program/majiang/design/2026-09-30-remaining-tiles/souzu/originals/sou-5.png"
+      ]
+    }
+  ]
+}

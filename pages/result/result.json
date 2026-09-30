@@ -1,7 +1,8 @@
 {
-  "navigationBarTitleText": "计算结果",
-  "navigationBarBackgroundColor": "#0d3b1f",
+  "navigationBarTitleText": "计分结果",
+  "navigationBarBackgroundColor": "#f6f4ed",
   "usingComponents": {
     "tile": "/components/tile/tile"
-  }
+  },
+  "navigationBarTextStyle": "black"
 }

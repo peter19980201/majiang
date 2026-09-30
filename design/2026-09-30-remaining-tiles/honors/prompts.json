@@ -1,0 +1,45 @@
+{
+  "tool": "image_gen.imagegen (built-in)",
+  "referenceUrl": "https://shop.taiyo-chemicals.co.jp/blog/?p=1288",
+  "references": [
+    "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/honor-east.png",
+    "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/pin-5.png"
+  ],
+  "images": [
+    {
+      "name": "honor-south",
+      "prompt": "Use case: precise-object-edit. Make one matching traditional Japanese mahjong SOUTH WIND tile. Input image is the approved EAST tile: preserve its exact warm ivory body, rounded rectangular silhouette, frontal orthographic pose, bevel, soft upper-left lighting, near-black navy lacquer engraved texture and overall artwork scale. Replace ONLY the central 東 with the exact character 南, visibly correct, large and centered, occupying about 72% width and 72% height. Use traditional real physical mahjong carved bold brush calligraphy, with deeply incised strokes, tiny polished groove highlights, tapered ends, dignified balanced proportions. Not a computer font. No 東 remains. One complete tile, transparent outside, no shadow outside tile, no table, no extra text, no border graphic, no watermark. Keep actual alpha transparency.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-a2f6377d-8558-437b-a454-25e802727f81.png"
+    },
+    {
+      "name": "honor-west",
+      "prompt": "Use case: precise-object-edit. Make one matching traditional Japanese mahjong WEST WIND tile. Input image is the approved EAST tile: preserve its exact warm ivory body, rounded rectangular silhouette, frontal orthographic pose, bevel, soft upper-left lighting, near-black navy lacquer engraved texture and overall artwork scale. Replace ONLY the central 東 with the exact character 西, visibly correct, large and centered, occupying about 72% width and 72% height. Use traditional real physical mahjong carved bold brush calligraphy, with deeply incised strokes, tiny polished groove highlights, tapered ends, dignified balanced proportions. Not a computer font. No 東 remains. One complete tile, transparent outside, no shadow outside tile, no table, no extra text, no border graphic, no watermark. Keep actual alpha transparency.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-58662997-0790-483b-9ab3-95858248cfdc.png"
+    },
+    {
+      "name": "honor-north",
+      "prompt": "Use case: precise-object-edit. Make one matching traditional Japanese mahjong NORTH WIND tile. Input image is the approved EAST tile: preserve its exact warm ivory body, rounded rectangular silhouette, frontal orthographic pose, bevel, soft upper-left lighting, near-black navy lacquer engraved texture and overall artwork scale. Replace ONLY the central 東 with the exact character 北, visibly correct, large and centered, occupying about 72% width and 72% height. Use traditional real physical mahjong carved bold brush calligraphy, with deeply incised strokes, tiny polished groove highlights, tapered ends, dignified balanced proportions. Not a computer font. No 東 remains. One complete tile, transparent outside, no shadow outside tile, no table, no extra text, no border graphic, no watermark. Keep actual alpha transparency.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-131e2c39-08c5-4403-9fb8-2b496eb7a590.png"
+    },
+    {
+      "name": "honor-white",
+      "prompt": "Use case: precise-object-edit. Convert the attached approved east wind mahjong tile into a Japanese WHITE DRAGON (HAKU) tile. Preserve exactly the warm ivory rounded rectangular tile body, polished cream resin face, bevels, straight-on orthographic perspective, soft upper-left lighting and size. REMOVE the entire dark 東 character and all engraving from its face, restoring uninterrupted smooth ivory material matching the surrounding face. The face is completely BLANK as a traditional Japanese riichi white dragon: no character 白, no rectangle, no frame, no pips, no symbols, no groove, no residual ghost of the character. One complete physical tile on true transparent alpha background, no external shadow, no other objects or text.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-b20dc753-6a30-4ae7-9f6a-26b1fe0475f7.png"
+    },
+    {
+      "name": "honor-green",
+      "prompt": "Use case: precise-object-edit. Make one matching traditional Japanese mahjong GREEN DRAGON tile. Input image is the approved EAST tile: preserve its exact warm ivory body, rounded rectangular silhouette, frontal orthographic pose, bevel, soft upper-left lighting, engraved texture and overall artwork scale. Replace ONLY the central 東 with the exact traditional Chinese character 發, visibly correct, large and centered, about 72% width and 72% height, all strokes filled deep emerald GREEN lacquer. Traditional real physical mahjong carved bold brush calligraphy, deeply incised strokes, tiny polished groove highlights, tapered ends, dignified balanced proportions, not a modern font. Use traditional 發 with 癶 top, 弓 lower left and 殳 lower right; not simplified 发, not Japanese 発, no extra strokes. One complete tile, transparent outside, no external shadow, no other objects, no extra text, no watermark. Keep actual alpha transparency.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-44bbd450-02a9-43b3-8372-03bd9e037a58.png"
+    },
+    {
+      "name": "honor-red",
+      "prompt": "Use case: precise-object-edit. Make one matching traditional Japanese mahjong RED DRAGON tile. Image 1 is the approved EAST tile: preserve its exact warm ivory body, rounded rectangular silhouette, frontal orthographic pose, bevel, soft upper-left lighting and engraved texture. Image 2 five circles gives the red lacquer COLOR only. Replace ONLY the central 東 with the exact character 中, visibly correct, large and centered, occupying about 64% width and 72% height. All strokes filled deep vermilion RED lacquer like the central circle in image2. Traditional real physical mahjong carved bold brush calligraphy, deeply incised strokes, polished groove highlights, tapered ends, not modern printed font. 中 must have one centered vertical stroke passing fully through its enclosing rectangular mouth. No 東 remains. One complete tile, genuine alpha transparency outside, no external shadow, no other objects, no extra text, no watermark.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-a9fe62e7-4151-4b71-ae73-9d8e6c91691a.png"
+    },
+    {
+      "name": "pin-5-red",
+      "prompt": "Use case: precise-object-edit. Make the RED FIVE CIRCLES Japanese mahjong variant of this exact approved normal five-circles tile. CHANGE ONLY the ink color of the FOUR dark navy outer floral circle medallions to the same deep vermilion RED as the center circle. All FIVE engraved floral circles must be red. Preserve the five-pip layout exactly: two at top corners, one in center, two at bottom corners; same five sizes, spacing, ivory petal cutouts, rings, carved groove depth, glossy enamel and highlights. Preserve exact ivory tile body, silhouette, bevel, straight-on orthographic pose, soft lighting and scale. Do not add extra circle, text, digit, red dot badge or gold marking. Output one complete tile, true alpha transparent outside, no external shadow, no background or watermark.",
+      "source": "/Users/david/.codex/generated_images/01a0f108-27b8-7430-8168-e08efb49ad9b/exec-d4a93992-a941-42b6-8216-501a530f845d.png"
+    }
+  ]
+}

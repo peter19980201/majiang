@@ -1,0 +1,18 @@
+[
+  {
+    "id": "02-calculator",
+    "prompt": "Edit only the illustrated tile counts and labels in this existing UI design board. Preserve all layout, typography, colors, screens, spacing and other controls. In the top-left 手牌 area replace the tiles with EXACTLY 13 tiles laid out as 7 tiles in first row and 6 in second row, label 手牌 13/13. Only ONE 和了牌 tile should be shown below; remove the extra plus tile next to it because this field only accepts one winning tile. Keep the 副露 section, selector and all right-hand panel content unchanged. This is a Chinese mahjong scoring UI concept, tile counts must match their labels."
+  },
+  {
+    "id": "06-reference",
+    "prompt": "Make one precise correction to this existing UI design board: in the right-hand expanded 七对子 card, the 示例牌型 illustration must show EXACTLY SEVEN PAIRS, FOURTEEN tiles, not eight pairs. First row four pairs: 一万一万, 二万二万, 三万三万, 五筒五筒. Second row three pairs: 三索三索, 東東, 中中. Clearly space each matching pair. Preserve all other text, navigation, colors, layout and styles unchanged. Do not add extra tile groups. 七对子 is seven distinct pairs."
+  },
+  {
+    "id": "07-history",
+    "prompt": "Correct only the 每局记录 list in the right phone of this existing historical-game UI design. Preserve the page composition, all scores and ranking ledger, both phone layouts, type, colors, header, and ongoing card. This app supports ordinary exhaustive draws only, not 九种九牌 or other abortive draws, and individual round rows do not navigate anywhere. Replace the list with exactly three simple non-clickable rows, NO chevrons on those round rows: '东1局  荣和' second line '小林 荣和 阿川' right '3,900点'; '东2局  自摸' second line '阿青 自摸' right '2,000点'; '东3局  流局' second line '小林、阿青听牌' and no score on this row. Remove unsupported 九种九牌 and any detailed yaku/point combination, no new features. Preserve expand chevrons on the left phone's complete GAME cards. The current code lists per-round results without opening separate round-detail pages."
+  },
+  {
+    "id": "03-result",
+    "prompt": "Make ONLY a numerical correction to this existing Chinese mahjong UI design. Preserve layout, colors, hierarchy, tile illustration, all other text and style. On BOTH phone screens replace total 1,500 with 1,100, replace 庄家支付 700 with 庄家支付 500, replace 闲家各付 400 with 闲家各付 300. Keep 30符 1番, 子家 自摸 0本场, 断幺九1番, and fu breakdown20+2+4=26 rounded30 unchanged. These values were verified by the actual calculation engine: 30fu 1han non-dealer tsumo yields 500 from dealer plus300 each from the two others, total1100. Update all matching score totals on both screens, not just one. No other changes."
+  }
+]

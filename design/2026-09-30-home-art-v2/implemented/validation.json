@@ -1,0 +1,10 @@
+{
+  "verified": [
+    "Default home artwork in simulator",
+    "Ongoing card with four scores visually checked",
+    "Native click on quick-score opens calculator"
+  ],
+  "storage": "Fixture used page setData only; no storage writes",
+  "assetBytes": 341676,
+  "note": "Automator route test interrupted by session API issue; native navigation confirmed after project restart."
+}

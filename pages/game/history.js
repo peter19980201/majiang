@@ -1,6 +1,7 @@
 Page({
   data: {
     currentGame: null,
+    windLabels: ['東', '南', '西', '北'],
     historyList: [],
     expandedId: -1
   },

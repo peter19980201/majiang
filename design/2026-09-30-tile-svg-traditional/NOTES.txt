@@ -1,0 +1,1 @@
+Revision 2. Transparent SVG samples; app assets unchanged. Character contours extracted from locally installed STKaitiSC-Black using CoreText, for visual prototype only; font redistribution/production rights not established. Pips and bamboo drawn as original SVG paths.

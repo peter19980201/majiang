@@ -1,0 +1,61 @@
+{
+  "tool": "image_gen built-in",
+  "reference": "/Users/david/Program/majiang/design/2026-09-30-tile-image-samples/originals/man-5.png",
+  "officialReference": "https://shop.taiyo-chemicals.co.jp/blog/?p=1288",
+  "jobs": [
+    {
+      "n": "man-1",
+      "t": "一",
+      "d": "one heavy expressive horizontal stroke (一), NOT 壱.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 一, above the existing red traditional 萬. one heavy expressive horizontal stroke (一), NOT 壱. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 一 then 萬."
+    },
+    {
+      "n": "man-2",
+      "t": "二",
+      "d": "two separate calligraphic horizontal strokes: short upper and longer lower, 二.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 二, above the existing red traditional 萬. two separate calligraphic horizontal strokes: short upper and longer lower, 二. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 二 then 萬."
+    },
+    {
+      "n": "man-3",
+      "t": "三",
+      "d": "three separate calligraphic horizontal strokes, 三.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 三, above the existing red traditional 萬. three separate calligraphic horizontal strokes, 三. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 三 then 萬."
+    },
+    {
+      "n": "man-4",
+      "t": "四",
+      "d": "traditional 四 with an enclosed outer frame and two inner strokes.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 四, above the existing red traditional 萬. traditional 四 with an enclosed outer frame and two inner strokes. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 四 then 萬."
+    },
+    {
+      "n": "man-6",
+      "t": "六",
+      "d": "六: top dot, horizontal, and two descending split legs.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 六, above the existing red traditional 萬. 六: top dot, horizontal, and two descending split legs. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 六 then 萬."
+    },
+    {
+      "n": "man-7",
+      "t": "七",
+      "d": "七: a horizontal cut across a rising stem that turns right into a curved hook.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 七, above the existing red traditional 萬. 七: a horizontal cut across a rising stem that turns right into a curved hook. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 七 then 萬."
+    },
+    {
+      "n": "man-8",
+      "t": "八",
+      "d": "八: exactly two bold diverging calligraphic downward strokes.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 八, above the existing red traditional 萬. 八: exactly two bold diverging calligraphic downward strokes. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 八 then 萬."
+    },
+    {
+      "n": "man-9",
+      "t": "九",
+      "d": "九: two traditional calligraphic strokes with curved hook.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 九, above the existing red traditional 萬. 九: two traditional calligraphic strokes with curved hook. Upper numeral must be deep near-black blue ink; lower 萬 remains dark cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 九 then 萬."
+    },
+    {
+      "n": "man-5-red",
+      "t": "伍",
+      "d": "Keep the EXACT 伍 character already in the reference image. Change only its ink from near black to deep cinnabar red, matching the existing 萬. Both glyphs red.",
+      "prompt": "Use case: precise-object-edit. Create ONE production mahjong tile for a mini-program. Input reference is approved five-characters tile: keep its ivory body, exact front-on orthographic camera, rounded bevels, warm softly polished ivory, subtle engraving depth and dark recessed pigment texture, proportions and light direction unchanged. Change only the upper numeral to 伍, above the existing red traditional 萬. Keep the EXACT 伍 character already in the reference image. Change only its ink from near black to deep cinnabar red, matching the existing 萬. Both glyphs red. All engraved pigment is deep traditional cinnabar red. Traditional physical Japanese AMOS-style mahjong carving with thick confident curved wedge-ended brush-carved strokes, NOT modern printed type, NOT sans-serif. The lower 萬 must match reference exactly. Centered upper numeral fills its upper half with generous readable weight, lower 萬 fills lower half. Maintain balanced same glyph scale as reference. Entire single ivory tile visible, tight transparent margins, no perspective angle, no detached shadows, no tabletop, no digits, no labels, no watermark, no background. TRUE transparent RGBA outside tile. Exact two vertically stacked glyphs: 伍 then 萬."
+    }
+  ]
+}

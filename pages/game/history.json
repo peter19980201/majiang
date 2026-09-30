@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "历史对局"
+  "navigationBarTitleText": "历史对局",
+  "usingComponents": {
+    "tile": "/components/tile/tile"
+  }
 }

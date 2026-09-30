@@ -9,6 +9,10 @@
       {
         "value": "DESIGN.md",
         "type": "file"
+      },
+      {
+        "value": "design",
+        "type": "folder"
       }
     ],
     "include": []

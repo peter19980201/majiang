@@ -1,0 +1,122 @@
+[
+  {
+    "bytes" : 86233,
+    "crop" : [
+      49,
+      92,
+      973,
+      1330
+    ],
+    "height" : 264,
+    "name" : "pin-1",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 289418,
+    "width" : 192
+  },
+  {
+    "bytes" : 84928,
+    "crop" : [
+      72,
+      128,
+      938,
+      1291
+    ],
+    "height" : 264,
+    "name" : "pin-2",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 369778,
+    "width" : 192
+  },
+  {
+    "bytes" : 85847,
+    "crop" : [
+      71,
+      129,
+      933,
+      1308
+    ],
+    "height" : 264,
+    "name" : "pin-3",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 358487,
+    "width" : 192
+  },
+  {
+    "bytes" : 91108,
+    "crop" : [
+      50,
+      59,
+      972,
+      1367
+    ],
+    "height" : 264,
+    "name" : "pin-4",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 249960,
+    "width" : 192
+  },
+  {
+    "bytes" : 107023,
+    "crop" : [
+      72,
+      129,
+      946,
+      1289
+    ],
+    "height" : 264,
+    "name" : "pin-6",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 356902,
+    "width" : 192
+  },
+  {
+    "bytes" : 92545,
+    "crop" : [
+      73,
+      128,
+      928,
+      1287
+    ],
+    "height" : 264,
+    "name" : "pin-7",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 376862,
+    "width" : 192
+  },
+  {
+    "bytes" : 98063,
+    "crop" : [
+      51,
+      44,
+      971,
+      1411
+    ],
+    "height" : 264,
+    "name" : "pin-8",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 212639,
+    "width" : 192
+  },
+  {
+    "bytes" : 103862,
+    "crop" : [
+      72,
+      129,
+      934,
+      1285
+    ],
+    "height" : 264,
+    "name" : "pin-9",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 372421,
+    "width" : 192
+  }
+]

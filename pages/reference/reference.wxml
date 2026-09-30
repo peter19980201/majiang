@@ -2,10 +2,10 @@
   <!-- 搜索栏 -->
   <view class="search-bar">
     <view class="search-input-wrap">
-      <text class="search-icon">Q</text>
-      <input class="search-input" placeholder="搜索役种名称..."
+      <view class="search-icon"></view>
+      <input class="search-input" placeholder="搜索役种名称或说明"
              value="{{keyword}}" bindinput="onKeywordInput" />
-      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearKeyword">x</text>
+      <text class="search-clear" wx:if="{{keyword}}" bindtap="onClearKeyword">×</text>
     </view>
   </view>
 
@@ -20,8 +20,7 @@
               bindtap="onCategoryTap" data-cat="{{item}}">{{item}}</text>
       </view>
     </scroll-view>
-    <text class="menzen-toggle {{filterMenzen ? 'active' : ''}}"
-          bindtap="onToggleMenzen">门前限定</text>
+    <view class="filter-footer"><view class="menzen-toggle" bindtap="onToggleMenzen"><view class="switch-track {{filterMenzen ? 'active' : ''}}"><view class="switch-knob"></view></view><text>门前限定</text></view><text class="filter-count">{{filteredYaku.length}} 项役种</text></view>
   </view>
 
   <!-- 役种列表 -->
@@ -35,15 +34,15 @@
           <text class="yaku-name-ja">{{item.nameJa}}</text>
         </view>
         <view class="yaku-badges">
-          <text class="badge menzen" wx:if="{{item.menzenOnly}}">门前</text>
+          <text class="badge menzen" wx:if="{{item.menzenOnly}}">门前限定</text>
           <text class="badge han" wx:if="{{!item.isYakuman}}">{{item.han}}番</text>
           <text class="badge han open" wx:if="{{!item.isYakuman && item.hanOpen !== null && item.hanOpen !== item.han}}">副露{{item.hanOpen}}番</text>
           <text class="badge yakuman" wx:if="{{item.isYakuman && item.yakumanTimes === 1}}">役满</text>
-          <text class="badge yakuman double" wx:if="{{item.isYakuman && item.yakumanTimes === 2}}">双倍役满</text>
+          <text class="badge yakuman double" wx:if="{{item.isYakuman && item.yakumanTimes === 2}}">双倍役满</text><text class="yaku-chevron">{{expandedIndex === index ? '∧' : '›'}}</text>
         </view>
       </view>
       <!-- 简述 -->
-      <text class="yaku-desc">{{item.desc}}</text>
+      <text wx:if="{{expandedIndex === index}}" class="yaku-desc">{{item.desc}}</text>
       <!-- 展开详情 -->
       <view class="yaku-detail" wx:if="{{expandedIndex === index}}">
         <view class="detail-section">
@@ -52,14 +51,10 @@
         </view>
         <view class="detail-section" wx:if="{{item._handTiles}}">
           <text class="detail-label">示例牌型</text>
-          <view class="example-hand">
-            <view class="example-tiles">
-              <tile wx:for="{{item._handTiles}}" wx:for-item="t" wx:key="index"
-                    tid="{{t}}" size="small"></tile>
-            </view>
-            <view class="example-agari" wx:if="{{item._agariTile !== undefined}}">
-              <tile tid="{{item._agariTile}}" size="small" extra="agari"></tile>
-            </view>
+          <view class="example-pairs" wx:if="{{item._pairGroups}}"><view class="example-pair" wx:for="{{item._pairGroups}}" wx:for-item="pair" wx:key="index"><tile wx:for="{{pair}}" wx:for-item="pairTile" wx:key="index" tid="{{pairTile}}" size="picker"></tile></view></view>
+          <view class="example-hand" wx:else>
+            <tile wx:for="{{item._handTiles}}" wx:for-item="t" wx:key="index" tid="{{t}}" size="normal"></tile>
+            <tile wx:if="{{item._agariTile !== undefined}}" tid="{{item._agariTile}}" size="normal" extra="agari"></tile>
           </view>
           <text class="example-note" wx:if="{{item.example.note}}">{{item.example.note}}</text>
         </view>
@@ -69,6 +64,6 @@
 
   <!-- 空状态 -->
   <view class="empty" wx:if="{{filteredYaku.length === 0}}">
-    <text class="empty-text">没有找到匹配的役种</text>
+    <text class="empty-symbol">役</text><text class="empty-text">没有找到匹配的役种</text><text class="empty-hint">试试其他名称，或调整筛选条件</text>
   </view>
 </view>

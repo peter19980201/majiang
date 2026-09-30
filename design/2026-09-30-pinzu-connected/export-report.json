@@ -1,0 +1,62 @@
+[
+  {
+    "bytes" : 106183,
+    "crop" : [
+      48,
+      56,
+      978,
+      1382
+    ],
+    "height" : 264,
+    "name" : "pin-6",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 227507,
+    "width" : 192
+  },
+  {
+    "bytes" : 107474,
+    "crop" : [
+      63,
+      123,
+      946,
+      1303
+    ],
+    "height" : 264,
+    "name" : "pin-7",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 346133,
+    "width" : 192
+  },
+  {
+    "bytes" : 112260,
+    "crop" : [
+      63,
+      89,
+      944,
+      1366
+    ],
+    "height" : 264,
+    "name" : "pin-8",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 292977,
+    "width" : 192
+  },
+  {
+    "bytes" : 116954,
+    "crop" : [
+      56,
+      87,
+      955,
+      1341
+    ],
+    "height" : 264,
+    "name" : "pin-9",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 294034,
+    "width" : 192
+  }
+]

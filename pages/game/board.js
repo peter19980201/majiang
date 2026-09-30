@@ -31,6 +31,8 @@ Page({
     roundRiichi: [false, false, false, false],
     // 流局
     drawTenpai: [false, false, false, false],
+    drawPreview: [],
+    drawTenpaiCount: 0,
     // 结算
     finalResult: []
   },
@@ -92,6 +94,7 @@ Page({
     const r = this.data.roundRiichi.slice()
     r[idx] = !r[idx]
     this.setData({ roundRiichi: r })
+    if (this.data.showDrawModal) this.updateDrawPreview()
   },
 
   // 处理本局立直: 扣除1000点/人, 返回新增立直棒数
@@ -387,6 +390,7 @@ Page({
         drawTenpai: [false, false, false, false],
         roundRiichi: [false, false, false, false]
       })
+      this.updateDrawPreview()
     }, 150)
   },
 
@@ -395,6 +399,17 @@ Page({
     const t = this.data.drawTenpai.slice()
     t[idx] = !t[idx]
     this.setData({ drawTenpai: t })
+    this.updateDrawPreview()
+  },
+
+  updateDrawPreview() {
+    const { drawTenpai, roundRiichi, players } = this.data
+    const count = drawTenpai.filter(Boolean).length
+    const drawPreview = players.map((p, i) => {
+      const transfer = count > 0 && count < 4 ? (drawTenpai[i] ? 3000 / count : -3000 / (4 - count)) : 0
+      return { name: p.name, delta: transfer - (roundRiichi[i] ? 1000 : 0) }
+    })
+    this.setData({ drawPreview, drawTenpaiCount: count })
   },
 
   confirmDraw() {

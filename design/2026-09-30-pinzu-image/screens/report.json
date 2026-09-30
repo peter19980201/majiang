@@ -1,0 +1,10 @@
+{
+  "errors": [],
+  "checks": [
+    "one-to-nine pinzu selected in native calculator",
+    "nine-pin agari highlight",
+    "red-five fallback toggles",
+    "eight-pin exhausted after four and rejects fifth"
+  ],
+  "realStorageModified": false
+}

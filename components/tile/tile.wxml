@@ -1,4 +1,7 @@
-<view class="tile {{sizeClass}} {{suitClass}} {{extraClass}}" bindtap="onTap">
-  <text class="tile-num">{{displayNum}}</text>
-  <text class="tile-suit" wx:if="{{displaySuit}}">{{displaySuit}}</text>
+<view class="tile {{size}} {{face}} {{extra}} {{isRed ? 'is-red' : ''}} {{bodySrc ? 'engraved' : ''}}" aria-label="{{label}}">
+  <image wx:if="{{bodySrc}}" class="body-art" src="{{bodySrc}}" mode="scaleToFill" aria-hidden="true"></image>
+  <block wx:elif="{{face === 'man'}}"><text class="man-number">{{number}}</text><text class="man-suit">萬</text></block>
+  <image wx:elif="{{faceSrc}}" class="face-art" src="{{faceSrc}}" mode="aspectFit" aria-hidden="true"></image>
+  <view wx:elif="{{tid === 31}}" class="white-dragon"></view>
+  <text wx:else class="honor-face {{tid === 32 ? 'green' : tid === 33 ? 'red' : ''}}">{{suit}}</text>
 </view>

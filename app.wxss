@@ -1,12 +1,25 @@
 @import '/styles/theme.wxss';
-
 page {
-  background-color: #f7f5f0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #292524;
-  font-size: 28rpx;
+  background:#f6f4ed;
+  color:#182f2b;
+  font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
+  font-size:28rpx;
+  line-height:1.5;
+}
+
+view, text, button, input, scroll-view {
+  box-sizing:border-box;
+}
+
+button {
+  font:inherit;
+}
+
+button::after {
+  border:0;
 }
 
 .container {
-  padding: 20rpx;
+  padding:24rpx;
+  padding-bottom:calc(36rpx + env(safe-area-inset-bottom));
 }

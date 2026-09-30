@@ -1,198 +1,256 @@
-/* Hero area - deep green gradient */
-.home-hero {
-  background: linear-gradient(160deg, #0d3b1f 0%, #0f4425 40%, #1a6b3c 100%);
-  padding: 0 0 60rpx;
-  position: relative;
-  overflow: hidden;
+.home {
+  padding:0 28rpx calc(24rpx + env(safe-area-inset-bottom));
 }
 
-/* Decorative wind characters */
-.hero-deco {
-  position: absolute;
-  top: 80rpx;
-  right: -20rpx;
-  z-index: 0;
+.home-heading {
+  position:relative;
+  height:340rpx;
+  margin:0 -28rpx;
+  padding:36rpx 28rpx 0;
+  overflow:hidden;
 }
 
-.deco-text {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
-  font-size: 160rpx;
-  font-weight: 900;
-  color: rgba(255,255,255,0.03);
-  letter-spacing: 24rpx;
-  writing-mode: vertical-rl;
-  line-height: 1.2;
-}
-
-/* Logo */
-.home-logo {
-  text-align: center;
-  padding: 72rpx 0 48rpx;
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.kanji-box {
-  width: 144rpx;
-  height: 144rpx;
-  border: 4rpx solid rgba(255,255,255,0.2);
-  border-radius: 32rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255,255,255,0.08);
-  margin-bottom: 32rpx;
-}
-
-.kanji {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
-  font-size: 72rpx;
-  font-weight: 900;
-  color: #fff;
+.title-row {
+  display:flex;
+  align-items:center;
+  gap:14rpx;
+  position:relative;
+  z-index:2;
 }
 
 .home-title {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
-  font-size: 48rpx;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 8rpx;
-  margin-bottom: 16rpx;
+  font-family:'Songti SC','STSong',serif;
+  font-size:48rpx;
+  font-weight:800;
+  letter-spacing:1rpx;
+  color:#142f29;
+}
+
+.home-seal {
+  font-family:'Songti SC','STSong',serif;
+  font-size:29rpx;
+  border:3rpx solid #315647;
+  border-radius:5rpx;
+  line-height:1.12;
+  padding:4rpx;
+  color:#315647;
 }
 
 .home-subtitle {
-  font-size: 26rpx;
-  color: rgba(255,255,255,0.5);
-  letter-spacing: 4rpx;
-  font-weight: 300;
+  display:block;
+  margin-top:14rpx;
+  color:#707970;
+  font-size:26rpx;
+  letter-spacing:7rpx;
 }
 
-/* Menu */
+.quick-card {
+  position:relative;
+  overflow:hidden;
+  height:376rpx;
+  border-radius:26rpx;
+  padding:36rpx;
+  color:#fffdf4;
+  background:#194c3b;
+  box-shadow:0 8rpx 18rpx rgba(27,48,28,.13);
+}
+
+.quick-title {
+  display:block;
+  font-family:'Songti SC','STSong',serif;
+  font-size:48rpx;
+  font-weight:700;
+}
+
+.quick-desc {
+  display:block;
+  font-size:26rpx;
+  color:#e1e7dc;
+  margin-top:10rpx;
+}
+
+.quick-cta {
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30rpx;
+  margin-top:34rpx;
+  background:#f8f5e9;
+  color:#194435;
+  padding:18rpx 30rpx;
+  font-size:30rpx;
+  font-weight:600;
+  border-radius:100rpx;
+}
+
+.quick-arrow {
+  font-size:36rpx;
+  line-height:1;
+}
+
 .home-menu {
-  padding: 0 40rpx;
-  position: relative;
-  z-index: 1;
-}
-
-.menu-card {
-  background: #ffffff;
-  border-radius: 40rpx;
-  padding: 12rpx;
-  box-shadow: 0 4rpx 16rpx rgba(28,25,23,0.08), 0 2rpx 4rpx rgba(28,25,23,0.04);
+  margin-top:22rpx;
 }
 
 .menu-item {
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-  padding: 28rpx 24rpx;
-  border-radius: 32rpx;
-  position: relative;
+  display:flex;
+  align-items:center;
+  gap:26rpx;
+  padding:24rpx;
+  margin-bottom:16rpx;
+  min-height:132rpx;
+  background:#fdfcf8;
+  border:1rpx solid #eae7df;
+  border-radius:22rpx;
+  box-shadow:0 4rpx 9rpx rgba(39,46,25,.035);
 }
 
 .menu-item:active {
-  background: #fafaf9;
+  background:#eeefe6;
 }
 
-.menu-item + .menu-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 128rpx;
-  right: 32rpx;
-  height: 1rpx;
-  background: #f5f5f4;
-}
-
-/* Icon boxes */
 .menu-icon {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  font-family:'Songti SC','STSong',serif;
+  font-size:42rpx;
+  font-weight:800;
+  color:#275040;
+  width:65rpx;
+  text-align:center;
 }
 
-.menu-icon .icon-text {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #fff;
-}
-
-.menu-icon.calc {
-  background: linear-gradient(135deg, #1a6b3c, #2da660);
-}
-
-.menu-icon.game {
-  background: linear-gradient(135deg, #d97706, #f59e0b);
-}
-
-.menu-icon.ref {
-  background: linear-gradient(135deg, #6366f1, #818cf8);
-}
-
-.menu-icon.hist {
-  background: linear-gradient(135deg, #78716c, #a8a29e);
-}
-
-/* Menu text */
 .menu-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+  flex:1;
+  min-width:0;
 }
 
 .menu-name {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #292524;
-  margin-bottom: 6rpx;
+  display:block;
+  font-size:30rpx;
+  font-weight:600;
 }
 
 .menu-desc {
-  font-size: 24rpx;
-  color: #a8a29e;
-  line-height: 1.4;
+  display:block;
+  font-size:24rpx;
+  color:#7a8076;
+  margin-top:4rpx;
 }
 
 .menu-arrow {
-  font-size: 36rpx;
-  color: #d6d3d1;
-  flex-shrink: 0;
+  font-size:38rpx;
+  color:#3d5247;
 }
 
-/* Footer */
 .home-footer {
-  text-align: center;
-  padding: 48rpx 40rpx 40rpx;
-  background: #f7f5f0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border-top:1rpx solid #dadccf;
+  margin-top:28rpx;
+  padding-top:14rpx;
+  color:#697268;
+  font-size:22rpx;
 }
 
-.rule-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 12rpx;
-  padding: 12rpx 28rpx;
-  background: rgba(26,107,60,0.06);
-  border-radius: 200rpx;
+.feedback-entry {
+  width:auto!important;
+  min-width:0!important;
+  margin:0;
+  padding:12rpx 0;
+  background:transparent;
+  color:#314a3c;
+  line-height:1.5;
+  font-size:24rpx;
 }
 
-.tag-dot {
-  width: 10rpx;
-  height: 10rpx;
-  border-radius: 50%;
-  background: #2da660;
+.feedback-hover {
+  opacity:.6;
 }
 
-.tag-text {
-  font-size: 22rpx;
-  color: #1a6b3c;
-  font-weight: 500;
+.resume-card {
+  position:relative;
+  overflow:hidden;
+  border:1rpx solid #dce3d5;
+  background:linear-gradient(125deg,#eaf0e4,#e4e9dc);
+  border-radius:24rpx;
+  padding:28rpx;
 }
+
+.resume-badge {
+  display:inline-block;
+  background:#244d3e;
+  color:#fff;
+  padding:6rpx 14rpx;
+  border-radius:9rpx;
+  font-size:22rpx;
+}
+
+.resume-round {
+  display:block;
+  font-family:'Songti SC','STSong',serif;
+  font-size:40rpx;
+  font-weight:700;
+  margin-top:18rpx;
+}
+
+.resume-players {
+  display:flex;
+  margin:24rpx 0;
+}
+
+.resume-player {
+  flex:1;
+  min-width:0;
+  text-align:center;
+  border-right:1rpx solid #c8d0bf;
+}
+
+.resume-player:last-child {
+  border:0;
+}
+
+.resume-name {
+  display:block;
+  font-size:23rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:0 4rpx;
+}
+
+.resume-points {
+  display:block;
+  font-size:29rpx;
+  font-weight:600;
+  margin-top:4rpx;
+}
+
+.resume-actions {
+  display:flex;
+  gap:14rpx;
+}
+
+.resume-actions .btn-primary {
+  flex:1.4;
+}
+
+.resume-actions .btn-secondary {
+  flex:1;
+}
+
+/* Artwork is decorative; native controls and scores stay above it. */
+.header-art,.card-art {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+.home-subtitle,.quick-title,.quick-desc,.quick-cta,
+.resume-badge,.resume-round,.resume-players,.resume-actions {
+  position:relative;
+  z-index:1;
+}
+.quick-desc { font-size:25rpx; }
+.quick-cta { min-width:310rpx; }

@@ -1,6 +1,8 @@
+<wxs module="fmt" src="../../utils/format.wxs"></wxs>
 <view class="container">
   <!-- 进行中的对局 -->
   <view class="current-game" wx:if="{{currentGame}}">
+    <image class="current-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image>
     <view class="current-header">
       <view class="current-badge">进行中</view>
       <text class="current-date">{{currentGame.date}}</text>
@@ -12,8 +14,8 @@
     </view>
     <view class="current-players">
       <view class="cp-item" wx:for="{{currentGame.gameState.players}}" wx:key="index">
-        <text class="cp-name">{{item.name}}</text>
-        <text class="cp-pts {{item.points < currentGame.gameState.config.startPoints ? 'negative' : 'positive'}}">{{item.points}}</text>
+        <view class="cp-tile"><tile tid="{{27 + index * 1}}" size="small"></tile></view><text class="cp-name">{{item.name}}</text>
+        <text class="cp-pts {{item.points < currentGame.gameState.config.startPoints ? 'negative' : 'positive'}}">{{fmt.points(item.points)}}</text>
       </view>
     </view>
     <view class="current-actions">
@@ -37,19 +39,19 @@
         </view>
         <view class="card-right">
           <text class="card-delete" catchtap="deleteRecord" data-id="{{item.id}}">删除</text>
-          <text class="card-arrow">{{expandedId === item.id ? '▲' : '▼'}}</text>
+          <text class="card-arrow">{{expandedId === item.id ? '∧' : '›'}}</text>
         </view>
       </view>
       <!-- 排名摘要 -->
       <view class="rank-row">
         <view class="rank-item" wx:for="{{item.result}}" wx:for-item="r" wx:key="rank">
-          <text class="rank-num">{{r.rank}}位</text>
-          <text class="rank-name">{{r.name}}</text>
+          <text class="rank-num rank-{{r.rank}}">{{r.rank}}</text>
+          <text class="rank-name">{{r.name}}</text><text class="rank-points">{{fmt.points(r.points)}}</text>
           <text class="rank-pt {{r.finalPt >= 0 ? 'positive' : 'negative'}}">{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
         </view>
       </view>
       <!-- 详情 -->
-      <view class="card-detail" wx:if="{{expandedId === item.id}}">
+      <view class="card-detail" wx:if="{{expandedId === item.id}}"><view class="record-config">起始 {{item.config.startPoints}} · 返还 {{item.config.returnPoints}} · 顺位马 {{item.config.uma}}</view>
         <view class="detail-section" wx:if="{{item.rounds.length > 0}}">
           <text class="detail-title">每局记录</text>
           <view class="round-item" wx:for="{{item.rounds}}" wx:for-item="rd" wx:key="index">
@@ -62,8 +64,8 @@
         <view class="detail-section">
           <text class="detail-title">结算明细</text>
           <view class="settle-row" wx:for="{{item.result}}" wx:for-item="r" wx:key="rank">
-            <text class="settle-name">{{r.rank}}位 {{r.name}}</text>
-            <text class="settle-info">{{r.points}}点 | 素点{{r.rawPt >= 0 ? '+' : ''}}{{r.rawPt}} | 马{{r.uma >= 0 ? '+' : ''}}{{r.uma}} | 最终{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
+            <view class="settle-main"><text class="settle-name">{{r.rank}}位 {{r.name}}</text><text class="settle-score">{{fmt.points(r.points)}} 点</text><text class="settle-info">素点 {{r.rawPt >= 0 ? '+' : ''}}{{r.rawPt}} · 马 {{r.uma >= 0 ? '+' : ''}}{{r.uma}}</text></view>
+            <text class="settle-final {{r.finalPt >= 0 ? 'positive' : 'negative'}}">{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
           </view>
         </view>
       </view>
@@ -71,6 +73,7 @@
   </view>
 
   <view class="empty" wx:if="{{historyList.length === 0 && !currentGame}}">
-    <text class="empty-text">暂无历史对局</text>
+    <text class="empty-symbol">局</text><text class="empty-text">还没有对局记录</text><text class="empty-hint">完成一场对局后，在这里回顾每一局</text>
   </view>
+  <view class="local-note">仅保存在当前设备 · 最近 50 场</view>
 </view>

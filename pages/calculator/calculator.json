@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "手牌输入",
+  "navigationBarTitleText": "快速计分",
   "usingComponents": {
     "tile": "/components/tile/tile"
   }

@@ -1,0 +1,137 @@
+[
+  {
+    "bytes" : 101187,
+    "crop" : [
+      56,
+      57,
+      957,
+      1368
+    ],
+    "height" : 264,
+    "name" : "sou-1",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 253352,
+    "width" : 192
+  },
+  {
+    "bytes" : 76221,
+    "crop" : [
+      63,
+      124,
+      949,
+      1311
+    ],
+    "height" : 264,
+    "name" : "sou-2",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 334881,
+    "width" : 192
+  },
+  {
+    "bytes" : 85372,
+    "crop" : [
+      57,
+      83,
+      956,
+      1344
+    ],
+    "height" : 264,
+    "name" : "sou-4",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 285015,
+    "width" : 192
+  },
+  {
+    "bytes" : 88779,
+    "crop" : [
+      51,
+      60,
+      968,
+      1379
+    ],
+    "height" : 264,
+    "name" : "sou-5",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 246762,
+    "width" : 192
+  },
+  {
+    "bytes" : 93276,
+    "crop" : [
+      50,
+      125,
+      972,
+      1331
+    ],
+    "height" : 264,
+    "name" : "sou-6",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 287945,
+    "width" : 192
+  },
+  {
+    "bytes" : 91632,
+    "crop" : [
+      70,
+      128,
+      936,
+      1309
+    ],
+    "height" : 264,
+    "name" : "sou-7",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 354213,
+    "width" : 192
+  },
+  {
+    "bytes" : 95718,
+    "crop" : [
+      70,
+      129,
+      936,
+      1304
+    ],
+    "height" : 264,
+    "name" : "sou-8",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 356199,
+    "width" : 192
+  },
+  {
+    "bytes" : 93665,
+    "crop" : [
+      64,
+      114,
+      945,
+      1339
+    ],
+    "height" : 264,
+    "name" : "sou-9",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 316496,
+    "width" : 192
+  },
+  {
+    "bytes" : 89233,
+    "crop" : [
+      49,
+      59,
+      989,
+      1380
+    ],
+    "height" : 264,
+    "name" : "sou-5-red",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 215412,
+    "width" : 192
+  }
+]

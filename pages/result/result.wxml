@@ -1,26 +1,27 @@
 <view class="container" wx:if="{{result}}">
   <!-- Hero: Points display -->
-  <view class="result-hero">
+  <view class="result-context" wx:if="{{result.input}}"><image class="result-art" src="/assets/art/table-texture.jpg" mode="aspectFill" aria-hidden="true"></image><text class="result-context-label">{{result.input.jikaze === 27 ? '庄家' : '子家'}} · {{result.input.agariType === 'tsumo' ? '自摸' : '荣和'}} · {{result.input.honba || 0}}本场</text></view>
+  <view class="result-hero"><text class="score-caption">和了点数</text>
     <view class="hero-badge" wx:if="{{result.level}}">
       <text class="badge-text">{{result.level}}</text>
     </view>
     <text class="result-fuban" wx:if="{{result.han > 0}}">{{result.fu}}符 {{result.han}}番</text>
-    <text class="result-points">{{result.payment.total}}点</text>
-    <text class="result-payment">{{result.payment.description}}</text>
+    <text class="result-points">{{totalDisplay}}<text class="score-unit">点</text></text>
+    <text wx:if="{{!paymentRows.length}}" class="result-payment">{{result.payment.description}}</text>
+    <view class="payment-grid">
+      <view class="payment-cell" wx:for="{{paymentRows}}" wx:key="label"><text class="payment-label">{{item.label}}</text><text class="payment-number">{{item.value}}<text class="payment-unit">点</text></text></view>
+    </view>
   </view>
 
   <!-- Hand display card -->
   <view class="result-hand" wx:if="{{result.input}}">
-    <view class="hand-card">
-      <view class="hand-tiles-row">
+    <view class="hand-card"><text class="section-title">和了牌型</text>
+      <view class="hand-block"><text class="hand-group-label">暗手 · {{result.input.hand.length}}张</text><view class="hand-tiles-row">
         <!-- Hand tiles -->
         <tile wx:for="{{result.input.hand}}" wx:key="index"
-              tid="{{item}}" size="normal"></tile>
-        <!-- Separator -->
-        <view class="hand-sep"></view>
-        <!-- Agari tile -->
-        <tile tid="{{result.input.agariTile}}" size="normal" extra="agari"></tile>
-      </view>
+              tid="{{item}}" size="small"></tile>
+      </view></view>
+      <view class="winning-block"><text class="hand-group-label">和了牌</text><tile tid="{{result.input.agariTile}}" size="small" extra="agari"></tile></view>
       <!-- Melds -->
       <view class="melds-row" wx:if="{{result.input.melds.length > 0}}">
         <view class="meld-group" wx:for="{{result.input.melds}}" wx:key="index">
@@ -62,7 +63,7 @@
     <view class="fu-card">
       <view class="fu-header" bindtap="toggleFuDetail">
         <text class="fu-title">符数明细</text>
-        <text class="fu-arrow">{{showFuDetail ? '▲' : '▼'}}</text>
+        <text class="fu-arrow">{{showFuDetail ? '收起 ∧' : '展开 ∨'}}</text>
       </view>
       <view class="fu-detail" wx:if="{{showFuDetail}}">
         <view class="fu-row" wx:for="{{result.fuDetail}}" wx:key="index">
@@ -79,10 +80,10 @@
 
   <!-- Action buttons -->
   <view class="result-actions">
-    <view class="btn-back" bindtap="goBack">
+    <view class="btn-primary btn-back" bindtap="goBack">
       <text>返回修改</text>
     </view>
-    <view class="btn-home" bindtap="goHome">
+    <view class="btn-secondary btn-home" bindtap="goHome">
       <text>返回首页</text>
     </view>
   </view>

@@ -1,323 +1,326 @@
-.container {
-  padding: 20rpx;
-  min-height: 100vh;
-  background: #f7f5f0;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16rpx;
-}
-
-.header-title {
-  font-size: 26rpx;
-  color: #a8a29e;
-  font-weight: 500;
-}
-
-.clear-all {
-  font-size: 24rpx;
-  color: #dc2626;
-  padding: 4rpx 16rpx;
-  font-weight: 500;
-}
-
-.list {
-  display: flex;
-  flex-direction: column;
-  gap: 16rpx;
-}
-
-/* History cards */
-.card {
-  background: #fff;
-  border-radius: 32rpx;
-  padding: 24rpx 28rpx;
-  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
-  border: 2rpx solid #fafaf9;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.card-info {
-  display: flex;
-  gap: 12rpx;
-  align-items: center;
-}
-
-.card-date {
-  font-size: 28rpx;
-  color: #292524;
-  font-weight: 600;
-}
-
-.card-type {
-  font-size: 22rpx;
-  background: #dcf5e5;
-  color: #1a6b3c;
-  padding: 6rpx 14rpx;
-  border-radius: 200rpx;
-  font-weight: 600;
-}
-
-.card-abandoned {
-  font-size: 20rpx;
-  background: #fef3c7;
-  color: #b45309;
-  padding: 4rpx 12rpx;
-  border-radius: 200rpx;
-  font-weight: 500;
-}
-
-.card-right {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-
-.card-delete {
-  font-size: 22rpx;
-  color: #dc2626;
-  padding: 4rpx 12rpx;
-}
-
-.card-arrow {
-  font-size: 24rpx;
-  color: #d6d3d1;
-}
-
-/* Ranking row */
-.rank-row {
-  display: flex;
-  gap: 10rpx;
-  margin-top: 16rpx;
-}
-
-.rank-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rpx;
-  background: #fdfcfb;
-  border-radius: 12rpx;
-  padding: 10rpx 0;
-}
-
-.rank-num {
-  font-family: 'Songti SC', 'STSong', 'Noto Serif CJK SC', serif;
-  font-size: 20rpx;
-  color: #d6d3d1;
-  font-weight: 700;
-}
-
-.rank-name {
-  font-size: 24rpx;
-  color: #57534e;
-  font-weight: 500;
-}
-
-.rank-pt {
-  font-size: 24rpx;
-  font-weight: 700;
-}
-
-.positive { color: #1a6b3c; }
-.negative { color: #dc2626; }
-
-/* Expanded detail */
-.card-detail {
-  margin-top: 16rpx;
-  padding-top: 16rpx;
-  border-top: 2rpx solid #fafaf9;
-  background: #fdfcfb;
-  margin: 16rpx -28rpx 0;
-  padding: 20rpx 28rpx;
-  border-radius: 0 0 32rpx 32rpx;
-}
-
-.detail-section {
-  margin-bottom: 16rpx;
-}
-
-.detail-title {
-  font-size: 22rpx;
-  color: #a8a29e;
-  display: block;
-  margin-bottom: 8rpx;
-  font-weight: 600;
-  letter-spacing: 2rpx;
-}
-
-.round-item {
-  display: flex;
-  gap: 10rpx;
-  align-items: baseline;
-  padding: 6rpx 0;
-}
-
-.rd-round {
-  font-size: 22rpx;
-  color: #a8a29e;
-  white-space: nowrap;
-  font-weight: 600;
-}
-
-.rd-desc {
-  font-size: 24rpx;
-  color: #44403c;
-}
-
-.settle-row {
-  padding: 6rpx 0;
-}
-
-.settle-name {
-  font-size: 24rpx;
-  color: #292524;
-  font-weight: 600;
-  display: block;
-}
-
-.settle-info {
-  font-size: 22rpx;
-  color: #a8a29e;
-  display: block;
-}
-
-.delete-btn {
-  display: block;
-  text-align: center;
-  font-size: 24rpx;
-  color: #dc2626;
-  padding: 12rpx 0;
-  margin-top: 8rpx;
-}
-
-/* Active game card */
 .current-game {
-  background: #fff;
-  border-radius: 32rpx;
-  padding: 24rpx 28rpx;
-  margin-bottom: 20rpx;
-  border: 4rpx solid #f59e0b;
-  box-shadow: 0 2rpx 8rpx rgba(28,25,23,0.06), 0 1rpx 2rpx rgba(28,25,23,0.04);
+  background:linear-gradient(130deg,#eef2e7,#e2e9d8);
+  border:1rpx solid #d6dfca;
+  border-radius:24rpx;
+  padding:26rpx;
+  margin-bottom:30rpx;
 }
 
 .current-header {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  margin-bottom: 12rpx;
+  display:flex;
+  align-items:center;
+  gap:14rpx;
+  font-size:22rpx;
 }
 
 .current-badge {
-  font-size: 22rpx;
-  background: #f59e0b;
-  color: #fff;
-  padding: 6rpx 16rpx;
-  border-radius: 200rpx;
-  font-weight: 600;
+  background:#285943;
+  color:#fff;
+  padding:7rpx 14rpx;
+  border-radius:9rpx;
 }
 
 .current-date {
-  font-size: 26rpx;
-  color: #292524;
-  font-weight: 600;
+  flex:1;
+  color:#738467;
 }
 
 .current-type {
-  font-size: 22rpx;
-  background: #dcf5e5;
-  color: #1a6b3c;
-  padding: 6rpx 14rpx;
-  border-radius: 200rpx;
-  font-weight: 600;
+  color:#4d6945;
 }
 
 .current-info {
-  display: flex;
-  gap: 12rpx;
-  align-items: center;
-  margin-bottom: 12rpx;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10rpx;
+  margin:24rpx 0;
 }
 
 .current-round {
-  font-size: 28rpx;
-  color: #1a6b3c;
-  font-weight: bold;
+  font-size:33rpx;
+  font-weight:600;
 }
 
 .current-supply {
-  font-size: 24rpx;
-  color: #d97706;
+  font-size:23rpx;
+  color:#8f6e2b;
 }
 
 .current-players {
-  display: flex;
-  gap: 10rpx;
-  margin-bottom: 16rpx;
+  display:flex;
+  margin-bottom:24rpx;
 }
 
 .cp-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rpx;
-  background: #fdfcfb;
-  border-radius: 16rpx;
-  padding: 12rpx 0;
+  flex:1;
+  min-width:0;
+  text-align:center;
+  border-right:1rpx solid #cbd6bf;
+}
+
+.cp-item:last-child {
+  border:0;
+}
+
+.cp-wind {
+  display:block;
+  width:54rpx;
+  height:70rpx;
+  line-height:64rpx;
+  margin:0 auto 10rpx;
+  font-family:'Songti SC','STSong',serif;
+  font-size:37rpx;
+  font-weight:700;
+  background:#fcf8e8;
+  border:1rpx solid #cfc9a9;
+  border-radius:6rpx;
+  box-shadow:0 4rpx 0 #b7ba9e;
 }
 
 .cp-name {
-  font-size: 22rpx;
-  color: #78716c;
+  display:block;
+  font-size:22rpx;
+  padding:0 4rpx;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
 .cp-pts {
-  font-size: 26rpx;
-  font-weight: bold;
+  display:block;
+  font-size:30rpx;
+  font-weight:600;
+  margin-top:3rpx;
 }
 
 .current-actions {
-  display: flex;
-  gap: 12rpx;
+  display:flex;
+  gap:12rpx;
 }
 
 .current-btn {
-  flex: 1;
-  text-align: center;
-  padding: 18rpx;
-  border-radius: 16rpx;
-  font-size: 28rpx;
-  font-weight: 700;
+  flex:1;
+  text-align:center;
+  padding:18rpx 4rpx;
+  border-radius:15rpx;
+  font-size:26rpx;
+  font-weight:600;
 }
 
 .current-btn.resume {
-  background: linear-gradient(135deg, #14522b, #22884c);
-  color: #fff;
-  box-shadow: 0 2rpx 8rpx rgba(26,107,60,0.3);
+  background:#2a5843;
+  color:#fff;
 }
 
 .current-btn.abandon {
-  background: #fafaf9;
-  color: #a8a29e;
+  border:1rpx solid #6f8d61;
+  color:#385e3d;
+  background:#f6f7ef;
 }
 
-/* Empty state */
-.empty {
-  text-align: center;
-  padding: 120rpx 0;
+.header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:16rpx;
 }
 
-.empty-text {
-  font-size: 28rpx;
-  color: #d6d3d1;
+.header-title {
+  font-size:27rpx;
+  font-weight:600;
 }
+
+.clear-all {
+  font-size:23rpx;
+  color:#7d826f;
+  padding:10rpx;
+}
+
+.card {
+  padding:24rpx;
+}
+
+.card-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8rpx;
+}
+
+.card-info {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:12rpx;
+}
+
+.card-date {
+  font-size:27rpx;
+  font-weight:600;
+}
+
+.card-type {
+  font-size:23rpx;
+  color:#637858;
+}
+
+.card-abandoned {
+  font-size:20rpx;
+  background:#f1e7ce;
+  color:#997630;
+  padding:3rpx 9rpx;
+  border-radius:5rpx;
+}
+
+.card-right {
+  display:flex;
+  gap:12rpx;
+  align-items:center;
+  flex-shrink:0;
+}
+
+.card-delete {
+  padding:8rpx;
+  font-size:21rpx;
+  color:#8c6f5c;
+}
+
+.card-arrow {
+  font-size:31rpx;
+  color:#75876b;
+}
+
+.rank-row {
+  display:flex;
+  gap:10rpx;
+  margin-top:20rpx;
+  padding-top:20rpx;
+  border-top:1rpx solid #e6e7da;
+}
+
+.rank-item {
+  flex:1;
+  min-width:0;
+  text-align:center;
+}
+
+.rank-num {
+  display:inline-block;
+  width:31rpx;
+  height:35rpx;
+  line-height:34rpx;
+  color:#fff;
+  background:#a1a898;
+  border-radius:6rpx;
+  font-size:23rpx;
+}
+
+.rank-num.rank-1 {
+  background:#b3984a;
+}
+
+.rank-num.rank-3 {
+  background:#b68e70;
+}
+
+.rank-name {
+  display:block;
+  font-size:23rpx;
+  margin-top:8rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rank-points {
+  display:block;
+  font-size:27rpx;
+  margin-top:5rpx;
+  font-weight:500;
+}
+
+.rank-pt {
+  display:block;
+  font-size:22rpx;
+  margin-top:4rpx;
+}
+
+.card-detail {
+  border-top:1rpx solid #dce2ce;
+  margin-top:24rpx;
+  padding-top:20rpx;
+}
+
+.record-config {
+  font-size:21rpx;
+  line-height:1.7;
+  color:#7b8a6c;
+  margin-bottom:22rpx;
+}
+
+.detail-section {
+  margin-top:20rpx;
+}
+
+.detail-title {
+  display:block;
+  font-size:27rpx;
+  font-weight:600;
+  margin-bottom:12rpx;
+}
+
+.round-item {
+  display:flex;
+  gap:16rpx;
+  padding:16rpx 0;
+  border-bottom:1rpx solid #e7e9dc;
+  align-items:baseline;
+}
+
+.rd-round {
+  font-size:22rpx;
+  color:#809072;
+  flex-shrink:0;
+}
+
+.rd-desc {
+  font-size:25rpx;
+}
+
+.settle-row {
+  padding:12rpx 0;
+  border-bottom:1rpx solid #e7e9dc;
+}
+
+.settle-name {
+  display:block;
+  font-size:26rpx;
+  font-weight:600;
+}
+
+.settle-info {
+  display:block;
+  font-size:22rpx;
+  color:#768669;
+  margin-top:6rpx;
+  line-height:1.7;
+}
+
+
+
+.settle-row { display:flex; align-items:center; justify-content:space-between; gap:16rpx; }
+.settle-main { flex:1; min-width:0; }
+.settle-name { overflow-wrap:break-word; }
+.settle-score { display:block; font-size:27rpx; margin-top:6rpx; }
+.settle-final { font-size:38rpx; font-family:'Songti SC','STSong',serif; font-weight:700; flex-shrink:0; }
+
+
+.current-game { position:relative; overflow:hidden; }
+.current-art { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.current-header,.current-info,.current-players,.current-actions { position:relative; z-index:1; }
+.cp-tile { margin-bottom:14rpx; line-height:0; }
+.current-round { font-family:'Songti SC','STSong',serif; font-weight:700; }
+.rank-num { background:linear-gradient(135deg,#bec4bb,#8e978d); box-shadow:inset 0 1rpx 1rpx #fff9; }
+.rank-num.rank-1 { background:linear-gradient(135deg,#e1c371,#ad7c29); }
+.rank-num.rank-3 { background:linear-gradient(135deg,#ceab88,#9b7559); }

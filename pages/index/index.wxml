@@ -1,72 +1,27 @@
-<view class="home-hero">
-  <!-- Decorative wind characters -->
-  <view class="hero-deco">
-    <text class="deco-text">東南西北</text>
+<wxs module="fmt" src="../../utils/format.wxs"></wxs>
+<view class="home">
+  <view class="home-heading">
+    <image class="header-art" src="/assets/home/header.jpg" mode="scaleToFill" aria-hidden="true"></image>
+    <view class="title-row"><text class="home-title">日麻计分助手</text><text class="home-seal">雀</text></view>
+    <text class="home-subtitle">符数 · 番数 · 点数</text>
   </view>
-
-  <!-- Logo area -->
-  <view class="home-logo">
-    <view class="kanji-box">
-      <text class="kanji">雀</text>
-    </view>
-    <text class="home-title">日麻计分助手</text>
-    <text class="home-subtitle">符数 · 番数 · 点数 一键计算</text>
+  <view wx:if="{{currentGame}}" class="resume-card">
+    <image class="card-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image>
+    <text class="resume-badge">对局进行中</text>
+    <text class="resume-round">{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
+    <view class="resume-players"><view class="resume-player" wx:for="{{currentGame.gameState.players}}" wx:key="index"><text class="resume-name">{{item.name}}</text><text class="resume-points">{{fmt.points(item.points)}}</text></view></view>
+    <view class="resume-actions"><view class="btn-primary" bindtap="resumeGame">继续对局 ›</view><view class="btn-secondary" bindtap="newGame">新建对局</view></view>
   </view>
-
-  <!-- Menu card -->
+  <view wx:else class="quick-card" bindtap="goCalculator">
+    <image class="card-art" src="/assets/home/quick-score.jpg" mode="scaleToFill" aria-hidden="true"></image>
+    <text class="quick-title">快速计分</text><text class="quick-desc">输入手牌，算清每一分</text>
+    <view class="quick-cta">开始计分 <text class="quick-arrow">›</text></view>
+  </view>
   <view class="home-menu">
-    <view class="menu-card">
-      <view class="menu-item" bindtap="goCalculator">
-        <view class="menu-icon calc">
-          <text class="icon-text">計</text>
-        </view>
-        <view class="menu-info">
-          <text class="menu-name">快速计分</text>
-          <text class="menu-desc">输入手牌，自动计算符番点数</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bindtap="goGameSetup">
-        <view class="menu-icon game">
-          <text class="icon-text">局</text>
-        </view>
-        <view class="menu-info">
-          <text class="menu-name">对局管理</text>
-          <text class="menu-desc">四人记分板，自动结算顺位马</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bindtap="goReference">
-        <view class="menu-icon ref">
-          <text class="icon-text">役</text>
-        </view>
-        <view class="menu-info">
-          <text class="menu-name">役种速查</text>
-          <text class="menu-desc">全役种参考，含番数与成立条件</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
-
-      <view class="menu-item" bindtap="goHistory">
-        <view class="menu-icon hist">
-          <text class="icon-text">史</text>
-        </view>
-        <view class="menu-info">
-          <text class="menu-name">历史对局</text>
-          <text class="menu-desc">查看往期对局记录与结算</text>
-        </view>
-        <text class="menu-arrow">›</text>
-      </view>
-    </view>
+    <view class="menu-item" bindtap="goCalculator" wx:if="{{currentGame}}"><text class="menu-icon">計</text><view class="menu-info"><text class="menu-name">快速计分</text><text class="menu-desc">输入手牌，算清每一分</text></view><text class="menu-arrow">›</text></view>
+    <view class="menu-item" bindtap="goGameSetup" wx:else><text class="menu-icon">局</text><view class="menu-info"><text class="menu-name">对局管理</text><text class="menu-desc">新建四人对局</text></view><text class="menu-arrow">›</text></view>
+    <view class="menu-item" bindtap="goReference"><text class="menu-icon">役</text><view class="menu-info"><text class="menu-name">役种速查</text><text class="menu-desc">查看番数与成立条件</text></view><text class="menu-arrow">›</text></view>
+    <view class="menu-item" bindtap="goHistory"><text class="menu-icon">史</text><view class="menu-info"><text class="menu-name">历史对局</text><text class="menu-desc">查看记录与结算</text></view><text class="menu-arrow">›</text></view>
   </view>
-</view>
-
-<!-- Footer -->
-<view class="home-footer">
-  <view class="rule-tag">
-    <view class="tag-dot"></view>
-    <text class="tag-text">参考规则：雀魂 Majsoul</text>
-  </view>
+  <view class="home-footer"><button class="feedback-entry" open-type="feedback" hover-class="feedback-hover">◌ 意见反馈</button><text>参考规则：雀魂</text></view>
 </view>

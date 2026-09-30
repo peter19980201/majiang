@@ -1,0 +1,137 @@
+[
+  {
+    "bytes" : 83247,
+    "crop" : [
+      62,
+      128,
+      948,
+      1294
+    ],
+    "height" : 264,
+    "name" : "man-1",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 354551,
+    "width" : 192
+  },
+  {
+    "bytes" : 84861,
+    "crop" : [
+      64,
+      129,
+      945,
+      1292
+    ],
+    "height" : 264,
+    "name" : "man-2",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 360829,
+    "width" : 192
+  },
+  {
+    "bytes" : 87219,
+    "crop" : [
+      65,
+      131,
+      942,
+      1287
+    ],
+    "height" : 264,
+    "name" : "man-3",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 367693,
+    "width" : 192
+  },
+  {
+    "bytes" : 88131,
+    "crop" : [
+      45,
+      83,
+      979,
+      1345
+    ],
+    "height" : 264,
+    "name" : "man-4",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 259176,
+    "width" : 192
+  },
+  {
+    "bytes" : 88023,
+    "crop" : [
+      62,
+      93,
+      948,
+      1324
+    ],
+    "height" : 264,
+    "name" : "man-6",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 323563,
+    "width" : 192
+  },
+  {
+    "bytes" : 86923,
+    "crop" : [
+      64,
+      128,
+      947,
+      1293
+    ],
+    "height" : 264,
+    "name" : "man-7",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 358058,
+    "width" : 192
+  },
+  {
+    "bytes" : 86369,
+    "crop" : [
+      63,
+      128,
+      952,
+      1292
+    ],
+    "height" : 264,
+    "name" : "man-8",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 348666,
+    "width" : 192
+  },
+  {
+    "bytes" : 86525,
+    "crop" : [
+      64,
+      127,
+      944,
+      1288
+    ],
+    "height" : 264,
+    "name" : "man-9",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 364018,
+    "width" : 192
+  },
+  {
+    "bytes" : 90809,
+    "crop" : [
+      64,
+      130,
+      945,
+      1289
+    ],
+    "height" : 264,
+    "name" : "man-5-red",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 364126,
+    "width" : 192
+  }
+]

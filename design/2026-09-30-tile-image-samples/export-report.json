@@ -1,0 +1,62 @@
+[
+  {
+    "bytes" : 102651,
+    "crop" : [
+      72,
+      130,
+      928,
+      1287
+    ],
+    "height" : 264,
+    "name" : "pin-5",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 374379,
+    "width" : 192
+  },
+  {
+    "bytes" : 80264,
+    "crop" : [
+      70,
+      129,
+      935,
+      1304
+    ],
+    "height" : 264,
+    "name" : "sou-3",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 356617,
+    "width" : 192
+  },
+  {
+    "bytes" : 90724,
+    "crop" : [
+      64,
+      129,
+      943,
+      1291
+    ],
+    "height" : 264,
+    "name" : "man-5",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 363907,
+    "width" : 192
+  },
+  {
+    "bytes" : 82688,
+    "crop" : [
+      63,
+      129,
+      949,
+      1286
+    ],
+    "height" : 264,
+    "name" : "honor-east",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 355452,
+    "width" : 192
+  }
+]

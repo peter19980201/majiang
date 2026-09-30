@@ -1,0 +1,10 @@
+{
+  "errors": [],
+  "checks": [
+    "all 34 tile types displayed across four suit tabs",
+    "three red-five toggles",
+    "agari highlights",
+    "white dragon limit rejects fifth"
+  ],
+  "realStorageModified": false
+}

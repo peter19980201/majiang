@@ -1,0 +1,11 @@
+{
+  "errors": [],
+  "checks": [
+    "four sample IDs selected in native calculator",
+    "all four suit screenshots",
+    "agari outline",
+    "red-five toggle",
+    "depleted tile rejects fifth selection"
+  ],
+  "realStorageModified": false
+}

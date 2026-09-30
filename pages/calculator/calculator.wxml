@@ -1,4 +1,4 @@
-<view class="container">
+<view class="container calculator">
   <!-- 手牌展示区 -->
   <view class="section">
     <view class="section-header">
@@ -39,7 +39,7 @@
         <text class="section-title">副露 {{melds.length}}/4</text>
         <text class="add-meld-btn" wx:if="{{melds.length < 4}}" bindtap="showMeldPanel">+添加</text>
       </view>
-      <view class="melds-row">
+      <view class="melds-row"><view wx:if="{{melds.length === 0}}" class="meld-placeholder">暂无副露 · 点击添加</view>
         <view class="meld-group" wx:for="{{melds}}" wx:key="index">
           <view class="meld-tiles-row">
             <tile wx:for="{{item.tiles}}" wx:for-item="t" wx:key="*this"
@@ -69,9 +69,9 @@
       <text class="suit-tab {{pickerSuit === 'man' ? 'active' : ''}}"
             bindtap="switchSuit" data-suit="man">万</text>
       <text class="suit-tab {{pickerSuit === 'pin' ? 'active' : ''}}"
-            bindtap="switchSuit" data-suit="pin">饼</text>
+            bindtap="switchSuit" data-suit="pin">筒</text>
       <text class="suit-tab {{pickerSuit === 'sou' ? 'active' : ''}}"
-            bindtap="switchSuit" data-suit="sou">条</text>
+            bindtap="switchSuit" data-suit="sou">索</text>
       <text class="suit-tab {{pickerSuit === 'jihai' ? 'active' : ''}}"
             bindtap="switchSuit" data-suit="jihai">字</text>
     </view>
@@ -81,7 +81,7 @@
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index}}" bindtap="selectTile">
         <tile tid="{{index}}" size="large" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge-lg">{{tileRemaining[index]}}</text>
+        <text class="remain-badge-lg">剩{{tileRemaining[index]}}</text>
       </view>
       <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redM5">
         <tile tid="{{4}}" size="large" extra="red5{{redM5 ? ' red5-on' : ''}}"></tile>
@@ -92,7 +92,7 @@
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 9}}" bindtap="selectTile">
         <tile tid="{{index + 9}}" size="large" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge-lg">{{tileRemaining[index + 9]}}</text>
+        <text class="remain-badge-lg">剩{{tileRemaining[index + 9]}}</text>
       </view>
       <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redP5">
         <tile tid="{{13}}" size="large" extra="red5{{redP5 ? ' red5-on' : ''}}"></tile>
@@ -103,7 +103,7 @@
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 18}}" bindtap="selectTile">
         <tile tid="{{index + 18}}" size="large" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge-lg">{{tileRemaining[index + 18]}}</text>
+        <text class="remain-badge-lg">剩{{tileRemaining[index + 18]}}</text>
       </view>
       <view class="picker-tile-lg" bindtap="toggleRed" data-flag="redS5">
         <tile tid="{{22}}" size="large" extra="red5{{redS5 ? ' red5-on' : ''}}"></tile>
@@ -114,7 +114,7 @@
       <view class="picker-tile-lg" wx:for="{{7}}" wx:key="*this"
             data-id="{{index + 27}}" bindtap="selectTile">
         <tile tid="{{index + 27}}" size="large" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
-        <text class="remain-badge-lg">{{tileRemaining[index + 27]}}</text>
+        <text class="remain-badge-lg">剩{{tileRemaining[index + 27]}}</text>
       </view>
     </view>
   </view>
@@ -169,13 +169,13 @@
 
   <!-- 附加状态 -->
   <view class="section">
-    <text class="section-title">附加状态</text>
+    <text class="section-title">附加役种（可多选）</text>
     <view class="chip-grid">
       <text class="chip {{riichi ? 'on' : ''}}" bindtap="toggleFlag" data-flag="riichi">立直</text>
-      <text class="chip {{doubleRiichi ? 'on' : ''}}" bindtap="toggleFlag" data-flag="doubleRiichi">W立直</text>
+      <text class="chip {{doubleRiichi ? 'on' : ''}}" bindtap="toggleFlag" data-flag="doubleRiichi">双立直</text>
       <text class="chip {{ippatsu ? 'on' : ''}}" bindtap="toggleFlag" data-flag="ippatsu">一发</text>
       <text class="chip {{haitei ? 'on' : ''}}" bindtap="toggleFlag" data-flag="haitei">海底/河底</text>
-      <text class="chip {{rinshan ? 'on' : ''}}" bindtap="toggleFlag" data-flag="rinshan">岭上</text>
+      <text class="chip {{rinshan ? 'on' : ''}}" bindtap="toggleFlag" data-flag="rinshan">岭上开花</text>
       <text class="chip {{chankan ? 'on' : ''}}" bindtap="toggleFlag" data-flag="chankan">抢杠</text>
       <text class="chip {{tenhou ? 'on' : ''}}" bindtap="toggleFlag" data-flag="tenhou">天和</text>
       <text class="chip {{chihou ? 'on' : ''}}" bindtap="toggleFlag" data-flag="chihou">地和</text>
@@ -243,13 +243,13 @@
     </view>
   </view>
 
-  <view style="height: 120rpx"></view>
+
 
   <!-- 副露弹窗 -->
-  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel" catchtouchmove="stopBubble">
+  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel" >
     <view class="modal-content" catchtap="stopBubble">
       <view class="modal-handle"></view>
-      <text class="modal-title">添加副露 - 选择类型</text>
+      <view class="sheet-heading"><text class="modal-title">添加副露</text><text class="sheet-close" bindtap="closeMeldPanel">×</text></view>
       <view class="meld-type-grid" wx:if="{{!editingMeldType}}">
         <view class="meld-type-btn" bindtap="startMeldInput" data-type="chi">
           <text class="meld-type-icon">吃</text>
@@ -308,8 +308,8 @@
   </view>
 
   <!-- 记分板模式: 结果弹窗 -->
-  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult" catchtouchmove="stopBubble">
-    <view class="modal-content board-result" catchtap="stopBubble" catchtouchmove="stopBubble">
+  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult" >
+    <view class="modal-content board-result" catchtap="stopBubble" >
       <view class="modal-handle"></view>
       <text class="modal-title">计算结果</text>
       <view class="br-score-section">
@@ -337,7 +337,7 @@
   </view>
 
   <!-- 计算按钮 -->
-  <view class="calc-btn" bindtap="doCalculate">
-    <text>{{boardMode ? '计算点数' : '计 算'}}</text>
-  </view>
+  <view class="calc-bottom"><view class="calc-btn btn-primary" bindtap="doCalculate">
+    <text>计算点数</text>
+  </view></view>
 </view>

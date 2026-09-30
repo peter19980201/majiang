@@ -1,4 +1,28 @@
 Page({
+  data: { currentGame: null },
+  onShow() {
+    const saved = wx.getStorageSync('currentGame')
+    this.setData({ currentGame: saved && saved.gameState && !saved.gameState.gameOver ? saved : null })
+  },
+  resumeGame() { wx.navigateTo({ url: '/pages/game/board?resume=1' }) },
+  newGame() {
+    const saved = wx.getStorageSync('currentGame')
+    if (!saved || !saved.gameState) {
+      wx.navigateTo({ url: '/pages/game/setup' })
+      return
+    }
+    wx.showModal({
+      title: '新建对局', content: '当前对局将结算并保存到历史记录，是否继续？',
+      confirmText: '新建对局',
+      success: (res) => {
+        if (res.confirm) {
+          this._settleAndSave(saved)
+          this.setData({ currentGame: null })
+          wx.navigateTo({ url: '/pages/game/setup' })
+        }
+      }
+    })
+  },
   goCalculator() {
     wx.navigateTo({ url: '/pages/calculator/calculator' })
   },

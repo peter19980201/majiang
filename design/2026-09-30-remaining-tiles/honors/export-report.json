@@ -1,0 +1,107 @@
+[
+  {
+    "bytes" : 82458,
+    "crop" : [
+      63,
+      128,
+      961,
+      1287
+    ],
+    "height" : 264,
+    "name" : "honor-south",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 343541,
+    "width" : 192
+  },
+  {
+    "bytes" : 81456,
+    "crop" : [
+      63,
+      128,
+      946,
+      1284
+    ],
+    "height" : 264,
+    "name" : "honor-west",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 357882,
+    "width" : 192
+  },
+  {
+    "bytes" : 81034,
+    "crop" : [
+      52,
+      127,
+      971,
+      1288
+    ],
+    "height" : 264,
+    "name" : "honor-north",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 324511,
+    "width" : 192
+  },
+  {
+    "bytes" : 57033,
+    "crop" : [
+      63,
+      127,
+      955,
+      1286
+    ],
+    "height" : 264,
+    "name" : "honor-white",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 346492,
+    "width" : 192
+  },
+  {
+    "bytes" : 90079,
+    "crop" : [
+      64,
+      129,
+      946,
+      1281
+    ],
+    "height" : 264,
+    "name" : "honor-green",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 366428,
+    "width" : 192
+  },
+  {
+    "bytes" : 75497,
+    "crop" : [
+      63,
+      129,
+      973,
+      1286
+    ],
+    "height" : 264,
+    "name" : "honor-red",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 326018,
+    "width" : 192
+  },
+  {
+    "bytes" : 102278,
+    "crop" : [
+      71,
+      128,
+      932,
+      1291
+    ],
+    "height" : 264,
+    "name" : "pin-5-red",
+    "originalHeight" : 1470,
+    "originalWidth" : 1070,
+    "transparentPixels" : 377415,
+    "width" : 192
+  }
+]

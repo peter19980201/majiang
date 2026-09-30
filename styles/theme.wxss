@@ -1,197 +1,225 @@
-/* ========== Design Tokens Reference ==========
- *
- * Primary - Deep Forest Green:
- *   green-900: #0d3b1f   green-800: #14522b   green-700: #1a6b3c
- *   green-600: #22884c   green-500: #2da660   green-400: #4cba78
- *   green-100: #dcf5e5   green-50:  #eefbf2
- *
- * Accent - Warm Amber/Gold:
- *   amber-700: #b45309   amber-600: #d97706   amber-500: #f59e0b
- *   amber-400: #fbbf24   amber-100: #fef3c7   amber-50:  #fffbeb
- *
- * Danger:
- *   red-700: #b91c1c   red-600: #dc2626   red-500: #ef4444   red-100: #fee2e2
- *
- * Neutrals - Warm Tones:
- *   warm-950: #1c1917   warm-900: #292524   warm-800: #44403c
- *   warm-700: #57534e   warm-600: #78716c   warm-500: #a8a29e
- *   warm-400: #d6d3d1   warm-300: #e7e5e4   warm-200: #f5f5f4
- *   warm-100: #fafaf9   warm-50:  #fdfcfb
- *
- * Surfaces:
- *   bg-page: #f7f5f0   bg-card: #ffffff
- *
- * Shadows:
- *   shadow-sm: 0 1rpx 2rpx rgba(28,25,23,0.04)
- *   shadow-md: 0 2rpx 8rpx rgba(28,25,23,0.06), 0 1rpx 2rpx rgba(28,25,23,0.04)
- *   shadow-lg: 0 4rpx 16rpx rgba(28,25,23,0.08), 0 2rpx 4rpx rgba(28,25,23,0.04)
- *   shadow-xl: 0 8rpx 32rpx rgba(28,25,23,0.12), 0 2rpx 8rpx rgba(28,25,23,0.06)
- *
- * Radius:
- *   sm: 16rpx   md: 24rpx   lg: 32rpx   xl: 40rpx   2xl: 48rpx
- *
- * Fonts:
- *   serif: 'Songti SC', 'STSong', 'Noto Serif CJK SC', 'SimSun', serif
- *   sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif
- * ========== */
-
-/* ========== Shared Components ========== */
-
-/* Card */
-.card {
-  background: #ffffff;
-  border-radius: 32rpx;
-  padding: 24rpx;
-  box-shadow: 0 1rpx 2rpx rgba(28,25,23,0.04);
+/* Pine, ivory and brass — shared native mini-program components. */
+.card,.section {
+  background:#fdfcf8;
+  border:1rpx solid #e8e5dc;
+  border-radius:24rpx;
+  padding:24rpx;
+  margin-bottom:18rpx;
 }
 
-/* Primary Button */
-.btn-primary {
-  height: 96rpx;
-  border-radius: 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
-  font-weight: 700;
-  background: linear-gradient(135deg, #14522b, #22884c);
-  color: #fff;
-  box-shadow: 0 4rpx 16rpx rgba(26,107,60,0.35);
-  letter-spacing: 2rpx;
+.section-title {
+  display:block;
+  font-size:28rpx;
+  font-weight:600;
+  margin-bottom:18rpx;
+  color:#182f2b;
 }
 
-.btn-primary:active {
-  opacity: 0.9;
+.section-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12rpx;
+  margin-bottom:16rpx;
 }
 
-/* Secondary Button */
-.btn-secondary {
-  height: 96rpx;
-  border-radius: 24rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28rpx;
-  font-weight: 600;
-  background: #fafaf9;
-  color: #57534e;
+.section-header .section-title {
+  margin:0;
 }
 
-.btn-secondary:active {
-  background: #f5f5f4;
+.section-note {
+  font-size:22rpx;
+  color:#737b74;
 }
 
-/* Chip / Pill tag */
-.chip {
-  padding: 14rpx 28rpx;
-  border-radius: 200rpx;
-  font-size: 26rpx;
-  font-weight: 500;
-  background: #fafaf9;
-  color: #78716c;
-  border: 3rpx solid transparent;
-  transition: all 0.15s;
+.btn-primary,.btn-secondary,.modal-btn {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:88rpx;
+  padding:18rpx 24rpx;
+  border-radius:18rpx;
+  font-size:30rpx;
+  font-weight:600;
+  text-align:center;
 }
 
-.chip.on, .chip.active {
-  background: #fef3c7;
-  color: #b45309;
-  border-color: #fbbf24;
+.btn-primary,.modal-btn.confirm {
+  background:linear-gradient(120deg,#204e40,#123c31);
+  color:#fffdf6;
+  border:1rpx solid #204e40;
 }
 
-/* Segment Control */
+.btn-secondary,.modal-btn.cancel {
+  background:#faf9f4;
+  border:1rpx solid #c4c9c0;
+  color:#24483e;
+}
+
+.btn-primary:active,.btn-secondary:active,.modal-btn:active {
+  opacity:.78;
+}
+
 .seg-ctrl {
-  display: flex;
-  background: #fafaf9;
-  border-radius: 16rpx;
-  padding: 6rpx;
-  gap: 0;
+  display:flex;
+  background:#eeeee7;
+  border-radius:14rpx;
+  padding:4rpx;
+  gap:6rpx;
 }
 
 .seg {
-  flex: 1;
-  text-align: center;
-  font-size: 26rpx;
-  padding: 16rpx 0;
-  border-radius: 12rpx;
-  color: #78716c;
-  font-weight: 500;
-  transition: all 0.2s;
+  flex:1;
+  min-width:0;
+  min-height:64rpx;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:10rpx 4rpx;
+  font-size:26rpx;
+  border-radius:11rpx;
+  color:#5c6861;
 }
 
 .seg.active {
-  background: #1a6b3c;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 2rpx 8rpx rgba(26,107,60,0.3);
+  background:#204e40;
+  color:#fffdf6;
 }
 
-/* Badge variants */
-.badge {
-  font-size: 20rpx;
-  padding: 4rpx 16rpx;
-  border-radius: 200rpx;
-  white-space: nowrap;
-  font-weight: 600;
+.stepper {
+  display:flex;
+  align-items:center;
+  gap:10rpx;
 }
 
-.badge-han {
-  background: #dcf5e5;
-  color: #1a6b3c;
+.step-btn {
+  width:64rpx;
+  height:64rpx;
+  line-height:60rpx;
+  border:1rpx solid #ddded4;
+  border-radius:14rpx;
+  text-align:center;
+  font-size:36rpx;
+  color:#24483e;
+  background:#faf9f4;
 }
 
-.badge-furo {
-  background: #f3e5f5;
-  color: #7b1fa2;
+.step-btn:active {
+  background:#e4e9df;
 }
 
-.badge-menzen {
-  background: #e3f2fd;
-  color: #1565c0;
+.step-val {
+  text-align:center;
+  font-size:30rpx;
+  font-weight:600;
+  font-variant-numeric:tabular-nums;
+  border-radius:12rpx;
+  padding:8rpx 20rpx;
+  background:#eeefe8;
 }
 
-.badge-yakuman {
-  background: #fef3c7;
-  color: #b45309;
-}
-
-.badge-double-yakuman {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-/* Modal / Bottom Sheet */
 .modal-mask {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 200;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  background:rgba(8,25,20,.58);
+  z-index:200;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
 }
 
 .modal-content {
-  background: #fff;
-  border-radius: 48rpx 48rpx 0 0;
-  padding: 16rpx 32rpx 48rpx;
-  width: 100%;
-  max-height: 80vh;
+  width:100%;
+  max-height:88vh;
+  overflow-y:auto;
+  background:#f9f7f0;
+  color:#182f2b;
+  border-radius:36rpx 36rpx 0 0;
+  padding:16rpx 28rpx calc(28rpx + env(safe-area-inset-bottom));
 }
 
 .modal-handle {
-  width: 72rpx;
-  height: 8rpx;
-  border-radius: 4rpx;
-  background: #e7e5e4;
-  margin: 0 auto 24rpx;
+  width:62rpx;
+  height:7rpx;
+  background:#c6c7bd;
+  border-radius:8rpx;
+  margin:0 auto 22rpx;
 }
 
 .modal-title {
-  font-size: 32rpx;
-  font-weight: 700;
-  color: #292524;
-  text-align: center;
-  display: block;
-  margin-bottom: 24rpx;
+  display:block;
+  font-size:36rpx;
+  font-weight:700;
+  text-align:center;
+  margin-bottom:24rpx;
 }
+
+.modal-subtitle {
+  display:block;
+  font-size:24rpx;
+  color:#69776e;
+  text-align:center;
+  margin-bottom:24rpx;
+}
+
+.modal-actions {
+  display:flex;
+  gap:16rpx;
+  margin-top:28rpx;
+}
+
+.modal-actions .modal-btn {
+  flex:1;
+  min-width:0;
+}
+
+.positive {
+  color:#235a46;
+}
+
+.negative {
+  color:#af443a;
+}
+
+.empty {
+  text-align:center;
+  padding:80rpx 24rpx;
+  color:#738077;
+}
+
+.empty-symbol {
+  display:block;
+  font-family:'Songti SC','STSong',serif;
+  font-size:72rpx;
+  color:#9aa897;
+  margin-bottom:20rpx;
+}
+
+.empty-text {
+  display:block;
+  font-size:28rpx;
+}
+
+.empty-hint {
+  display:block;
+  font-size:24rpx;
+  margin-top:12rpx;
+  color:#7d857e;
+}
+
+.local-note {
+  text-align:center;
+  color:#7b817a;
+  font-size:22rpx;
+  padding:28rpx 0 4rpx;
+}
+
+
+/* Shared ivory surfaces and pine controls, coordinated with illustrated home. */
+.card,.section { box-shadow:0 3rpx 12rpx rgba(48,47,25,.035); }
+.btn-primary,.modal-btn.confirm { box-shadow:inset 0 1rpx 0 rgba(255,255,255,.15),0 3rpx 6rpx rgba(15,48,34,.08); }
+.modal-content { background:linear-gradient(135deg,#fdfbf5,#f6f3e9); box-shadow:0 -8rpx 36rpx rgba(7,30,22,.13); }

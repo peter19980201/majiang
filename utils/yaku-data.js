@@ -113,7 +113,7 @@ const YAKU_DATA = [
     category: '2番', menzenOnly: true,
     desc: '7组对子（固定25符）',
     condition: '手牌由7组不同的对子组成',
-    example: { hand: '1133m2277p4499s', melds: [], agari: '9s', note: '7组对子' }
+    example: { hand: '1133m2277p449s東東', melds: [], agari: '9s', note: '7组对子' }
   },
   {
     name: '三色同顺', nameJa: 'サンショクドウジュン', han: 2, hanOpen: 1,

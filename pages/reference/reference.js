@@ -20,6 +20,11 @@ Page({
           item._agariTile = T.parseTiles(y.example.agari)[0]
         }
       }
+      if (y.name === '七对子' && item._handTiles && item._agariTile !== undefined) {
+        const full = item._handTiles.concat(item._agariTile).sort((a,b)=>a-b)
+        item._pairGroups = []
+        for (let j=0;j<full.length;j+=2) item._pairGroups.push(full.slice(j,j+2))
+      }
       return item
     })
     this.applyFilter()

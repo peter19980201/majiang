@@ -1,0 +1,32 @@
+{
+  "coreTests": {
+    "passed": 110,
+    "failed": 0
+  },
+  "drawPreviewCases": 256,
+  "sevenPairs": {
+    "tiles": 14,
+    "pairs": 7
+  },
+  "simulatorWidths": [
+    320,
+    390
+  ],
+  "flows": [
+    "hand selection",
+    "meld input",
+    "red tile toggling",
+    "score calculation and breakdown",
+    "game setup",
+    "ron entry",
+    "tsumo sheet",
+    "draw preview and commit",
+    "resume game",
+    "settlement",
+    "history expansion",
+    "yaku search and empty results"
+  ],
+  "runtimeErrors": 0,
+  "sourceProject": "/Users/david/Program/majiang",
+  "storage": "All automated scenario data used mocked, in-memory storage; real storage APIs restored."
+}
