@@ -5,6 +5,7 @@ const { nextRound, DEFAULT_RULES, ABORT_REASONS } = require('../utils/game-rules
 let definition, storage = {}, navigation, toast
 global.Page = value => { definition = value }
 global.wx = {
+  showShareMenu() {},
   getStorageSync: key => storage[key] ? Records.clone(storage[key]) : '',
   setStorageSync: (key, value) => { storage[key] = Records.clone(value) },
   removeStorageSync: key => { delete storage[key] },

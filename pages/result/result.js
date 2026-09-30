@@ -1,6 +1,7 @@
+const { withShare } = require('../../utils/share')
 const T = require('../../utils/tiles')
 
-Page({
+Page(withShare({
   data: {
     result: null,
     showFuDetail: false,
@@ -31,4 +32,4 @@ Page({
   goHome() {
     wx.reLaunch({ url: '/pages/index/index' })
   }
-})
+}))

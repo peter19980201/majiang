@@ -1,4 +1,5 @@
-Page({
+const { withShare } = require('../../utils/share')
+Page(withShare({
   data: { record: null, busy: false },
 
   onLoad() {
@@ -31,4 +32,4 @@ Page({
       success: res => { if (res.confirm) this._returnWithAction('deleteRound') }
     })
   }
-})
+}))

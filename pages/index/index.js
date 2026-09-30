@@ -1,5 +1,6 @@
+const { withShare } = require('../../utils/share')
 const { settle } = require('../../utils/game-settlement')
-Page({
+Page(withShare({
   data: { currentGame: null },
   onShow() {
     const saved = wx.getStorageSync('currentGame')
@@ -69,4 +70,4 @@ Page({
   goHistory() {
     wx.navigateTo({ url: '/pages/game/history' })
   }
-})
+}, { timeline: true }))

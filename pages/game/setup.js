@@ -1,5 +1,6 @@
+const { withShare } = require('../../utils/share')
 const { DEFAULT_RULES } = require('../../utils/game-rules')
-Page({
+Page(withShare({
   data: {
     gameType: 'hanchan',   // tonpuu=东风, hanchan=半庄
     startPoints: 25000,
@@ -70,4 +71,4 @@ Page({
       url: `/pages/game/board?config=${encodeURIComponent(JSON.stringify(config))}`
     })
   }
-})
+}))

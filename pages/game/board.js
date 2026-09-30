@@ -1,3 +1,4 @@
+const { withShare } = require('../../utils/share')
 const WIND_NAMES = ['東', '南', '西', '北']
 const Records = require('../../utils/game-records')
 const RoundView = require('../../utils/round-view')
@@ -937,4 +938,4 @@ const boardDefinition = {
   }
 }
 
-Page(boardDefinition)
+Page(withShare(boardDefinition))

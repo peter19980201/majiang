@@ -1,9 +1,10 @@
+const { withShare } = require('../../utils/share')
 const T = require('../../utils/tiles')
 const { calculate } = require('../../utils/calculator')
 const CALCULATOR_INPUT_KEYS = ['hand', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
   'haitei', 'rinshan', 'chankan', 'tenhou', 'chihou', 'dora', 'uraDora', 'redM5', 'redP5', 'redS5']
 
-Page({
+Page(withShare({
   data: {
     hand: [],
     melds: [],
@@ -396,4 +397,4 @@ Page({
   cancelBoardResult() {
     this.setData({ showBoardResult: false })
   }
-})
+}))

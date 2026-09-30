@@ -4,6 +4,7 @@ const path = require('path')
 let definition
 global.Page = value => { definition = value }
 global.wx = {
+  showShareMenu() {},
   getStorageSync: () => '', setStorageSync() {}, removeStorageSync() {},
   navigateTo() {}, showModal() {}
 }

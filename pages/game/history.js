@@ -1,6 +1,7 @@
+const { withShare } = require('../../utils/share')
 const { settle } = require('../../utils/game-settlement')
 const { summary } = require('../../utils/game-rules')
-Page({
+Page(withShare({
   data: {
     currentGame: null,
     windLabels: ['東', '南', '西', '北'],
@@ -95,4 +96,4 @@ Page({
       }
     })
   }
-})
+}))

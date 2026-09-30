@@ -1,7 +1,8 @@
+const { withShare } = require('../../utils/share')
 const { YAKU_DATA, CATEGORIES } = require('../../utils/yaku-data')
 const T = require('../../utils/tiles')
 
-Page({
+Page(withShare({
   data: {
     categories: CATEGORIES,
     activeCategory: '',
@@ -80,4 +81,4 @@ Page({
 
     this.setData({ filteredYaku: list })
   }
-})
+}))

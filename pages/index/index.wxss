@@ -152,11 +152,13 @@
   font-size:22rpx;
 }
 
-.feedback-entry {
+button.feedback-entry {
+  flex:0 0 auto;
   width:auto!important;
   min-width:0!important;
-  margin:0;
-  padding:12rpx 0;
+  margin:0!important;
+  padding:12rpx 0!important;
+  text-align:left;
   background:transparent;
   color:#314a3c;
   line-height:1.5;

@@ -9,6 +9,7 @@ let navigation
 let toast
 global.Page = value => { definition = value }
 global.wx = {
+  showShareMenu() {},
   getStorageSync(key) { return storage[key] ? Records.clone(storage[key]) : '' },
   setStorageSync(key, value) { storage[key] = Records.clone(value) },
   removeStorageSync(key) { delete storage[key] },
