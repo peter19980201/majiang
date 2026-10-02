@@ -57,13 +57,11 @@ function calculate(input) {
 
   // 对每种拆解和和了牌归属计算，选择得点最高的
   let bestResult = null
-  let bestPoints = -1
 
   for (const dec of decompositions) {
     for (const winningTile of WinningTile.placements(dec, agariTile)) {
       const result = calculateForDecomposition({ ...dec, winningTile }, melds, ctx, input, dora)
-      if (result && result.payment.total > bestPoints) {
-        bestPoints = result.payment.total
+      if (result && isBetterResult(result, bestResult)) {
         bestResult = result
       }
     }
@@ -74,6 +72,21 @@ function calculate(input) {
   }
 
   return bestResult
+}
+
+// Keep payment as the primary criterion. At a score cap several legal
+// interpretations can pay the same: prefer more han, then more fu instead of
+// depending on decomposition traversal order. Actual yakuman outranks counted
+// yakuman at equal payment (yakuman uses han = -1 in the public result).
+function isBetterResult(candidate, current) {
+  if (!current) return true
+  if (candidate.payment.total !== current.payment.total) {
+    return candidate.payment.total > current.payment.total
+  }
+  const candidateHan = candidate.han === -1 ? Infinity : candidate.han
+  const currentHan = current.han === -1 ? Infinity : current.han
+  if (candidateHan !== currentHan) return candidateHan > currentHan
+  return candidate.fu > current.fu
 }
 
 // Dora does not depend on decomposition or winning-tile placement.

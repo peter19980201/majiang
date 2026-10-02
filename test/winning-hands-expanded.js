@@ -71,7 +71,7 @@ if (process.argv.includes('--report')) {
     '- winning-hands-expanded-result.json：当前引擎统计，失败用例包含完整输入、期望和实际输出。', '',
     '所有输入检查张数、实体牌数量（含指示牌）和副露结构。相应立直/海底等对局过程条件视为已满足，不涵盖完整牌谱过程校验。无役样本有完整和牌结构，但不能宣告合法和牌，用于防止宝牌充当役。', '',
     '## 比较约定', '',
-    '逐例严格比较独立库所选拆法的役种、番数和符数。mahjong 1.4.0 在多种拆法中按番数、符数排序；项目引擎按支付点数取最优，等点时保留先遍历的拆法。因此达到满贯及以上时，两种合法拆法可能番符不同而支付相同。这类差异单独标记，不能直接当作少付点数或牌型计算错误；也不会悄悄放宽断言。', '',
+    '逐例严格比较独立库所选拆法的役种、番数和符数。mahjong 1.4.0 在多种拆法中按番数、符数排序；项目引擎先按支付点数取最优，等点时优先番数较高、再优先符数较高的合法拆法；实际役满在等点时优先于累计役满。满贯及以上也不再依赖拆解遍历顺序选取结果。若仍出现等点但番符不同的差异，会单独标记，不放宽断言。', '',
     '## 当前结果', '', `扩展集：**${stats.passed}/${stats.total}通过，${stats.failed}失败**。失败不会被跳过或改成程序现有答案，进程以非零状态退出。`, '',
     `其中 **${samePoints}例为基本点相同但番符/役种不同**；其余${failures.length - samePoints}例需检查其他原因。不同暗手/副露牌型（不计风位、和牌张、宝牌等场况）：${uniqueShapes}种。`, '',
     `失败编号：${failures.map(f => f.id).join('、') || '无'}。`, '']
@@ -80,6 +80,6 @@ if (process.argv.includes('--report')) {
     for (const [key, value] of Object.entries(data)) lines.push(`| ${key} | ${value} |`)
     lines.push('')
   }
-  fs.writeFileSync(path.join(__dirname, 'winning-hands-expanded.md'), lines.join('\n') + '\n')
+  fs.writeFileSync(path.join(__dirname, 'winning-hands-expanded.md'), lines.join('\n').trimEnd() + '\n')
 }
 if (failures.length) process.exitCode = 1
