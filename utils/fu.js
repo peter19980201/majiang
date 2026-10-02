@@ -9,6 +9,7 @@
  */
 
 const T = require('./tiles')
+const WinningTile = require('./winning-tile')
 
 /**
  * 计算符数
@@ -130,37 +131,10 @@ function calculateFu(decomp, allMentsu, ctx, hasPinfu) {
 function getMachiFu(decomp, agariTile) {
   if (decomp.type !== 'regular') return { fu: 0, name: '' }
 
-  // 单骑: 和了牌是雀头
-  if (agariTile === decomp.jantai) {
-    // 需要确认不是双碰等其他情况
-    // 如果和了牌既能做雀头又能做面子，这个拆解中它做了雀头 → 单骑
-    return { fu: 2, name: '单骑' }
-  }
-
-  // 检查和了牌在哪个顺子中
-  for (const m of decomp.mentsu) {
-    if (m.type === 'shuntsu') {
-      const t0 = m.tile
-      const t1 = m.tile + 1
-      const t2 = m.tile + 2
-
-      if (agariTile === t1) {
-        // 嵌张 (中间那张)
-        return { fu: 2, name: '嵌张' }
-      }
-      if (agariTile === t0 && (t0 % 9) === 6) {
-        // 边张: 789 等 7 → 边张
-        return { fu: 2, name: '边张' }
-      }
-      if (agariTile === t2 && (t2 % 9) === 2) {
-        // 边张: 123 等 3 → 边张
-        return { fu: 2, name: '边张' }
-      }
-    }
-  }
-
-  // 双面 或 双碰: 0符
-  return { fu: 0, name: '' }
+  const winning = WinningTile.selected(decomp, agariTile)
+  const names = { tanki: '单骑', kanchan: '嵌张', penchan: '边张' }
+  const name = winning && names[winning.type]
+  return name ? { fu: 2, name } : { fu: 0, name: '' }
 }
 
 module.exports = {

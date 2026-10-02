@@ -10,7 +10,6 @@ Page(withShare({
     players: ['東家', '南家', '西家', '北家'],
     rules: { ...DEFAULT_RULES },
     ruleOptions: [
-      { key: 'multipleRon', label: '多家荣和', note: '允许两家或三家同时荣和，各家分别加本场；供托归放铳者下家方向最近的和了者。' },
       { key: 'bankruptcy', label: '飞人终局', note: '任一玩家点数小于 0 时结束；恰好 0 点继续。' },
       { key: 'extension', label: '延长战', note: '规定场结束时无人达到返还点，东风延长至南场、半庄至西场；延长场有人达标即结束，最多延长一个场。' },
       { key: 'dealerFinish', label: '末局庄家首位止', note: '末局庄家和牌或听牌连庄，且首位达到返还点时自动结束；同点按起始座位顺序排名。' }

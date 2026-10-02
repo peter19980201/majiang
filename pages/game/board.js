@@ -4,6 +4,7 @@ const Records = require('../../utils/game-records')
 const RoundView = require('../../utils/round-view')
 const GameRules = require('../../utils/game-rules')
 const { settle } = require('../../utils/game-settlement')
+const GameStorage = require('../../utils/game-storage')
 
 const boardDefinition = {
   data: {
@@ -119,25 +120,43 @@ const boardDefinition = {
       abortReasons: GameRules.ABORT_REASONS })
   },
 
-  toggleMultiRon() {
-    if (!GameRules.rules(this.data.config).multipleRon) return
-    this.setData({ multiRonMode: !this.data.multiRonMode, ronEntries: [] })
-    this._refreshRonChoices()
-  },
-
+  // Winner count determines the form; no separate single/multiple mode switch.
   _refreshRonChoices() {
+    if (!this.data.multiRonMode && !this.data.ronEntries.length && this.data.selectedWinner >= 0) {
+      const idx = this.data.selectedWinner
+      const old = this._editingRecord
+      const quickInput = old && old.input.quickInput
+      const calcResult = old && old.input.source !== 'manual' ? {
+        source: old.input.source, quickInput, calculatorInput: old.input.calculatorInput,
+        han: old.han, fu: old.fu, level: old.level, yaku: old.yaku || [],
+        payment: { total: Number(this.data.inputPoints) + this._entryState().honba * 300 }
+      } : null
+      this.setData({ ronEntries: [{ idx, name: this.data.players[idx].name,
+        points: this.data.inputPoints, calcResult, calculatorInput: old && old.input.calculatorInput }] })
+    }
     this.setData({ ronChoices: this.data.players.map((p, idx) => ({ name: p.name, idx,
       active: this.data.ronEntries.some(entry => entry.idx === idx), disabled: idx === this.data.selectedLoser })) })
   },
 
+  _setRonEntries(ronEntries) {
+    const single = ronEntries.length === 1 ? ronEntries[0] : null
+    this.setData({ ronEntries, multiRonMode: ronEntries.length > 1,
+      selectedWinner: single ? single.idx : -1,
+      inputPoints: single ? single.points || '' : '',
+      showManualInput: Boolean(single && single.points) })
+    this._refreshRonChoices()
+  },
+
   selectMultiRonWinner(e) {
     const idx = Number(e.currentTarget.dataset.idx)
-    if (idx === this.data.selectedLoser) return
+    if (!Number.isInteger(idx) || !this.data.players[idx] || idx === this.data.selectedLoser) return
     const selected = this.data.ronEntries.some(entry => entry.idx === idx)
+    if (!selected && this.data.ronEntries.length >= 3) {
+      wx.showToast({ title: '最多选择三位和了者', icon: 'none' }); return
+    }
     const ronEntries = selected ? this.data.ronEntries.filter(entry => entry.idx !== idx) :
       this.data.ronEntries.concat([{ idx, name: this.data.players[idx].name, points: '', calculatorInput: null }])
-    this.setData({ ronEntries })
-    this._refreshRonChoices()
+    this._setRonEntries(ronEntries)
   },
 
   onMultiRonPoints(e) {
@@ -147,18 +166,43 @@ const boardDefinition = {
     this.setData({ ronEntries })
   },
 
-  goToMultiCalc(e) {
+  openMultiRonPoints(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    this.setData({ ronEntries: this.data.ronEntries.map(entry => ({ ...entry,
+      editingPoints: entry.idx === idx,
+      draftPoints: entry.idx === idx ? entry.points || '' : entry.draftPoints })) })
+  },
+
+  onMultiRonDraft(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    this.setData({ ronEntries: this.data.ronEntries.map(entry => entry.idx === idx ?
+      { ...entry, draftPoints: e.detail.value } : entry) })
+  },
+
+  saveMultiRonPoints(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    const entry = this.data.ronEntries.find(item => item.idx === idx)
+    const points = entry && Number(entry.draftPoints)
+    if (!Number.isSafeInteger(points) || points <= 0 || points % 100 !== 0) {
+      wx.showToast({ title: '请输入正整数点数（100的倍数）', icon: 'none' }); return
+    }
+    this.setData({ ronEntries: this.data.ronEntries.map(item => item.idx === idx ?
+      { ...item, points: String(points), calcResult: null, calculatorInput: null,
+        editingPoints: false, draftPoints: '' } : item) })
+  },
+
+  goToMultiCalc(e, mode) {
     if (this.data.selectedLoser < 0) {
       wx.showToast({ title: '请先选择放铳者', icon: 'none' }); return
     }
     this.setData({ selectedWinner: Number(e.currentTarget.dataset.idx) })
-    this._navigateToCalc('ron')
+    this._navigateToCalc('ron', mode)
   },
 
   _applyMultiRon() {
     const { ronEntries, selectedLoser, players: current } = this.data
     const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < current.length
-    if (!GameRules.rules(this.data.config).multipleRon || !validSeat(selectedLoser) ||
+    if (!validSeat(selectedLoser) ||
         ronEntries.length < 2 || ronEntries.length > 3 ||
         new Set(ronEntries.map(entry => entry.idx)).size !== ronEntries.length ||
         ronEntries.some(entry => !validSeat(entry.idx) || entry.idx === selectedLoser)) {
@@ -172,6 +216,9 @@ const boardDefinition = {
     const sticks = this.data.riichiSticks + this._applyRiichi(players)
     const winners = ronEntries.map(entry => ({ idx: entry.idx, name: players[entry.idx].name,
       points: Number(entry.points), payment: Number(entry.points) + this.data.honba * 300,
+      source: entry.calcResult && entry.calcResult.source === 'hanfu' ? 'hanfu' : entry.calcResult ? 'calculator' : 'manual',
+      han: entry.calcResult ? entry.calcResult.han : null, fu: entry.calcResult ? entry.calcResult.fu : null,
+      level: entry.calcResult ? entry.calcResult.level : '',
       yaku: entry.calcResult ? RoundView.sortedYaku(entry.calcResult) : [] }))
     winners.forEach(winner => {
       players[winner.idx].points += winner.payment
@@ -183,6 +230,8 @@ const boardDefinition = {
     this.setData({ players, riichiSticks: 0 })
     this.addRecord({ type: 'ron', round: this.getRoundLabel(), winner: winners.map(p => p.name).join('、'),
       winners, loser: players[selectedLoser].name, points: winners.reduce((sum, p) => sum + p.payment, 0),
+      basePayment: winners.reduce((sum, p) => sum + p.points, 0),
+      honbaBonus: this.data.honba * 300 * winners.length,
       riichiCollected: sticks, riichiRecipient: nearest.name,
       desc: winners.map(p => `${p.name} ${p.payment}点`).join(' / ') + `；供托归${nearest.name}` })
     this.advanceRound(winners.some(p => p.idx === this.data.dealerIdx))
@@ -213,8 +262,8 @@ const boardDefinition = {
     // Page methods are bound to the native live instance. Inherit raw methods
     // so every nested score/rotation call stays on this isolated draft.
     const draft = Object.create(boardDefinition)
-    draft.data = Records.clone({ ...original, ...before, roundHistory: history,
-      gameOver: false, finalResult: [] })
+    draft.data = { ...Records.clone(before), ...Records.input(original),
+      roundHistory: history, gameOver: false, finalResult: [] }
     if (calcResult && calcResult.calculatorInput) {
       draft.data.roundRiichi[draft.data.selectedWinner] = Boolean(
         calcResult.calculatorInput.riichi || calcResult.calculatorInput.doubleRiichi)
@@ -231,12 +280,15 @@ const boardDefinition = {
       draft.data.endedEarly = true
     }
     const record = draft.data.roundHistory[draft.data.roundHistory.length - 1]
-    record.version = 2
+    const hasQuickInput = (calcResult && calcResult.source === 'hanfu') ||
+      (record.winners && original.ronEntries.some(entry => entry.calcResult && entry.calcResult.source === 'hanfu'))
+    record.version = hasQuickInput ? 4 : 3
     record.id = this._editingRecord ? this._editingRecord.id : Records.newGameId()
     record.before = before
     record.after = Records.snapshot(draft.data)
     record.input = { ...Records.input(original), roundRiichi: draft.data.roundRiichi.slice(),
       drawType: draft.data.drawType, abortReason: draft.data.abortReason, source,
+      quickInput: calcResult && calcResult.quickInput ? Records.clone(calcResult.quickInput) : null,
       calculatorInput: calcResult && calcResult.calculatorInput ? Records.clone(calcResult.calculatorInput) : null }
     if (calcResult) {
       const payment = calcResult.payment
@@ -258,9 +310,7 @@ const boardDefinition = {
   },
 
   _removeSavedSettlement() {
-    const history = wx.getStorageSync('gameHistory') || []
-    const updated = history.filter(record => String(record.id) !== this.data.gameId)
-    if (updated.length !== history.length) wx.setStorageSync('gameHistory', updated)
+    GameStorage.removeHistory(this.data.gameId)
   },
 
   _canWriteGame() {
@@ -273,9 +323,8 @@ const boardDefinition = {
   },
 
   _refreshHistoryCards() {
-    this.setData({ historyCards: this.data.roundHistory.map((record, index, records) => ({
-      ...RoundView.describe(record, index === records.length - 1)
-    })) })
+    this.setData({ historyCards: this.data.roundHistory.map((record, index, records) =>
+      RoundView.card(record, index === records.length - 1)) })
   },
 
   openRoundDetail(e) {
@@ -352,7 +401,7 @@ const boardDefinition = {
   onShow() {
     if (this._returningFromCalculator) {
       this._returningFromCalculator = false
-      if (this._editingRecord || this.data.multiRonMode) {
+      if (!this._calculatorResultReceived || this._editingRecord || this.data.multiRonMode) {
         const type = this._calculatorType
         this.setData({ showRonModal: type === 'ron', showTsumoModal: type === 'tsumo' })
       }
@@ -422,24 +471,34 @@ const boardDefinition = {
         showManualInput: false,
         roundRiichi: [false, false, false, false]
       })
+      this._refreshRonChoices()
     }, 150)
   },
 
   selectRonWinner(e) {
-    this.setData({ selectedWinner: parseInt(e.currentTarget.dataset.idx) })
+    this.selectMultiRonWinner(e)
   },
 
   selectRonLoser(e) {
     const selectedLoser = parseInt(e.currentTarget.dataset.idx)
-    this.setData({ selectedLoser, ronEntries: this.data.ronEntries.filter(entry => entry.idx !== selectedLoser) })
-    this._refreshRonChoices()
+    this.setData({ selectedLoser })
+    this._setRonEntries(this.data.ronEntries.filter(entry => entry.idx !== selectedLoser))
   },
 
   onPointsInput(e) {
-    this.setData({ inputPoints: e.detail.value })
+    this.setData({ inputPoints: e.detail.value, ronEntries: this.data.ronEntries.map(entry =>
+      entry.idx === this.data.selectedWinner ? { ...entry, points: e.detail.value, calcResult: null } : entry) })
   },
 
   confirmRon() {
+    if (this.data.multiRonMode && this.data.ronEntries.some(entry => entry.editingPoints)) {
+      wx.showToast({ title: '请先保存正在输入的点数', icon: 'none' }); return
+    }
+    const single = !this.data.multiRonMode && this.data.ronEntries.find(entry => entry.idx === this.data.selectedWinner)
+    if (single && single.calcResult) {
+      this._processCalcRon(single.calcResult)
+      return
+    }
     this._commitRound(this.data.multiRonMode ? '_applyMultiRon' : '_applyManualRon', 'manual')
   },
 
@@ -457,30 +516,7 @@ const boardDefinition = {
       wx.showToast({ title: '和了者和放铳者不能相同', icon: 'none' }); return
     }
 
-    const honbaBonus = this.data.honba * 300
-    const totalPts = pts + honbaBonus
-
-    const players = this.data.players.slice().map(p => ({ ...p }))
-    const newSticks = this._applyRiichi(players)
-    const allSticks = this.data.riichiSticks + newSticks
-
-    players[selectedWinner].points += totalPts + allSticks * 1000
-    players[selectedLoser].points -= totalPts
-
-    const record = {
-      type: 'ron',
-      round: this.getRoundLabel(),
-      winner: players[selectedWinner].name,
-      loser: players[selectedLoser].name,
-      points: pts,
-      honbaBonus,
-      riichiCollected: allSticks
-    }
-
-    this.setData({ players, showRonModal: false, riichiSticks: 0 })
-    this.addRecord(record)
-    this.advanceRound(selectedWinner === this.data.dealerIdx)
-    this._autoSave()
+    this._applyWin({ type: 'ron', total: pts + this.data.honba * 300 })
   },
 
   closeRon() {
@@ -492,7 +528,13 @@ const boardDefinition = {
   },
 
   // === 计算器导航 ===
-  goToCalcRon() {
+  goToQuickRon() { this.goToCalcRon('quick') },
+
+  goToQuickTsumo() { this.goToCalcTsumo('quick') },
+
+  goToMultiQuick(e) { this.goToMultiCalc(e, 'quick') },
+
+  goToCalcRon(mode) {
     const { selectedWinner, selectedLoser } = this.data
     if (selectedWinner < 0 || selectedLoser < 0) {
       wx.showToast({ title: '请选择和了者和放铳者', icon: 'none' }); return
@@ -500,18 +542,19 @@ const boardDefinition = {
     if (selectedWinner === selectedLoser) {
       wx.showToast({ title: '和了者和放铳者不能相同', icon: 'none' }); return
     }
-    this._navigateToCalc('ron')
+    this._navigateToCalc('ron', mode)
   },
 
-  goToCalcTsumo() {
+  goToCalcTsumo(mode) {
     const { selectedWinner } = this.data
     if (selectedWinner < 0) {
       wx.showToast({ title: '请选择和了者', icon: 'none' }); return
     }
-    this._navigateToCalc('tsumo')
+    this._navigateToCalc('tsumo', mode)
   },
 
-  _navigateToCalc(agariType) {
+  _navigateToCalc(agariType, mode) {
+    const quick = mode === 'quick'
     const { roundWind, dealerIdx, honba, riichiSticks } = this._entryState()
     const { selectedWinner, roundRiichi } = this.data
     const bakaze = 27 + roundWind
@@ -525,20 +568,25 @@ const boardDefinition = {
     const that = this
     const multi = agariType === 'ron' && this.data.multiRonMode
     const multiEntry = multi && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
-    const calculatorInput = multi ? multiEntry && multiEntry.calculatorInput :
+    const singleEntry = !multi && agariType === 'ron' && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
+    const calculatorInput = multi ? multiEntry && multiEntry.calculatorInput : singleEntry ? singleEntry.calculatorInput :
       this._editingRecord && this._editingRecord.input.calculatorInput
+    const quickInput = multi ? multiEntry && multiEntry.calcResult && multiEntry.calcResult.quickInput : singleEntry ? singleEntry.calcResult && singleEntry.calcResult.quickInput :
+      this._editingRecord && this._editingRecord.input.quickInput
+    this._calculatorResultReceived = false
     this._returningFromCalculator = true
     this._calculatorType = agariType
     this.setData({ showRonModal: false, showTsumoModal: false })
 
     wx.navigateTo({
-      url: `/pages/calculator/calculator?mode=board&agariType=${agariType}&bakaze=${bakaze}&jikaze=${jikaze}&honba=${honba}&riichi=${winnerRiichi}&sticks=${totalSticks}`,
+      url: `/pages/${quick ? 'quick-score/quick-score' : 'calculator/calculator'}?mode=board&agariType=${agariType}&bakaze=${bakaze}&jikaze=${jikaze}&honba=${honba}&riichi=${winnerRiichi}&sticks=${totalSticks}`,
       events: {
         calcResult(data) {
+          that._calculatorResultReceived = true
           if (multi) {
             const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
               { ...entry, points: String(data.payment.total - honba * 300),
-                calculatorInput: data.calculatorInput || null, calcResult: data } : entry)
+                calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, draftPoints: '' } : entry)
             const riichi = that.data.roundRiichi.slice()
             if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
             that.setData({ ronEntries, roundRiichi: riichi, showRonModal: true })
@@ -552,7 +600,8 @@ const boardDefinition = {
         }
       },
       success(res) {
-        if (calculatorInput) res.eventChannel.emit('restoreInput', Records.clone(calculatorInput))
+        if (quick && quickInput) res.eventChannel.emit('restoreQuickInput', Records.clone(quickInput))
+        if (!quick && calculatorInput) res.eventChannel.emit('restoreInput', Records.clone(calculatorInput))
       },
       fail() {
         that._returningFromCalculator = false
@@ -562,89 +611,64 @@ const boardDefinition = {
   },
 
   _processCalcRon(calcResult) {
-    this._commitRound('_applyCalcRon', 'calculator', calcResult)
+    this._commitRound('_applyCalcRon', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
   },
 
   _applyCalcRon(calcResult) {
-    const { selectedWinner, selectedLoser } = this.data
-    const players = this.data.players.slice().map(p => ({ ...p }))
-
-    const newSticks = this._applyRiichi(players)
-    const allSticks = this.data.riichiSticks + newSticks
-
-    // payment.total 已含本场加算
-    players[selectedWinner].points += calcResult.payment.total + allSticks * 1000
-    players[selectedLoser].points -= calcResult.payment.total
-
-    const record = {
-      type: 'ron',
-      round: this.getRoundLabel(),
-      winner: players[selectedWinner].name,
-      loser: players[selectedLoser].name,
-      points: calcResult.payment.total,
-      han: calcResult.han,
-      fu: calcResult.fu,
-      level: calcResult.level,
-      yaku: Records.clone(calcResult.yaku || []),
-      yakuSummary: calcResult.yaku ? calcResult.yaku.map(y => y.name).join(' ') : '',
-      riichiCollected: allSticks
-    }
-
-    this.setData({ players, riichiSticks: 0 })
-    this.addRecord(record)
-    this.advanceRound(selectedWinner === this.data.dealerIdx)
-    this._autoSave()
+    this._applyWin({ ...calcResult.payment, type: 'ron' }, calcResult)
   },
 
   _processCalcTsumo(calcResult) {
-    this._commitRound('_applyCalcTsumo', 'calculator', calcResult)
+    this._commitRound('_applyCalcTsumo', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
   },
 
   _applyCalcTsumo(calcResult) {
-    const { selectedWinner } = this.data
-    const players = this.data.players.slice().map(p => ({ ...p }))
-    const payment = calcResult.payment
+    this._applyWin({ ...calcResult.payment, type: 'tsumo' }, calcResult)
+  },
 
-    const newSticks = this._applyRiichi(players)
-    const allSticks = this.data.riichiSticks + newSticks
-
-    // 使用计算器返回的分账明细 (已含本场)
-    if (payment.type === 'tsumo_oya') {
-      for (let i = 0; i < 4; i++) {
-        if (i !== selectedWinner) {
-          players[i].points -= payment.koPayment
-          players[selectedWinner].points += payment.koPayment
-        }
-      }
-    } else {
-      for (let i = 0; i < 4; i++) {
-        if (i === selectedWinner) continue
-        const pay = (i === this.data.dealerIdx) ? payment.oyaPayment : payment.koPayment
-        players[i].points -= pay
-        players[selectedWinner].points += pay
-      }
+  // Both input sources supply payments that already include honba.
+  _applyWin(payment, calcResult) {
+    const { selectedWinner, selectedLoser, dealerIdx, honba } = this.data
+    const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < this.data.players.length
+    const validPayment = value => Number.isSafeInteger(value) && value > 0 && value % 100 === 0
+    const isTsumo = payment.type === 'tsumo'
+    if (!validSeat(selectedWinner) || (!isTsumo &&
+        (!validSeat(selectedLoser) || selectedWinner === selectedLoser))) {
+      wx.showToast({ title: '请选择有效的和了者及放铳者', icon: 'none' }); return
     }
-
-    players[selectedWinner].points += allSticks * 1000
-
+    const amounts = this.data.players.map((_, idx) => {
+      if (idx === selectedWinner) return 0
+      if (isTsumo) return idx === dealerIdx ? payment.oyaPayment : payment.koPayment
+      return idx === selectedLoser ? payment.total : 0
+    })
+    if (!amounts.filter((_, idx) => idx !== selectedWinner && (isTsumo || idx === selectedLoser)).every(validPayment)) {
+      wx.showToast({ title: '支付额须为正数且是100的倍数', icon: 'none' }); return
+    }
+    const total = amounts.reduce((sum, amount) => sum + amount, 0)
+    if (total !== payment.total) {
+      wx.showToast({ title: '支付额与总点数不一致', icon: 'none' }); return
+    }
+    const players = this.data.players.map(p => ({ ...p }))
+    const allSticks = this.data.riichiSticks + this._applyRiichi(players)
+    amounts.forEach((amount, idx) => { players[idx].points -= amount })
+    players[selectedWinner].points += total + allSticks * 1000
     const record = {
-      type: 'tsumo',
-      round: this.getRoundLabel(),
-      winner: players[selectedWinner].name,
-      points: payment.total,
-      desc: payment.description,
-      han: calcResult.han,
-      fu: calcResult.fu,
-      level: calcResult.level,
-      yaku: Records.clone(calcResult.yaku || []),
-      yakuSummary: calcResult.yaku ? calcResult.yaku.map(y => y.name).join(' ') : '',
+      type: payment.type, round: this.getRoundLabel(), winner: players[selectedWinner].name,
+      points: total, basePayment: total - honba * 300, honbaBonus: honba * 300,
       riichiCollected: allSticks
     }
-
+    if (isTsumo) {
+      record.desc = selectedWinner === dealerIdx ? `子家各付${payment.koPayment}点` :
+        `庄家${payment.oyaPayment}点/子家${payment.koPayment}点`
+    } else record.loser = players[selectedLoser].name
+    if (calcResult) {
+      Object.assign(record, { han: calcResult.han, fu: calcResult.fu, level: calcResult.level,
+        yaku: Records.clone(calcResult.yaku || []),
+        yakuSummary: (calcResult.yaku || []).map(y => y.name).join(' ') })
+    }
     this.setData({ players, riichiSticks: 0 })
     this.addRecord(record)
-    this.advanceRound(selectedWinner === this.data.dealerIdx)
-    this._autoSave()
+    this.advanceRound(selectedWinner === dealerIdx)
   },
 
   // === 自摸 ===
@@ -697,54 +721,10 @@ const boardDefinition = {
     if (!validPayment(koPayment) || !validPayment(oyaPayment)) {
       wx.showToast({ title: '支付额须为正数且是100的倍数', icon: 'none' }); return
     }
-    const honbaBonus = this.data.honba * 100
-    const players = this.data.players.slice().map(p => ({ ...p }))
-
-    const newSticks = this._applyRiichi(players)
-    const allSticks = this.data.riichiSticks + newSticks
-
-    // 直接使用各家支付额，本场另加，供托单独领取。
-    let pts = 0
-    let desc = ''
-    if (isOya) {
-      const each = koPayment
-      for (let i = 0; i < 4; i++) {
-        if (i !== selectedWinner) {
-          const pay = each + honbaBonus
-          players[i].points -= pay
-          players[selectedWinner].points += pay
-          pts += pay
-        }
-      }
-      desc = `子家各付${each + honbaBonus}点`
-    } else {
-      const oyaPay = oyaPayment
-      const koPay = koPayment
-      for (let i = 0; i < 4; i++) {
-        if (i === selectedWinner) continue
-        const pay = (i === this.data.dealerIdx ? oyaPay : koPay) + honbaBonus
-        players[i].points -= pay
-        players[selectedWinner].points += pay
-        pts += pay
-      }
-      desc = `庄家${oyaPay + honbaBonus}点/子家${koPay + honbaBonus}点`
-    }
-
-    players[selectedWinner].points += allSticks * 1000
-
-    const record = {
-      type: 'tsumo',
-      round: this.getRoundLabel(),
-      winner: players[selectedWinner].name,
-      points: pts,
-      desc,
-      riichiCollected: allSticks
-    }
-
-    this.setData({ players, showTsumoModal: false, riichiSticks: 0 })
-    this.addRecord(record)
-    this.advanceRound(selectedWinner === this.data.dealerIdx)
-    this._autoSave()
+    const bonus = this.data.honba * 100
+    this._applyWin({ type: 'tsumo', koPayment: koPayment + bonus,
+      oyaPayment: oyaPayment + bonus,
+      total: (isOya ? koPayment * 3 : koPayment * 2 + oyaPayment) + bonus * 3 })
   },
 
   closeTsumo() {
@@ -884,45 +864,13 @@ const boardDefinition = {
   },
 
   saveHistory(result) {
-    const record = {
-      id: this.data.gameId,
-      date: this.data.gameDate,
-      config: this.data.config,
-      result,
-      rounds: this.data.roundHistory,
-      gameState: { ...Records.snapshot(this.data), gameId: this.data.gameId,
-        gameDate: this.data.gameDate, roundHistory: this.data.roundHistory }
-    }
-    const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== this.data.gameId)
-    history.unshift(record)
-    wx.setStorageSync('gameHistory', history)
-    // 结算后清除进行中存档
-    wx.removeStorageSync('currentGame')
+    GameStorage.saveCompleted({ ...this.data, finalResult: result })
   },
 
   // 自动保存当前对局进度
   _autoSave() {
     this._refreshHistoryCards()
-    if (this.data.gameOver) return
-    wx.setStorageSync('currentGame', {
-      date: this.data.gameDate,
-      gameState: {
-        gameId: this.data.gameId,
-        gameDate: this.data.gameDate,
-        config: this.data.config,
-        players: this.data.players,
-        roundWind: this.data.roundWind,
-        roundWindName: this.data.roundWindName,
-        roundNum: this.data.roundNum,
-        honba: this.data.honba,
-        riichiSticks: this.data.riichiSticks,
-        dealerIdx: this.data.dealerIdx,
-        gameOver: this.data.gameOver,
-        endedEarly: this.data.endedEarly,
-        endReason: this.data.endReason,
-        roundHistory: this.data.roundHistory
-      }
-    })
+    if (!this.data.gameOver) GameStorage.saveCurrent(this.data)
   },
 
   closeResult() {

@@ -21,26 +21,40 @@ function sortedYaku(record) {
     .map(entry => entry.item)
 }
 
-// Display data only; snapshots remain the source of truth for score corrections.
-function describe(record, latest = true) {
+// v1/v2 manual ron stored base points separately. Never mutate old snapshots.
+function points(record) {
+  return record.type === 'ron' && !(record.version >= 3) && record.honbaBonus !== undefined ?
+    record.points + record.honbaBonus : record.points
+}
+
+// List cards contain only rendered fields, not correction snapshots or hands.
+function card(record, latest = true) {
   const parts = String(record.round || '').trim().split(/\s+/)
   const tags = sortedYaku(record).map(yaku => yaku.name)
-  const changes = record.before && record.after ? record.before.players.map((player, index) => ({
-    name: player.name,
-    before: player.points,
-    after: record.after.players[index].points,
-    delta: record.after.players[index].points - player.points
-  })) : []
   return {
-    ...record,
+    type: record.type, round: record.round, winner: record.winner, loser: record.loser,
+    points: points(record), tenpai: record.tenpai, level: record.level,
     roundTitle: parts[0] || '本局',
     honbaLabel: parts.slice(1).join(' ') || '本场未记录',
     typeLabel: record.abortive ? '途中流局' : record.winners ? '多家荣和' : { ron: '荣和', tsumo: '自摸', draw: '流局' }[record.type] || '记录',
     name: record.type === 'draw' ? (record.abortive ? '途中流局' : '流局') : record.winner,
-    tags,
-    changes,
+    tags, source: record.input && record.input.source,
     latest,
     canChange: latest && Boolean(record.before && record.input)
   }
 }
-module.exports = { describe, sortedYaku }
+
+// Detail data is built on demand; the board retains authoritative snapshots.
+function describe(record, latest = true) {
+  const changes = record.before && record.after ? record.before.players.map((player, index) => ({
+    name: player.name, before: player.points, after: record.after.players[index].points,
+    delta: record.after.players[index].points - player.points
+  })) : []
+  return { ...card(record, latest), changes, desc: record.desc, han: record.han, fu: record.fu,
+    riichiCollected: record.riichiCollected,
+    winners: record.winners && record.winners.map(winner => ({
+      name: winner.name, idx: winner.idx, payment: winner.payment, source: winner.source,
+      han: winner.han, fu: winner.fu, level: winner.level, yaku: sortedYaku(winner)
+    })) }
+}
+module.exports = { describe, card, sortedYaku }

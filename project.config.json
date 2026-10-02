@@ -13,6 +13,10 @@
       {
         "value": "design",
         "type": "folder"
+      },
+      {
+        "value": "DEVELOPMENT_PLAN.md",
+        "type": "file"
       }
     ],
     "include": []

@@ -4,7 +4,7 @@
  * 支持: 普通和牌(4面子+1雀头), 七对子, 国士无双
  */
 
-const { isYaochu, getSuit, isJihai, tilesToCounts } = require('./tiles')
+const { isJihai, tilesToCounts } = require('./tiles')
 
 /**
  * 拆解结果结构:
@@ -97,7 +97,6 @@ function decomposeRegular(counts, remaining, mentsu, jantai, results) {
   if (!isJihai(first)) {
     const n = first % 9
     if (n <= 6) {
-      const suit = getSuit(first)
       const t1 = first
       const t2 = first + 1
       const t3 = first + 2

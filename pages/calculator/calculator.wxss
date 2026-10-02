@@ -474,3 +474,6 @@
 .calc-btn {
   font-size:30rpx;
 }
+
+.quick-links { display:flex; gap:16rpx; margin-bottom:20rpx; }
+.quick-link { flex:1; text-align:center; padding:22rpx 8rpx; background:#e5eadf; border-radius:16rpx; color:#24483e; font-size:26rpx; font-weight:600; }

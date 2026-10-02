@@ -1,5 +1,5 @@
 const { withShare } = require('../../utils/share')
-const { settle } = require('../../utils/game-settlement')
+const GameStorage = require('../../utils/game-storage')
 Page(withShare({
   data: { currentGame: null },
   onShow() {
@@ -51,18 +51,7 @@ Page(withShare({
   },
   // 将进行中的对局结算存入历史
   _settleAndSave(saved) {
-    const state = saved.gameState
-    const config = state.config
-    const result = settle(config, state.players)
-    const record = {
-      id: state.gameId || Date.now(), date: saved.date, config, result,
-      rounds: state.roundHistory, abandoned: true,
-      gameState: { ...state, gameOver: true, endedEarly: true, finalResult: result }
-    }
-    const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
-    history.unshift(record)
-    wx.setStorageSync('gameHistory', history)
-    wx.removeStorageSync('currentGame')
+    GameStorage.finishSavedGame(saved)
   },
   goReference() {
     wx.navigateTo({ url: '/pages/reference/reference' })

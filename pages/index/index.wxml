@@ -23,5 +23,6 @@
     <view class="menu-item" bindtap="goReference"><text class="menu-icon">役</text><view class="menu-info"><text class="menu-name">役种速查</text></view><text class="menu-arrow">›</text></view>
     <view class="menu-item" bindtap="goHistory"><text class="menu-icon">史</text><view class="menu-info"><text class="menu-name">历史对局</text></view><text class="menu-arrow">›</text></view>
   </view>
+  <view class="home-quick-links"><navigator class="home-quick-link" url="/pages/quick-score/quick-score">番符算分</navigator><navigator class="home-quick-link" url="/pages/quick-score/quick-score?tab=table">点数速查</navigator></view>
   <view class="home-footer"><button class="feedback-entry" open-type="feedback" hover-class="feedback-hover">◌ 意见反馈</button><text>参考规则：雀魂</text></view>
 </view>

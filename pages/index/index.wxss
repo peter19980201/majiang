@@ -256,3 +256,6 @@ button.feedback-entry {
 }
 .quick-desc { font-size:25rpx; }
 .quick-cta { min-width:310rpx; }
+
+.home-quick-links { display:flex; gap:16rpx; margin-top:22rpx; }
+.home-quick-link { flex:1; padding:22rpx; text-align:center; border:1rpx solid #c4c9c0; border-radius:16rpx; color:#24483e; font-size:26rpx; }

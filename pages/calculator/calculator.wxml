@@ -1,4 +1,5 @@
 <view class="container calculator">
+  <view class="quick-links" wx:if="{{!boardMode}}"><navigator class="quick-link" url="/pages/quick-score/quick-score">番符快捷算分 ›</navigator><navigator class="quick-link" url="/pages/quick-score/quick-score?tab=table">点数速查表 ›</navigator></view>
   <!-- 手牌展示区 -->
   <view class="section">
     <view class="section-header">

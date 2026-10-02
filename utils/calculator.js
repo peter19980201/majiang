@@ -3,10 +3,11 @@
  * 输入手牌信息 → 输出完整计算结果
  */
 
-const { tilesToCounts, countDora } = require('./tiles')
-const { decompose, meldToMentsu } = require('./decompose')
-const { judgeYaku, getAllMentsu, countAnko } = require('./yaku')
+const { countDora } = require('./tiles')
+const { decompose } = require('./decompose')
+const { judgeYaku, getAllMentsu } = require('./yaku')
 const { calculateFu } = require('./fu')
+const WinningTile = require('./winning-tile')
 const { calculateScore, calculatePayment } = require('./score')
 
 /**
@@ -24,11 +25,6 @@ function calculate(input) {
   // 合并手牌 + 和了牌用于拆解
   const handWithAgari = hand.concat([agariTile])
 
-  // 判断门前
-  const isMenzen = melds.every(m => m.type === 'ankan' || !m.type || false)
-    ? melds.every(m => m.type === 'ankan') && melds.length <= 4
-    : false
-  // 更准确的门前判定: 没有吃/碰/明杠/加杠
   const hasOpenMeld = melds.some(m =>
     m.type === 'chi' || m.type === 'pon' || m.type === 'minkan' || m.type === 'kakan'
   )
@@ -57,15 +53,19 @@ function calculate(input) {
     return { error: '无法拆解为合法牌型' }
   }
 
-  // 对每种拆解计算，选择得点最高的
+  const dora = calculateDora(input, melds, ctx)
+
+  // 对每种拆解和和了牌归属计算，选择得点最高的
   let bestResult = null
   let bestPoints = -1
 
   for (const dec of decompositions) {
-    const result = calculateForDecomposition(dec, melds, ctx, input)
-    if (result && result.payment.total > bestPoints) {
-      bestPoints = result.payment.total
-      bestResult = result
+    for (const winningTile of WinningTile.placements(dec, agariTile)) {
+      const result = calculateForDecomposition({ ...dec, winningTile }, melds, ctx, input, dora)
+      if (result && result.payment.total > bestPoints) {
+        bestPoints = result.payment.total
+        bestResult = result
+      }
     }
   }
 
@@ -76,19 +76,8 @@ function calculate(input) {
   return bestResult
 }
 
-/**
- * 对单个拆解计算
- */
-function calculateForDecomposition(decomp, melds, ctx, input) {
-  // 获取全部面子 (含副露)
-  const allMentsu = getAllMentsu(decomp, melds)
-
-  // 役种判定
-  const yakuList = judgeYaku(decomp, melds, ctx)
-
-  // 如果没有成立的役(不含ドラ)，暂时不算
-  // 注: ドラ本身不是役，需要至少1个役才能和牌
-
+// Dora does not depend on decomposition or winning-tile placement.
+function calculateDora(input, melds, ctx) {
   // 计算宝牌
   const allTileIds = getAllTilesFlat(input.hand, melds, input.agariTile)
   let doraCount = 0
@@ -109,17 +98,16 @@ function calculateForDecomposition(decomp, melds, ctx, input) {
     redDoraCount = (rd.m5 || 0) + (rd.p5 || 0) + (rd.s5 || 0)
   }
 
-  const totalDoraCount = doraCount + uraDoraCount + redDoraCount
+  return { doraCount, uraDoraCount, redDoraCount }
+}
 
-  // 没有役 → 不能和牌 (宝牌不算役)
+function calculateForDecomposition(decomp, melds, ctx, input, dora) {
+  const allMentsu = getAllMentsu(decomp, melds)
+  const yakuList = judgeYaku(decomp, melds, ctx)
+  // Dora alone cannot supply a yaku.
+  if (yakuList.length === 0) return null
   const isYakuman = yakuList.some(y => y.isYakuman)
-  if (yakuList.length === 0 && totalDoraCount === 0) {
-    return null
-  }
-  if (yakuList.length === 0) {
-    // 只有宝牌没有役 → 无法和牌
-    return null
-  }
+  const { doraCount, uraDoraCount, redDoraCount } = dora
 
   // 分别添加宝牌、里宝牌、赤宝牌
   if (!isYakuman) {
@@ -181,17 +169,9 @@ function adjustMentsuForRon(allMentsu, decomp, ctx) {
   if (ctx.isTsumo) return allMentsu
   if (decomp.type !== 'regular') return allMentsu
 
-  const result = allMentsu.map(m => ({ ...m }))
-  let adjusted = false
-
-  for (const m of result) {
-    if (!adjusted && m.type === 'koutsu' && !m.open && m.tile === ctx.agariTile) {
-      m.open = true // 荣和的刻子算明刻
-      adjusted = true
-    }
-  }
-
-  return result
+  const winning = WinningTile.selected(decomp, ctx.agariTile)
+  return allMentsu.map((m, index) => winning && winning.type === 'shanpon' &&
+    index === winning.mentsuIndex ? { ...m, open: true } : m)
 }
 
 /**

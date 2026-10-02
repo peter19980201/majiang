@@ -23,6 +23,7 @@
  */
 
 const T = require('./tiles')
+const WinningTile = require('./winning-tile')
 
 /**
  * 判定所有成立的役
@@ -61,10 +62,10 @@ function judgeYakuman(decomp, melds, ctx) {
 
   // 国士无双
   if (decomp.type === 'kokushi') {
-    // 国士十三面 = 双倍役满 (和了牌是13种幺九之一且所有幺九都有的情况下听13面)
-    const yaochu = [0, 8, 9, 17, 18, 26, 27, 28, 29, 30, 31, 32, 33]
-    if (ctx.agariTile === decomp.pair) {
-      // 单骑等某一种 → 普通国士
+    // 和了牌补齐缺失的一种幺九时，原手牌已有对子，是普通单面国士。
+    // 和了牌形成对子时，原手牌十三种各一张，是十三面听。
+    if (ctx.agariTile !== decomp.pair) {
+      // 等待缺失的一种 → 普通国士
       list.push({ name: '国士无双', nameJa: 'コクシムソウ', han: -1, isYakuman: true, yakumanTimes: 1 })
     } else {
       // 十三面听 → 双倍役满
@@ -85,12 +86,11 @@ function judgeYakuman(decomp, melds, ctx) {
 
   // 四暗刻
   if (decomp.type === 'regular') {
-    const anko = allMentsu.filter(m => (m.type === 'koutsu' && !m.open) || (m.type === 'kantsu' && !m.open))
     // 注意: 荣和时，和了牌构成的刻子算明刻
     const ankoCount = countAnko(decomp, melds, ctx)
     if (ankoCount === 4) {
       // 四暗刻单骑 = 双倍役满
-      if (ctx.agariTile === decomp.jantai) {
+      if (WinningTile.selected(decomp, ctx.agariTile).type === 'tanki') {
         list.push({ name: '四暗刻单骑', nameJa: 'スーアンコタンキ', han: -1, isYakuman: true, yakumanTimes: 2 })
       } else {
         list.push({ name: '四暗刻', nameJa: 'スーアンコ', han: -1, isYakuman: true, yakumanTimes: 1 })
@@ -340,8 +340,8 @@ function checkPinfu(decomp, allMentsu, ctx) {
   // 条件: 门前, 4组顺子, 雀头非役牌, 双面听
   if (decomp.type !== 'regular') return false
 
-  // 所有面子必须是顺子(手牌拆出的部分)
-  for (const m of decomp.mentsu) {
+  // 所有面子必须是顺子，包括副露中的暗杠
+  for (const m of allMentsu) {
     if (m.type !== 'shuntsu') return false
   }
 
@@ -351,26 +351,8 @@ function checkPinfu(decomp, allMentsu, ctx) {
   if (j === ctx.bakaze) return false
   if (j === ctx.jikaze) return false
 
-  // 必须是双面听: 和了牌在某个顺子的两端
-  const agari = ctx.agariTile
-  let isRyanmen = false
-  for (const m of decomp.mentsu) {
-    if (m.type === 'shuntsu') {
-      const t0 = m.tile
-      const t2 = m.tile + 2
-      // 双面: 和了牌是顺子最小牌且不是789的7, 或最大牌且不是123的3
-      if (agari === t0 && (t0 % 9) !== 6) {
-        isRyanmen = true
-        break
-      }
-      if (agari === t2 && (t2 % 9) !== 2) {
-        isRyanmen = true
-        break
-      }
-    }
-  }
-
-  return isRyanmen
+  const winning = WinningTile.selected(decomp, ctx.agariTile)
+  return Boolean(winning && winning.type === 'ryanmen')
 }
 
 /** 断幺九 (雀魂: 副露可) */
@@ -623,18 +605,13 @@ function countAnko(decomp, melds, ctx) {
   if (decomp.type !== 'regular') return 0
   let count = 0
 
-  // 手牌中的暗刻
-  for (const m of decomp.mentsu) {
-    if (m.type === 'koutsu') {
-      // 荣和时，如果和了牌是这组刻子的牌，算明刻
-      if (!ctx.isTsumo && m.tile === ctx.agariTile) {
-        // 这组刻子可能是因为荣和的牌凑成的，算明刻
-        // 但如果有多组同牌刻子，只有一组算明刻(实际不可能有多组同牌刻子)
-        continue
-      }
-      count++
-    }
-  }
+  const winning = WinningTile.selected(decomp, ctx.agariTile)
+  decomp.mentsu.forEach((m, index) => {
+    if (m.type !== 'koutsu') return
+    const completedByRon = !ctx.isTsumo && winning && winning.type === 'shanpon' &&
+      winning.mentsuIndex === index
+    if (!completedByRon) count++
+  })
 
   // 副露中的暗杠
   if (melds) {

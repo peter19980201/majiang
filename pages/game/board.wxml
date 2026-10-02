@@ -28,7 +28,7 @@
             <text class="hist-sub" wx:if="{{item.type === 'ron'}}">放铳 · {{item.loser}}</text>
             <text class="hist-sub" wx:if="{{item.type === 'draw'}}">{{item.tenpai}}</text>
             <view class="hist-yaku" wx:if="{{item.tags.length}}"><text class="hist-yaku-label">役种</text><view class="hist-tags"><text class="yaku-tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text></view></view>
-            <text class="hist-sub" wx:if="{{!item.tags.length && item.type !== 'draw'}}">{{item.level || '手动录入点数'}}</text>
+            <text class="hist-sub" wx:if="{{!item.tags.length && item.type !== 'draw'}}">{{item.source === 'hanfu' ? '番符录入 · 未记录役种' : (item.level || '手动录入点数')}}</text>
           </view>
         </view>
         <view class="record-detail-link"><text>查看本局详情</text><text>›</text></view>
@@ -47,14 +47,8 @@
         <text class="{{showTsumoModal ? 'active' : ''}}" bindtap="changeEditType" data-type="tsumo">自摸</text>
         <text class="{{showDrawModal ? 'active' : ''}}" bindtap="changeEditType" data-type="draw">流局</text>
       </view>
-      <view class="edit-type-tabs" wx:if="{{config.rules.multipleRon}}">
-        <text class="{{!multiRonMode ? 'active' : ''}}" bindtap="toggleMultiRon">{{multiRonMode ? '切换单家荣和' : '切换多家荣和'}}</text>
-      </view>
-      <text class="modal-label">{{multiRonMode ? '和了者（选择两至三人）' : '和了者'}}</text>
-      <view class="player-select" wx:if="{{!multiRonMode}}">
-        <text class="psel {{selectedWinner === index * 1 ? 'active' : ''}}" wx:for="{{players}}" wx:key="index" bindtap="selectRonWinner" data-idx="{{index}}">{{item.name}}</text>
-      </view>
-      <view class="player-select" wx:else>
+      <text class="modal-label">和了者（可选一至三人）</text>
+      <view class="player-select">
         <text class="psel {{item.active ? 'active' : ''}} {{item.disabled ? 'disabled' : ''}}" wx:for="{{ronChoices}}" wx:key="idx" bindtap="selectMultiRonWinner" data-idx="{{item.idx}}">{{item.name}}</text>
       </view>
       <text class="modal-label">放铳者</text>
@@ -72,23 +66,39 @@
         </view>
       </view>
       <view class="multi-ron-fields" wx:if="{{multiRonMode}}">
-        <view class="multi-ron-row" wx:for="{{ronEntries}}" wx:key="idx">
-          <text>{{item.name}}</text>
-          <input class="points-input" type="number" placeholder="点数（不含本场）" value="{{item.points}}" bindinput="onMultiRonPoints" data-idx="{{item.idx}}" />
-          <text class="multi-calc-link" bindtap="goToMultiCalc" data-idx="{{item.idx}}">录入手牌 ›</text>
+        <view class="ron-card {{item.points ? 'is-complete' : ''}}" wx:for="{{ronEntries}}" wx:key="idx">
+          <view class="ron-card-heading">
+            <text class="ron-card-name">{{item.name}}</text>
+            <text class="ron-card-status">{{item.points ? '已录入' : '待录入'}}</text>
+          </view>
+          <view class="ron-card-result" wx:if="{{item.points}}">
+            <view><text class="ron-card-points">{{item.points}}</text><text class="ron-card-unit">点</text></view>
+            <text class="ron-card-detail" wx:if="{{item.calcResult}}">{{item.calcResult.han > 0 ? item.calcResult.han + '番' : ''}}{{item.calcResult.fu > 0 ? item.calcResult.fu + '符' : ''}}{{item.calcResult.level ? ' · ' + item.calcResult.level : ''}} · {{item.calcResult.source === 'hanfu' ? '番符录入' : '手牌算分'}}</text>
+            <text class="ron-card-detail" wx:else>手动点数</text>
+            <text class="ron-card-note">不含本场与供托</text>
+          </view>
+          <text class="ron-card-empty" wx:else>选择一种方式，录入这家的和牌</text>
+          <view class="input-methods ron-card-methods">
+            <button class="input-method" bindtap="goToMultiCalc" data-idx="{{item.idx}}">录入手牌</button>
+            <button class="input-method" bindtap="goToMultiQuick" data-idx="{{item.idx}}">输入番符</button>
+            <button class="input-method" bindtap="openMultiRonPoints" data-idx="{{item.idx}}">输入点数</button>
+          </view>
+          <view class="ron-card-editor" wx:if="{{item.editingPoints}}">
+            <text class="ron-card-detail">点数（不含本场与供托）</text>
+            <view class="ron-card-input-row">
+              <input class="points-input" type="number" placeholder="例如 8000" value="{{item.draftPoints}}" bindinput="onMultiRonDraft" data-idx="{{item.idx}}" />
+              <button class="ron-card-save" bindtap="saveMultiRonPoints" data-idx="{{item.idx}}">保存</button>
+            </view>
+          </view>
         </view>
         <text class="payment-hint">每位和了者另收 {{entryHonba * 300}} 点本场；供托归放铳者下家方向最近的和了者。</text>
-        <view class="modal-actions"><text class="modal-btn cancel" bindtap="closeRon">取消</text><text class="modal-btn confirm" bindtap="confirmRon">确认多家荣和</text></view>
+        <view class="modal-actions"><text class="modal-btn confirm" bindtap="confirmRon">确认多家荣和</text></view>
       </view>
       <block wx:else>
-      <view class="modal-actions">
-        <text class="modal-btn cancel" bindtap="closeRon">取消</text>
-        <text class="modal-btn confirm" bindtap="goToCalcRon">计算点数</text>
-      </view>
-      <view class="manual-divider" bindtap="toggleManualInput">
-        <view class="divider-line"></view>
-        <text class="divider-text">{{showManualInput ? '收起' : '已知点数？手动输入'}}</text>
-        <view class="divider-line"></view>
+      <view class="input-methods">
+        <button class="input-method" bindtap="goToCalcRon">录入手牌</button>
+        <button class="input-method" bindtap="goToQuickRon">输入番符</button>
+        <button class="input-method" bindtap="toggleManualInput" aria-expanded="{{showManualInput}}">输入点数</button>
       </view>
       <view wx:if="{{showManualInput}}" class="manual-area">
         <input class="points-input" type="number" placeholder="点数 (不含本场)"
@@ -124,14 +134,10 @@
           <text class="riichi-toggle-check {{roundRiichi[index] ? 'on' : ''}}">{{roundRiichi[index] ? '✓' : '−'}}</text>
         </view>
       </view>
-      <view class="modal-actions">
-        <text class="modal-btn cancel" bindtap="closeTsumo">取消</text>
-        <text class="modal-btn confirm" bindtap="goToCalcTsumo">录入手牌</text>
-      </view>
-      <view class="manual-divider" bindtap="toggleManualInput">
-        <view class="divider-line"></view>
-        <text class="divider-text">{{showManualInput ? '收起' : '已知点数？手动输入'}}</text>
-        <view class="divider-line"></view>
+      <view class="input-methods">
+        <button class="input-method" bindtap="goToCalcTsumo">录入手牌</button>
+        <button class="input-method" bindtap="goToQuickTsumo">输入番符</button>
+        <button class="input-method" bindtap="toggleManualInput" aria-expanded="{{showManualInput}}">输入点数</button>
       </view>
       <view wx:if="{{showManualInput}}" class="manual-area tsumo-manual-area">
         <text wx:if="{{selectedWinner < 0}}" class="payment-hint">请先选择和了者</text>

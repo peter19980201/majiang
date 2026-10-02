@@ -1,0 +1,22 @@
+{
+  "seed": 20261002,
+  "total": 6000,
+  "library": "mahjong",
+  "libraryVersion": "1.4.0",
+  "expectedSource": "Independent Python library, not project engine",
+  "sha256": "45c54cb56c6a381e2f25d3878931047d79270f4cc8d2d22248899bb85a47654f",
+  "generatorSha256": "3760f7e17ad38fbba417e9934aa54ae2622b07899aa7e94ab8ecd03d1c7ee8c1",
+  "adapterSha256": "c62cdd12c87b28851c422ef1279bd185a9fb069df47144673dae87a5873a0d59",
+  "categories": {
+    "regular": 3450,
+    "seven-pairs": 700,
+    "kokushi": 300,
+    "reference-variants": 1500,
+    "high-fu": 50
+  },
+  "outcomes": {
+    "normal": 3963,
+    "no-yaku": 1354,
+    "yakuman": 683
+  }
+}

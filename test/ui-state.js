@@ -48,16 +48,12 @@ for (const dealer of [true,false]) for (const tsumo of [true,false]) {
 global.Component = value => { definition = value }
 require('../components/tile/tile')
 const tile = {data:{}, ...definition.methods, setData(data) {Object.assign(this.data,data)} }
-for (let id=0; id<34; id++) {
-  tile.updateDisplay(id,'')
-  if (id>=9 && id<27) assert.strictEqual(tile.data.marks.length,id%9+1)
-}
 definition.observers['tid, extra'].call(tile,13,'red5 red5-on')
 assert(tile.data.isRed)
-assert(tile.data.marks.every(mark => mark.red))
+assert(tile.data.bodySrc.endsWith('pin-5-red.png'))
 definition.observers['tid, extra'].call(tile,13,'')
 assert.strictEqual(tile.data.isRed,false)
-assert.strictEqual(tile.data.marks.filter(mark => mark.red).length,1)
+assert(tile.data.bodySrc.endsWith('pin-5.png'))
 
 // Every normal tile has artwork; red fives switch without changing tile ID.
 for (let id=0; id<34; id++) {

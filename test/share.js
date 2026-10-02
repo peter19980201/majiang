@@ -35,4 +35,4 @@ for (const timeline of [false, true]) {
   assert.strictEqual(context.count, 2)
   assert.deepStrictEqual(menus, timeline ? ['shareAppMessage', 'shareTimeline'] : ['shareAppMessage'])
 }
-console.log('Share checks passed: all 8 pages, home timeline, local data isolation, lifecycle preservation.')
+console.log(`Share checks passed: all ${pages.length} pages, home timeline, local data isolation, lifecycle preservation.`)

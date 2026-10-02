@@ -1,0 +1,44 @@
+<wxs module="fmt" src="../../utils/format.wxs"></wxs>
+<view class="container quick-page">
+  <view class="seg-ctrl top-tabs"><view class="seg {{tab === 'calc' ? 'active' : ''}}" bindtap="selectTab" data-tab="calc">番符算分</view><view class="seg {{tab === 'table' ? 'active' : ''}}" bindtap="selectTab" data-tab="table">点数速查表</view></view>
+  <block wx:if="{{tab === 'calc'}}">
+    <view class="section">
+      <text class="section-title">{{boardMode ? '本局场况' : '和牌场况'}}</text>
+      <text wx:if="{{boardMode}}" class="context">{{isOya ? '庄家' : '闲家'}} · {{agariType === 'ron' ? '荣和' : '自摸'}} · {{honba}}本场</text>
+      <block wx:else>
+        <view class="seg-ctrl"><view class="seg {{!isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="false">闲家</view><view class="seg {{isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="true">庄家</view></view>
+        <view class="seg-ctrl gap"><view class="seg {{agariType === 'ron' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="ron">荣和</view><view class="seg {{agariType === 'tsumo' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="tsumo">自摸</view></view>
+        <view class="honba-row"><text class="honba-label">本场数</text><view class="stepper"><button class="step-btn" bindtap="changeHonba" data-delta="-1" disabled="{{honba === 0}}">−</button><text class="step-val">{{honba}}</text><button class="step-btn" bindtap="changeHonba" data-delta="1" disabled="{{honba === 99}}">+</button></view></view>
+      </block>
+      <text wx:if="{{boardMode}}" class="hint">由对局自动带入。供托 {{boardSticks}} 本，由记分板结算归属。</text>
+    </view>
+    <view class="section">
+      <view class="seg-ctrl"><view class="seg {{kind === 'hanfu' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="hanfu">番符</view><view class="seg {{kind === 'yakuman' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="yakuman">役满</view></view>
+      <block wx:if="{{kind === 'hanfu'}}">
+        <text class="field-label">番数</text>
+        <view class="option-grid"><button wx:for="{{hanOptions}}" wx:key="value" class="option {{han === item.value ? 'selected' : ''}}" bindtap="select" data-key="han" data-value="{{item.value}}">{{item.label}}</button></view>
+        <block wx:if="{{han < 5}}"><text class="field-label">符数</text><view class="option-grid"><button wx:for="{{fuOptions}}" wx:key="*this" class="option {{fu === item ? 'selected' : ''}}" bindtap="select" data-key="fu" data-value="{{item}}">{{item}}符</button></view><text class="hint">20符为平和自摸；25符为七对子。无效组合会提示原因。</text></block>
+        <text class="hint" wx:else>5番起不需要符数；13番以上按累计役满计算。</text>
+      </block>
+      <block wx:else><text class="field-label">役满倍数</text><view class="option-grid"><button wx:for="{{yakumanOptions}}" wx:key="*this" class="option {{yakumanTimes === item ? 'selected' : ''}}" bindtap="select" data-key="yakumanTimes" data-value="{{item}}">{{item}}倍</button></view><text class="hint">用于役满役种及复合役满。普通役累计13番请使用番符模式。</text></block>
+    </view>
+    <view class="error-note" wx:if="{{error}}">{{error}}</view>
+    <view class="payment-card" wx:if="{{result}}">
+      <text class="score-caption">{{summary}}</text><view class="score-total">{{fmt.points(result.payment.total)}}<text class="score-unit">点</text></view>
+      <text class="payment-line">{{result.payment.description}}</text><text class="payment-note">已含 {{honba}} 本场的 {{honba * 300}} 点，不含供托</text>
+      <text class="payment-note">番符录入 · 未记录役种</text>
+    </view>
+    <view class="confirm-row" wx:if="{{boardMode}}"><button class="btn-secondary confirm-button" bindtap="goBack">返回</button><button class="btn-primary confirm-button {{!result || busy ? 'confirm-disabled' : ''}}" disabled="{{!result || busy}}" bindtap="confirm">{{busy ? '已发送结果' : '确认并返回记分'}} </button></view>
+  </block>
+  <block wx:else>
+    <view class="section">
+      <view class="seg-ctrl"><view class="seg {{!tableOya ? 'active' : ''}}" bindtap="selectTable" data-key="tableOya" data-value="false">闲家</view><view class="seg {{tableOya ? 'active' : ''}}" bindtap="selectTable" data-key="tableOya" data-value="true">庄家</view></view>
+      <view class="seg-ctrl gap"><view class="seg {{tableType === 'ron' ? 'active' : ''}}" bindtap="selectTable" data-key="tableType" data-value="ron">荣和</view><view class="seg {{tableType === 'tsumo' ? 'active' : ''}}" bindtap="selectTable" data-key="tableType" data-value="tsumo">自摸</view></view>
+      <text class="hint">零本场，不含供托。{{tableType === 'ron' ? '显示放铳者支付额。' : tableOya ? '显示每位闲家支付额。' : '数值顺序：闲家 / 庄家支付额。'}}</text>
+    </view>
+    <view class="score-table"><view class="table-row table-head"><text>符数</text><text>1番</text><text>2番</text><text>3番</text><text>4番</text></view><view class="table-row" wx:for="{{rows}}" wx:key="fu"><text class="fu-cell">{{item.fu}}符</text><text wx:for="{{item.cells}}" wx:for-item="cell" wx:key="han">{{cell.text}}</text></view></view>
+    <text class="hint table-note">— 表示该番符与和牌方式不成立。25符为七对子。</text>
+    <view class="section"><view class="limit-row" wx:for="{{limits}}" wx:key="name"><view><text>{{item.level}}</text><text class="hint">{{item.name}}</text></view><text>{{item.payment}}</text></view><text class="hint">单倍役满支付额同累计役满；多倍役满请切换番符算分中的“役满”。</text></view>
+  </block>
+  <text class="rule-note">{{ruleNote}} 本工具按输入的番符算点，不校验具体役种是否成立。</text>
+</view>

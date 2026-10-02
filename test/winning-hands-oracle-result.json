@@ -1,0 +1,10 @@
+{
+  "library": "mahjong",
+  "libraryVersion": "1.4.0",
+  "checkedAt": "2026-10-02T22:15:17.692078+08:00",
+  "casesSha256": "b2b6668dcb0ce3bf9284b4b728944ed14d263c94bddc6a4289023d71e79ca070",
+  "total": 100,
+  "passed": 100,
+  "failed": 0,
+  "failedCaseIds": []
+}

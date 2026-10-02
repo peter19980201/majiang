@@ -1,13 +1,12 @@
 const DEFAULT_RULES = {
-  multipleRon: false, bankruptcy: false,
+  multipleRon: true, bankruptcy: false,
   extension: false, dealerFinish: false
 }
 const ABORT_REASONS = ['九种九牌', '四风连打', '四家立直', '四杠散了', '三家和']
-function rules(config) { return { ...DEFAULT_RULES, ...(config.rules || {}) } }
+function rules(config) { return { ...DEFAULT_RULES, ...(config.rules || {}), multipleRon: true } }
 function summary(config) {
   const enabled = rules(config)
-  const labels = { multipleRon: '多家荣和',
-    bankruptcy: '飞人终局', extension: '延长战', dealerFinish: '庄家首位止' }
+  const labels = { bankruptcy: '飞人终局', extension: '延长战', dealerFinish: '庄家首位止' }
   const special = Object.keys(labels).filter(key => enabled[key]).map(key => labels[key])
   return special.length ? special.join(' · ') : '基础规则'
 }

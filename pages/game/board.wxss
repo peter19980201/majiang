@@ -230,10 +230,25 @@ page {
 .record-detail-link text:last-child { font-size:30rpx; line-height:1; }
 .record-pressed { background:#f2f3e9; }
 
-.multi-ron-fields { display:flex; flex-direction:column; gap:18rpx; }
-.multi-ron-row { display:flex; flex-wrap:wrap; align-items:center; gap:14rpx; padding:18rpx; background:#eff1e8; border-radius:14rpx; }
-.multi-ron-row input { width:100%; flex:none; box-sizing:border-box; }
-.multi-calc-link { margin-left:auto; color:#365d47; font-size:24rpx; }
+.multi-ron-fields { display:flex; flex-direction:column; gap:18rpx; margin-top:18rpx; }
+.ron-card { padding:24rpx; background:#fffdf7; border:1rpx solid #dedfd2; border-radius:20rpx; }
+.ron-card.is-complete { border-color:#aebfaa; }
+.ron-card-heading { display:flex; align-items:center; justify-content:space-between; }
+.ron-card-name { font-size:28rpx; font-weight:600; color:#24483e; }
+.ron-card-status { font-size:21rpx; color:#8b8e80; }
+.is-complete .ron-card-status { color:#426c50; }
+.ron-card-result { margin-top:18rpx; }
+.ron-card-points { font-size:46rpx; line-height:1.2; font-family:Georgia,serif; color:#24483e; font-variant-numeric:tabular-nums; }
+.ron-card-unit { font-size:22rpx; margin-left:8rpx; color:#617160; }
+.ron-card-detail { display:block; font-size:23rpx; line-height:1.6; color:#526c57; margin-top:8rpx; }
+.ron-card-note { display:block; font-size:20rpx; color:#8b8e80; margin-top:4rpx; }
+.ron-card-empty { display:block; margin-top:18rpx; color:#8b8e80; font-size:23rpx; }
+.ron-card .ron-card-methods { margin-top:22rpx; gap:10rpx; }
+.ron-card .input-method { font-size:24rpx; padding:18rpx 2rpx!important; border-radius:12rpx; }
+.ron-card-editor { border-top:1rpx solid #e5e6db; margin-top:20rpx; padding-top:12rpx; }
+.ron-card-input-row { display:flex; gap:12rpx; align-items:center; margin-top:12rpx; }
+.ron-card-input-row .points-input { flex:1; width:0; min-width:0; margin:0; }
+.ron-card-save { flex:none; margin:0!important; padding:18rpx 24rpx!important; min-width:0!important; font-size:24rpx; line-height:1.5; background:#24483e; color:#fffdf7; border-radius:12rpx; }
 .abort-reasons { display:flex; flex-wrap:wrap; gap:12rpx; margin-bottom:20rpx; }
 .abort-reasons text { padding:14rpx; border:1rpx solid #d2d9c4; border-radius:12rpx; font-size:24rpx; }
 .abort-reasons .active { background:#eff1e8; border-color:#99ab89; }
@@ -343,25 +358,8 @@ page {
   color:#fff;
 }
 
-.manual-divider {
-  display:flex;
-  gap:16rpx;
-  align-items:center;
-  padding:28rpx 0 18rpx;
-}
-
-.divider-line {
-  flex:1;
-  height:1rpx;
-  background:#dbdfce;
-}
-
-.divider-text {
-  font-size:24rpx;
-  color:#4a6145;
-}
-
 .manual-area {
+  margin-top:18rpx;
   display:flex;
   gap:14rpx;
 }
@@ -604,3 +602,26 @@ page {
 .settlement-card { box-shadow:0 3rpx 10rpx rgba(38,42,23,.04); }
 
 .board-topline,.players-cross,.table-total,.board-actions,.record-section,.settlement-trigger { position:relative; z-index:1; }
+
+.input-methods {
+  display:flex;
+  gap:12rpx;
+  margin-top:28rpx;
+}
+
+.input-methods .input-method {
+  flex:1;
+  width:0!important;
+  min-width:0!important;
+  margin:0!important;
+  padding:22rpx 4rpx!important;
+  line-height:1.5;
+  border:1rpx solid #c4c9c0;
+  border-radius:16rpx;
+  background:#e5eadf;
+  color:#24483e;
+  font-size:26rpx;
+  font-weight:600;
+}
+
+.input-method:active { background:#d5e0ce; }

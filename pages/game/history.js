@@ -1,5 +1,6 @@
 const { withShare } = require('../../utils/share')
-const { settle } = require('../../utils/game-settlement')
+const GameStorage = require('../../utils/game-storage')
+const RoundView = require('../../utils/round-view')
 const { summary } = require('../../utils/game-rules')
 Page(withShare({
   data: {
@@ -12,8 +13,14 @@ Page(withShare({
 
   onShow() {
     const currentGame = wx.getStorageSync('currentGame') || null
-    const list = wx.getStorageSync('gameHistory') || []
-    this.setData({ currentGame, historyList: list.map(game => ({ ...game, ruleSummary: summary(game.config || {}) })) })
+    const list = GameStorage.history()
+    this.setData({ currentGame, historyList: list.map(game => ({
+      id: game.id, date: game.date, config: game.config, result: game.result,
+      abandoned: game.abandoned, ruleSummary: summary(game.config || {}),
+      rounds: (game.rounds || []).map((round, index, rounds) => RoundView.card(round, index === rounds.length - 1)),
+      canCorrect: Boolean(game.gameState && game.rounds && game.rounds.length &&
+        game.rounds[game.rounds.length - 1].before)
+    })) })
   },
 
   resumeGame() {
@@ -26,28 +33,7 @@ Page(withShare({
       content: '将以当前点棒状态结算并存入历史记录',
       success: (res) => {
         if (res.confirm) {
-          const saved = this.data.currentGame
-          const state = saved.gameState
-          const config = state.config
-
-          // 结算
-          const result = settle(config, state.players)
-
-          // 存入历史
-          const record = {
-            id: state.gameId || Date.now(),
-            date: saved.date,
-            config,
-            result,
-            rounds: state.roundHistory,
-            abandoned: true,
-            gameState: { ...state, gameOver: true, endedEarly: true, finalResult: result }
-          }
-          const history = (wx.getStorageSync('gameHistory') || []).filter(h => String(h.id) !== String(record.id))
-          history.unshift(record)
-          wx.setStorageSync('gameHistory', history)
-
-          wx.removeStorageSync('currentGame')
+          GameStorage.finishSavedGame(this.data.currentGame)
           this.onShow()
         }
       }
@@ -68,8 +54,7 @@ Page(withShare({
       content: '删除后无法恢复',
       success: (res) => {
         if (res.confirm) {
-          const list = this.data.historyList.filter(h => String(h.id) !== String(id))
-          wx.setStorageSync('gameHistory', list)
+          GameStorage.removeHistory(id)
           this.onShow()
         }
       }
