@@ -396,3 +396,15 @@
 .current-header,.current-info,.current-players,.current-actions { position:relative; z-index:1; }
 .cp-tile { margin-bottom:14rpx; line-height:0; }
 .current-round { font-family:'Songti SC','STSong',serif; font-weight:700; }
+
+.history-card-pressed { opacity:.85; transform:scale(.985); }
+.history-settlement-mask { position:fixed; inset:0; z-index:200; display:flex; align-items:flex-end; visibility:hidden; pointer-events:none; background:rgba(8,25,20,0); transition:background-color 220ms ease-out,visibility 0s 220ms; }
+.history-settlement-mask.is-open { visibility:visible; pointer-events:auto; background:rgba(8,25,20,.58); transition:background-color 280ms ease-out,visibility 0s; }
+.history-settlement-sheet { display:flex; flex-direction:column; width:100%; height:96%; background:#faf8ef; border-radius:42rpx 42rpx 0 0; overflow:hidden; transform:translate3d(0,100%,0); transition:transform 220ms cubic-bezier(.32,.72,0,1); }
+.is-open .history-settlement-sheet { transform:translate3d(0,0,0); transition-duration:280ms; }
+.settlement-grip { width:72rpx; height:9rpx; flex-shrink:0; border-radius:8rpx; background:#d6d5cf; margin:20rpx auto 12rpx; }
+.settlement-drawer-heading { display:flex; align-items:center; gap:20rpx; padding:0 28rpx 12rpx; color:#103c35; font-size:30rpx; font-weight:600; }
+.settlement-correct { margin-left:auto; font-size:22rpx; font-weight:400; }
+.settlement-close { margin:0 0 0 auto; padding:0; width:54rpx; height:54rpx; line-height:48rpx; border-radius:50%; font-size:42rpx; font-weight:300; color:#344b47; background:#eeede5; }
+.settlement-drawer-content { flex:1; min-height:0; }
+@media (prefers-reduced-motion:reduce) { .history-settlement-mask,.history-settlement-mask.is-open,.history-settlement-sheet { transition:none; } }

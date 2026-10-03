@@ -9,7 +9,10 @@ Page(withShare({
     windLabels: ['東', '南', '西', '北'],
     rankLabels: ['一位', '二位', '三位', '四位'],
     historyList: [],
-    expandedId: -1
+    expandedId: -1,
+    settlementVisible: false,
+    settlementReport: null,
+    settlementCanCorrect: false
   },
 
   onLoad(options) { if (options.expandId) this.setData({ expandedId: options.expandId }) },
@@ -24,6 +27,12 @@ Page(withShare({
       canCorrect: Boolean(game.gameState && game.rounds && game.rounds.length &&
         game.rounds[game.rounds.length - 1].before)
     })) })
+    if (this.data.settlementVisible && this.data.settlementReport) {
+      const selected = list.find(r => String(r.id) === String(this.data.settlementReport.id))
+      if (selected) this.setData({ settlementReport: Reports.build(selected),
+        settlementCanCorrect: Boolean(selected.gameState && selected.rounds && selected.rounds.length && selected.rounds[selected.rounds.length - 1].before) })
+      else this.closeSettlement()
+    }
   },
 
   resumeGame() {
@@ -44,11 +53,12 @@ Page(withShare({
   },
 
   onExpandTap(e) {
-    const record = this.data.historyList.find(h => String(h.id) === String(e.currentTarget.dataset.id))
-    if (!record) return
-    const id = record.id
-    this.setData({ expandedId: this.data.expandedId === id ? -1 : id })
+    this.viewSettlement(e)
   },
+
+  closeSettlement() { this.setData({ settlementVisible:false }) },
+  stopBubble() {},
+
 
   deleteRecord(e) {
     const id = e.currentTarget.dataset.id
@@ -73,7 +83,11 @@ Page(withShare({
   },
 
   viewSettlement(e) {
-    wx.navigateTo({ url: `/pages/settlement/settlement?id=${encodeURIComponent(e.currentTarget.dataset.id)}` })
+    const id = e.currentTarget.dataset.id
+    const record = GameStorage.history().find(r => String(r.id) === String(id))
+    if (!record) return
+    this.setData({ settlementReport:Reports.build(record), settlementVisible:true,
+      settlementCanCorrect:Boolean(record.gameState && record.rounds && record.rounds.length && record.rounds[record.rounds.length - 1].before) })
   },
 
   copyBattleReport(e) {

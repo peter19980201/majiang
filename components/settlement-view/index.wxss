@@ -1,0 +1,4 @@
+@import '../../app.wxss';
+@import '../../pages/settlement/settlement.wxss';
+:host { display:block; height:100%; min-height:0; }
+.settlement-page { height:100%; }

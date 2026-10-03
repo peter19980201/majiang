@@ -34,9 +34,9 @@
   </view>
 
   <view class="list">
-    <view class="card" wx:for="{{historyList}}" wx:key="id">
+    <view class="card" wx:for="{{historyList}}" wx:key="id" bindtap="onExpandTap" data-id="{{item.id}}" hover-class="history-card-pressed" hover-start-time="0" hover-stay-time="100">
       <view class="card-bamboo" aria-hidden="true"><image src="/assets/home/header.jpg" mode="scaleToFill"></image></view>
-      <view class="card-header" bindtap="onExpandTap" data-id="{{item.id}}">
+      <view class="card-header">
         <view class="card-info">
           <text class="card-date">{{item.date}}</text>
           <text class="card-type">{{item.config.gameType === 'free' ? '自由记分' : item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
@@ -44,7 +44,6 @@
         </view>
         <view class="card-right">
           <text class="card-delete" catchtap="deleteRecord" data-id="{{item.id}}">删除</text>
-          <text class="card-arrow">{{expandedId === item.id ? '∧' : '›'}}</text>
         </view>
       </view>
       <!-- 排名摘要 -->
@@ -55,30 +54,7 @@
           <text class="rank-pt {{r.finalPt >= 0 ? 'positive' : 'negative'}}">{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
         </view>
       </view>
-      <!-- 详情 -->
-      <view class="card-detail" wx:if="{{expandedId === item.id}}"><view class="record-config">起始 {{item.config.startPoints}} · 返还 {{item.config.returnPoints}} · 顺位马 {{item.config.uma}}</view>
-        <view class="record-config">{{item.ruleSummary}}</view>
-        <view class="current-actions"><text class="current-btn" bindtap="viewSettlement" data-id="{{item.id}}">查看结算</text><text class="current-btn" bindtap="copyBattleReport" data-id="{{item.id}}">复制文字战报</text><text class="current-btn resume" bindtap="previewBattleReport" data-id="{{item.id}}">生成图片战报</text></view>
-        <view class="current-actions" wx:if="{{item.canCorrect}}">
-          <text class="current-btn resume" bindtap="correctLastRound" data-id="{{item.id}}">查看并纠正最近一局</text>
-        </view>
-        <view class="detail-section" wx:if="{{item.rounds.length > 0}}">
-          <text class="detail-title">每局记录</text>
-          <view class="round-item" wx:for="{{item.rounds}}" wx:for-item="rd" wx:key="index">
-            <text class="rd-round">{{rd.round}}</text>
-            <text class="rd-desc" wx:if="{{rd.type === 'ron'}}">{{rd.winner}} 荣和 {{rd.loser}} {{rd.points}}点</text>
-            <text class="rd-desc" wx:if="{{rd.type === 'tsumo'}}">{{rd.winner}} 自摸 {{rd.points}}点</text>
-            <text class="rd-desc" wx:if="{{rd.type === 'draw'}}">流局 ({{rd.tenpai}})</text>
-          </view>
-        </view>
-        <view class="detail-section">
-          <text class="detail-title">结算明细</text>
-          <view class="settle-row" wx:for="{{item.result}}" wx:for-item="r" wx:key="rank">
-            <view class="settle-main"><text class="settle-name">{{rankLabels[r.rank - 1]}} {{r.name}}</text><text class="settle-score">{{fmt.points(r.points)}} 点</text><text class="settle-info">素点 {{r.rawPt >= 0 ? '+' : ''}}{{r.rawPt}} · 马 {{r.uma >= 0 ? '+' : ''}}{{r.uma}}</text></view>
-            <text class="settle-final {{r.finalPt >= 0 ? 'positive' : 'negative'}}">{{r.finalPt >= 0 ? '+' : ''}}{{r.finalPt}}</text>
-          </view>
-        </view>
-      </view>
+
     </view>
   </view>
 
@@ -86,4 +62,11 @@
     <text class="empty-symbol">局</text><text class="empty-text">还没有对局记录</text><text class="empty-hint">完成一场对局后，在这里回顾每一局</text>
   </view>
   <view class="local-note">仅保存在当前设备 · 历史记录持续保留</view>
+  <view class="history-settlement-mask {{settlementVisible ? 'is-open' : ''}}" bindtap="closeSettlement" aria-hidden="{{!settlementVisible}}">
+    <view class="history-settlement-sheet" catchtap="stopBubble">
+      <view class="settlement-grip"></view>
+      <view class="settlement-drawer-heading"><text>对局结算</text><text class="settlement-correct" wx:if="{{settlementCanCorrect}}" bindtap="correctLastRound" data-id="{{settlementReport.id}}">纠正最近一局</text><button class="settlement-close" bindtap="closeSettlement" aria-label="关闭结算">×</button></view>
+      <view class="settlement-drawer-content"><settlement-view report="{{settlementReport}}"/></view>
+    </view>
+  </view>
 </view>
