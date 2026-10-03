@@ -11,8 +11,7 @@ Page(withShare({
     historyList: [],
     expandedId: -1,
     settlementVisible: false,
-    settlementReport: null,
-    settlementCanCorrect: false
+    settlementReport: null
   },
 
   onLoad(options) { if (options.expandId) this.setData({ expandedId: options.expandId }) },
@@ -23,14 +22,11 @@ Page(withShare({
     this.setData({ currentGame, historyList: list.map(game => ({
       id: game.id, date: game.date, config: game.config, result: game.result,
       abandoned: game.abandoned, ruleSummary: summary(game.config || {}),
-      rounds: (game.rounds || []).map((round, index, rounds) => RoundView.card(round, index === rounds.length - 1)),
-      canCorrect: Boolean(game.gameState && game.rounds && game.rounds.length &&
-        game.rounds[game.rounds.length - 1].before)
+      rounds: (game.rounds || []).map((round, index, rounds) => RoundView.card(round, index === rounds.length - 1))
     })) })
     if (this.data.settlementVisible && this.data.settlementReport) {
       const selected = list.find(r => String(r.id) === String(this.data.settlementReport.id))
-      if (selected) this.setData({ settlementReport: Reports.build(selected),
-        settlementCanCorrect: Boolean(selected.gameState && selected.rounds && selected.rounds.length && selected.rounds[selected.rounds.length - 1].before) })
+      if (selected) this.setData({ settlementReport: Reports.build(selected) })
       else this.closeSettlement()
     }
   },
@@ -74,20 +70,15 @@ Page(withShare({
     })
   },
 
-  correctLastRound(e) {
-    if (this.data.currentGame) {
-      wx.showToast({ title: '请先结束当前对局再修改历史', icon: 'none' })
-      return
-    }
-    wx.navigateTo({ url: `/pages/game/board?historyId=${encodeURIComponent(e.currentTarget.dataset.id)}` })
+  correctLastRound() {
+    wx.showToast({ title: '已结算的对局仅供查看', icon: 'none' })
   },
 
   viewSettlement(e) {
     const id = e.currentTarget.dataset.id
     const record = GameStorage.history().find(r => String(r.id) === String(id))
     if (!record) return
-    this.setData({ settlementReport:Reports.build(record), settlementVisible:true,
-      settlementCanCorrect:Boolean(record.gameState && record.rounds && record.rounds.length && record.rounds[record.rounds.length - 1].before) })
+    this.setData({ settlementReport:Reports.build(record), settlementVisible:true })
   },
 
   copyBattleReport(e) {

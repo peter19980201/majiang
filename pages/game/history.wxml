@@ -1,3 +1,4 @@
+<page-meta page-style="{{settlementVisible ? 'overflow: hidden;' : ''}}"></page-meta>
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
 <view class="container history-page">
   <view class="history-heading">
@@ -64,8 +65,8 @@
   <view class="local-note">仅保存在当前设备 · 历史记录持续保留</view>
   <view class="history-settlement-mask {{settlementVisible ? 'is-open' : ''}}" bindtap="closeSettlement" aria-hidden="{{!settlementVisible}}">
     <view class="history-settlement-sheet" catchtap="stopBubble">
-      <view class="settlement-grip"></view>
-      <view class="settlement-drawer-heading"><text>对局结算</text><text class="settlement-correct" wx:if="{{settlementCanCorrect}}" bindtap="correctLastRound" data-id="{{settlementReport.id}}">纠正最近一局</text><button class="settlement-close" bindtap="closeSettlement" aria-label="关闭结算">×</button></view>
+      <view class="settlement-grip" catchtouchmove="stopBubble"></view>
+      <view class="settlement-drawer-heading" catchtouchmove="stopBubble"><text>对局结算</text><button class="settlement-close" bindtap="closeSettlement" aria-label="关闭结算">×</button></view>
       <view class="settlement-drawer-content"><settlement-view report="{{settlementReport}}"/></view>
     </view>
   </view>

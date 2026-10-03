@@ -1,6 +1,19 @@
 const assert = require('assert')
 const Reports = require('../utils/battle-report')
 const Painter = require('../utils/battle-report-canvas')
+// Font-aware measurements verify shrink-before-wrap and the two-line limit.
+const measureContext = { font: '', measureText(value) {
+  const size = Number(this.font.match(/(\d+)px/)[1])
+  return { width: Array.from(value).reduce((width, ch) => width + (/[^\x00-\xff]/.test(ch) ? size : size * .5), 0) }
+} }
+assert.deepStrictEqual(Painter.fitName(measureContext, '东家', 146), { size: 32, lines: ['东家'] })
+const mediumName = Painter.fitName(measureContext, '测试 · 青岚', 146)
+assert(mediumName.size < 32 && mediumName.size >= 20)
+assert.strictEqual(mediumName.lines.length, 1)
+const longName = Painter.fitName(measureContext, '一二三四五六七八九十天地玄黄宇宙洪荒', 146)
+assert.strictEqual(longName.size, 20)
+assert.deepStrictEqual(longName.lines, ['一二三四五六七', '八九十天地玄黄'])
+for (const value of longName.lines) assert(measureContext.measureText(value).width <= 146)
 const record = { id: 'only-this-game', date: '2026/10/2', abandoned: true,
   config: { gameType: 'hanchan', startPoints: 25000, returnPoints: 30000, uma: '10-20' },
   result: [
@@ -14,6 +27,14 @@ const record = { id: 'only-this-game', date: '2026/10/2', abandoned: true,
     { type: 'draw', round: '東2局', tenpai: '南家' } ] }
 const original = JSON.stringify(record)
 const report = Reports.build(record)
+assert.deepStrictEqual(report.rounds.map(r => r.round), record.rounds.map(r => r.round))
+assert.strictEqual(report.rows[1].seatTile, 28)
+assert.strictEqual(report.rounds[0].winners[0].seatTile, 28)
+assert.strictEqual(report.rounds[0].winners[0].pointsText, '12,000')
+assert.deepStrictEqual(report.rounds[0].winners[1].tags, ['大三元'])
+assert.strictEqual(report.rounds[0].winners[1].hanFuText, '役满')
+assert.strictEqual(report.rounds[1].isDraw, true)
+assert.strictEqual(report.rounds[1].drawDescription, '南家')
 assert.strictEqual(report.status, '提前结束')
 assert.strictEqual(report.rows[0].finalText, '+23.0') // use saved score; no oka inferred from mockup
 assert.strictEqual(report.rows[3].finalText, '-38.2')
@@ -22,6 +43,24 @@ assert.strictEqual(report.highlights.length, 2)
 const text = Reports.text(report)
 assert(text.includes('本场大牌')); assert(!text.includes('四人一桌'))
 assert(text.includes('南家 荣和 12000点；東家 荣和 32000点'))
+assert.deepStrictEqual(report.rounds[0].yakuEntries, [
+  { name: '南家', tags: ['清一色'] }, { name: '東家', tags: ['大三元'] }
+])
+assert.deepStrictEqual(report.rounds[1].yakuEntries, [])
+assert(text.includes('南家 · 役种：清一色\n東家 · 役种：大三元'))
+const yakuReport = Reports.build({ ...record, rounds: [
+  { type: 'tsumo', winner: '東家', yaku: [{ name: '立直', han: 1 }, { name: '清一色', han: 6 }] },
+  { type: 'ron', winner: '南家', yakuSummary: '立直 一发' },
+  { type: 'ron', winner: '西家', han: 3, fu: 40, input: { source: 'hanfu' } },
+  { type: 'tsumo', winner: '北家', input: { source: 'manual' } }
+] })
+assert.deepStrictEqual(yakuReport.rounds.map(r => r.yakuEntries), [
+  [{ name: '', tags: ['清一色', '立直'] }], [{ name: '', tags: ['立直', '一发'] }],
+  [{ name: '', tags: [] }], [{ name: '', tags: [] }]
+])
+assert.strictEqual(yakuReport.rounds[2].winners[0].hanFuText, '3番40符')
+assert.strictEqual(yakuReport.rounds[3].winners[0].hanFuText, '')
+assert.strictEqual(Reports.text(yakuReport).split('役种：未记录役种').length - 1, 2)
 assert.strictEqual(JSON.stringify(record), original)
 assert.strictEqual(Reports.build({ ...record, config: { ...record.config, gameType: 'tonpuu' }, rounds: [] }).title, '东风战报')
 assert(Reports.text(Reports.build({ ...record, rounds: [] })).includes('暂无已记录'))
@@ -30,6 +69,7 @@ const ctx = new Proxy({ measureText: s => ({ width: Array.from(s).reduce((n, c) 
   get: (t, k) => k in t ? t[k] : () => {}, set: (t, k, v) => { t[k] = v; return true } })
 Painter.draw(ctx, report)
 for (const row of report.rows) { assert(painted.includes(row.pointsText)); assert(painted.includes(row.finalText)) }
+assert(painted.includes('32,000 点')); assert(painted.includes('荣和')); assert(painted.includes('大三元')); assert(painted.includes('東1局 · 0本场'));
 assert(painted.includes('本场大牌')); assert(!painted.some(t => t.includes('四人一桌')))
 // Page reads the selected stored record; failed generation/save retain the record.
 let definition, exportOptions, saveOptions, modal, settings = 0

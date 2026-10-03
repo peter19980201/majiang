@@ -1,21 +1,35 @@
 <view class="settlement-page" wx:if="{{report}}">
-  <image class="page-paper" src="/assets/report/settlement-paper.jpg" mode="scaleToFill"></image>
-  <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="settlement-scroll" scroll-y>
-  <view class="settlement-content">
-    <view class="heading"><view class="eyebrow"><text class="hairline"></text><text>{{report.type}} · {{report.status}}</text><text class="hairline"></text></view><text class="seal">日<text class="seal-bottom">麻</text></text><text class="title">本场成绩</text><text class="date">{{report.date}}</text></view>
-    <view class="ranking">
-      <view class="row table-head"><text class="rank">排名</text><text class="name">玩家</text><text class="points">最终点数</text><text class="score">得点</text></view>
-      <view class="row {{index === 0 ? 'first' : ''}}" wx:for="{{report.rows}}" wx:key="rank"><view class="rank"><text>{{rankLabels[item.rank - 1]}}</text></view><text class="name">{{item.name}}</text><text class="points">{{item.pointsText}}</text><text class="score">{{item.finalText}}</text></view>
-    </view>
-    <view class="rules"><text class="rule-line">{{report.rules}}</text><text class="rule-line">{{report.uma}}</text></view>
-    <view class="round-records">
-      <view class="round-record" wx:for="{{report.rounds}}" wx:key="index">
-        <text class="round-label">{{item.round}}</text>
-        <text class="round-description">{{item.description}}</text>
+  <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="settlement-scroll" bounces="{{false}}" scroll-y>
+    <view class="settlement-content">
+      <view class="heading"><text class="title">本场成绩</text><view class="subtitle"><text>{{report.type}} · {{report.status}}</text><text>{{report.date}}</text></view></view>
+      <view class="ranking">
+        <view class="row table-head"><text class="rank">排名</text><text class="name">玩家</text><text class="points">最终点数</text><text class="score">得点</text></view>
+        <view class="row {{index === 0 ? 'first' : ''}}" wx:for="{{report.rows}}" wx:key="rank">
+          <text class="rank">{{item.rank}}位</text>
+          <view class="name"><tile wx:if="{{item.seatTile !== null}}" tid="{{item.seatTile}}" size="small"/><text>{{item.name}}</text></view>
+          <text class="points">{{item.pointsText}}</text><text class="score {{item.finalPt < 0 ? 'negative' : ''}}">{{item.finalText}}</text>
+        </view>
+      </view>
+      <view class="rules"><text>{{report.rules}}</text><text>{{report.uma}}</text></view>
+      <view class="review-heading"><text>对局回顾</text><text class="review-count">{{report.rounds.length}}条记录</text></view>
+      <view class="timeline">
+        <view class="round-record" wx:for="{{report.rounds}}" wx:for-item="round" wx:key="index">
+          <view class="round-label"><view class="timeline-dot"></view>{{round.roundTitle}} · {{round.honbaLabel}}</view>
+          <view class="round-card">
+            <view class="winner-row" wx:if="{{round.isDraw}}"><view class="draw-icon">◎</view><view class="winner-body"><text class="winner-name">{{round.typeLabel}}</text><text class="round-description">{{round.drawDescription}}</text></view></view>
+            <view class="winner-row" wx:for="{{round.winners}}" wx:for-item="winner" wx:key="index">
+              <view class="winner-avatar"><tile wx:if="{{winner.seatTile !== null}}" tid="{{winner.seatTile}}" size="picker"/><text wx:else class="draw-icon">和</text></view>
+              <view class="winner-body">
+                <view class="winner-summary"><view class="winner-title"><text class="winner-name">{{winner.name}}</text><text class="type-tag">{{round.typeLabel}}</text></view><view class="win-points"><text class="win-han-fu" wx:if="{{winner.hanFuText}}">{{winner.hanFuText}}</text>{{winner.pointsText}}<text>点</text></view></view>
+                <text class="round-description" wx:if="{{round.loser}}">放铳 · {{round.loser}}</text>
+                <view class="round-yaku"><text class="round-yaku-label">役种</text><text class="round-yaku-tag" wx:for="{{winner.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text><text class="round-yaku-empty" wx:if="{{!winner.tags.length}}">未记录役种</text></view>
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
       <text class="empty-records" wx:if="{{!report.rounds.length}}">暂无逐局记录</text>
     </view>
-  </view>
   </scroll-view>
-  <view class="share-actions"><button class="share-button" bindtap="copy">复制文字战报</button><button class="share-button primary" bindtap="preview">生成图片战报</button></view>
+  <view class="share-actions"><button class="share-button" bindtap="copy"><view class="copy-icon"></view>复制文字战报</button><button class="share-button primary" bindtap="preview"><view class="image-icon"><view></view></view>生成图片战报</button></view>
 </view>

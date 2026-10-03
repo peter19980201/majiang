@@ -404,7 +404,6 @@
 .is-open .history-settlement-sheet { transform:translate3d(0,0,0); transition-duration:280ms; }
 .settlement-grip { width:72rpx; height:9rpx; flex-shrink:0; border-radius:8rpx; background:#d6d5cf; margin:20rpx auto 12rpx; }
 .settlement-drawer-heading { display:flex; align-items:center; gap:20rpx; padding:0 28rpx 12rpx; color:#103c35; font-size:30rpx; font-weight:600; }
-.settlement-correct { margin-left:auto; font-size:22rpx; font-weight:400; }
-.settlement-close { margin:0 0 0 auto; padding:0; width:54rpx; height:54rpx; line-height:48rpx; border-radius:50%; font-size:42rpx; font-weight:300; color:#344b47; background:#eeede5; }
+.settlement-drawer-heading .settlement-close { display:flex; align-items:center; justify-content:center; flex:0 0 54rpx; min-width:54rpx!important; max-width:54rpx; margin:0 0 0 auto!important; padding:0!important; width:54rpx!important; height:54rpx; line-height:1; border-radius:50%; font-size:42rpx; font-weight:300; color:#344b47; background:#eeede5; }
 .settlement-drawer-content { flex:1; min-height:0; }
 @media (prefers-reduced-motion:reduce) { .history-settlement-mask,.history-settlement-mask.is-open,.history-settlement-sheet { transition:none; } }
