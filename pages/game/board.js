@@ -5,6 +5,7 @@ const RoundView = require('../../utils/round-view')
 const GameRules = require('../../utils/game-rules')
 const { settle } = require('../../utils/game-settlement')
 const GameStorage = require('../../utils/game-storage')
+const Reports = require('../../utils/battle-report')
 
 const boardDefinition = {
   data: {
@@ -19,7 +20,8 @@ const boardDefinition = {
     entryRoundLabel: '',
     players: [],    // [{name, points, wind}]
     // 局况
-    roundWind: 0,   // 0=東, 1=南
+    roundCycle: 1,
+    roundWind: 0,   // 0=東, 1=南, 2=西, 3=北
     roundWindName: '東',
     roundNum: 1,    // 1-4
     honba: 0,
@@ -32,7 +34,15 @@ const boardDefinition = {
     endReason: '',
     roundHistory: [],
     historyCards: [],
+    recordsExpanded: false,
     // 弹窗
+    recordTimeline: [],
+    recordsScrollTarget: '',
+    roundDetailVisible: false,
+    roundDetailRecord: null,
+    inputOverlayVisible: false,
+    inputOverlayConfig: null,
+    inputOverlayKind: '',
     showActionModal: false,
     showRonModal: false,
     showTsumoModal: false,
@@ -46,6 +56,12 @@ const boardDefinition = {
     inputOyaPayment: '',
     multiRonMode: false,
     ronEntries: [],
+    tsumoReady: false,
+    tsumoBaseTotal: 0,
+    tsumoCalcResult: null,
+    ronReady: false,
+    ronCompleted: 0,
+    ronPendingHint: '请选择和了者和放铳者',
     ronChoices: [],
     showManualInput: false,
     // 本局立直
@@ -58,7 +74,8 @@ const boardDefinition = {
     abortReason: '九种九牌',
     abortReasons: GameRules.ABORT_REASONS,
     // 结算
-    finalResult: []
+    finalResult: [],
+    settlementReport: null
   },
 
   onLoad(options) {
@@ -105,18 +122,19 @@ const boardDefinition = {
   },
 
   getRoundLabel() {
-    return `${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba}本场`
+    return `${this.data.roundCycle > 1 ? '第' + this.data.roundCycle + '轮 · ' : ''}${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba}本场`
   },
 
   _entryState() {
-    return this._editingRecord ? this._editingRecord.before : this.data
+    const state = this._editingRecord ? this._editingRecord.before : this.data
+    return { ...state, roundCycle: state.roundCycle || 1, config: this.data.config.gameType === 'free' ? { ...state.config, gameType: 'free' } : state.config }
   },
 
   _prepareEntry() {
     const state = this._entryState()
     this.setData({ entryHonba: state.honba, entryRiichiSticks: state.riichiSticks,
       entryDealerIdx: state.dealerIdx,
-      entryRoundLabel: `${WIND_NAMES[state.roundWind]}${state.roundNum}局 ${state.honba}本场`,
+      entryRoundLabel: `${state.roundCycle > 1 ? '第' + state.roundCycle + '轮 · ' : ''}${WIND_NAMES[state.roundWind]}${state.roundNum}局 ${state.honba}本场`,
       abortReasons: GameRules.ABORT_REASONS })
   },
 
@@ -134,7 +152,13 @@ const boardDefinition = {
       this.setData({ ronEntries: [{ idx, name: this.data.players[idx].name,
         points: this.data.inputPoints, calcResult, calculatorInput: old && old.input.calculatorInput }] })
     }
-    this.setData({ ronChoices: this.data.players.map((p, idx) => ({ name: p.name, idx,
+    const entries = this.data.ronEntries
+    const pending = entries.filter(entry => !Number(entry.points) || entry.editingPoints)
+    this.setData({ ronCompleted: entries.length - pending.length,
+      ronReady: entries.length > 0 && !pending.length && this.data.selectedLoser >= 0,
+      ronPendingHint: !entries.length ? '请选择和了者' : this.data.selectedLoser < 0 ? '请选择放铳者' :
+        pending.length ? `还需录入 ${pending.map(entry => entry.name).join('、')}的和牌` : '已完成录入，可以确认荣和',
+      ronChoices: this.data.players.map((p, idx) => ({ name: p.name, idx,
       active: this.data.ronEntries.some(entry => entry.idx === idx), disabled: idx === this.data.selectedLoser })) })
   },
 
@@ -171,6 +195,13 @@ const boardDefinition = {
     this.setData({ ronEntries: this.data.ronEntries.map(entry => ({ ...entry,
       editingPoints: entry.idx === idx,
       draftPoints: entry.idx === idx ? entry.points || '' : entry.draftPoints })) })
+    this._refreshRonChoices()
+  },
+
+  editRonEntry(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    this.setData({ ronEntries: this.data.ronEntries.map(entry => ({ ...entry,
+      editingMethods: entry.idx === idx ? !entry.editingMethods : false })) })
   },
 
   onMultiRonDraft(e) {
@@ -188,7 +219,8 @@ const boardDefinition = {
     }
     this.setData({ ronEntries: this.data.ronEntries.map(item => item.idx === idx ?
       { ...item, points: String(points), calcResult: null, calculatorInput: null,
-        editingPoints: false, draftPoints: '' } : item) })
+        editingPoints: false, editingMethods: false, draftPoints: '' } : item) })
+    this._setRonEntries(this.data.ronEntries)
   },
 
   goToMultiCalc(e, mode) {
@@ -196,7 +228,7 @@ const boardDefinition = {
       wx.showToast({ title: '请先选择放铳者', icon: 'none' }); return
     }
     this.setData({ selectedWinner: Number(e.currentTarget.dataset.idx) })
-    this._navigateToCalc('ron', mode)
+    this._navigateToCalc('ron', mode, true)
   },
 
   _applyMultiRon() {
@@ -275,9 +307,10 @@ const boardDefinition = {
     if (draft.data.roundHistory.length !== history.length + 1) return
     // An explicitly ended game stays ended after correction; undo can reopen it.
     if (this._editingRecord && original.gameOver &&
-        (original.endedEarly || !this._editingRecord.after.gameOver)) {
+        (original.endReason === '手动结束' || original.endedEarly || !this._editingRecord.after.gameOver)) {
       draft.data.gameOver = true
-      draft.data.endedEarly = true
+      draft.data.endedEarly = original.config.gameType !== 'free'
+      draft.data.endReason = original.config.gameType === 'free' ? '手动结束' : original.endReason
     }
     const record = draft.data.roundHistory[draft.data.roundHistory.length - 1]
     const hasQuickInput = (calcResult && calcResult.source === 'hanfu') ||
@@ -322,9 +355,22 @@ const boardDefinition = {
     return true
   },
 
+  toggleRecords() {
+    const recordsExpanded = !this.data.recordsExpanded
+    this.setData({ recordsExpanded, recordsScrollTarget: recordsExpanded ? 'record-list-top' : '' })
+  },
+
   _refreshHistoryCards() {
-    this.setData({ historyCards: this.data.roundHistory.map((record, index, records) =>
-      RoundView.card(record, index === records.length - 1)) })
+    const historyCards = this.data.roundHistory.map((record, index, records) =>
+      RoundView.card(record, index === records.length - 1))
+    const recordTimeline = historyCards.map((card, index) => {
+      const record = this.data.roundHistory[index]
+      const players = record.before ? record.before.players : this.data.players
+      const indices = record.winners ? record.winners.map(winner => winner.idx) :
+        [record.input && Number.isInteger(record.input.selectedWinner) ? record.input.selectedWinner : players.findIndex(p => p.name === record.winner)]
+      return { ...card, recordIndex: index, seatTiles: indices.filter(i => players[i]).map(i => 27 + players[i].seatWind) }
+    }).reverse()
+    this.setData({ historyCards, recordTimeline })
   },
 
   openRoundDetail(e) {
@@ -332,22 +378,35 @@ const boardDefinition = {
     if (!Number.isInteger(index) || index < 0 || index >= this.data.roundHistory.length) return
     const record = this.data.roundHistory[index]
     if (!record) return
-    const isCurrent = () => this.data.roundHistory[this.data.roundHistory.length - 1] === record
-    wx.navigateTo({
-      url: '/pages/game/round-detail',
-      events: {
-        editRound: () => { if (isCurrent()) this.editLastRound() },
-        deleteRound: () => { if (isCurrent()) this._restoreLastRound(record) }
-      },
-      success: res => res.eventChannel.emit('roundDetail', RoundView.describe(record, index === this.data.roundHistory.length - 1))
-    })
+    this._detailSource = record
+    this.setData({ roundDetailRecord: RoundView.describe(record, index === this.data.roundHistory.length - 1),
+      roundDetailVisible: true })
+  },
+
+  closeRoundDetail() {
+    this.setData({ roundDetailVisible: false })
+    this._detailSource = null
+  },
+
+  editDetailRound() {
+    const record = this._detailSource
+    if (!record || record !== this.data.roundHistory[this.data.roundHistory.length - 1]) return
+    this.closeRoundDetail()
+    this.editLastRound()
+  },
+
+  deleteDetailRound() {
+    const record = this._detailSource
+    if (!record || record !== this.data.roundHistory[this.data.roundHistory.length - 1]) return
+    this.closeRoundDetail()
+    this._restoreLastRound(record)
   },
 
   _restoreLastRound(record) {
     if (this._editingRecord || !record || !record.before || !record.input) return
     if (this.data.roundHistory[this.data.roundHistory.length - 1] !== record) return
     if (!this._canWriteGame()) return
-    this.setData({ ...Records.clone(record.before), roundHistory: this.data.roundHistory.slice(0, -1),
+    this.setData({ ...Records.clone(record.before), roundCycle: record.before.roundCycle || 1, roundHistory: this.data.roundHistory.slice(0, -1),
       finalResult: [], gameOver: false, showResultModal: false,
       roundRiichi: [false, false, false, false] })
     this._removeSavedSettlement()
@@ -380,7 +439,9 @@ const boardDefinition = {
       showResultModal: false, showManualInput: record.input.source === 'manual',
       showRonModal: record.type === 'ron', showTsumoModal: record.type === 'tsumo',
       showDrawModal: record.type === 'draw' })
+    this.setData({ tsumoCalcResult: null })
     this._prepareEntry()
+    this._refreshTsumoEntry()
     this._refreshRonChoices()
     if (record.type === 'draw') this.updateDrawPreview()
   },
@@ -390,6 +451,7 @@ const boardDefinition = {
     this.setData({ showRonModal: type === 'ron', showTsumoModal: type === 'tsumo',
       showDrawModal: type === 'draw' })
     if (type === 'draw') this.updateDrawPreview()
+    if (type === 'tsumo') this._refreshTsumoEntry()
   },
 
   _cancelEntry() {
@@ -399,6 +461,12 @@ const boardDefinition = {
   },
 
   onShow() {
+    if (this._pendingSettlement) {
+      this._pendingSettlement = false
+      this._returningFromCalculator = false
+      this.openSettlement()
+      return
+    }
     if (this._returningFromCalculator) {
       this._returningFromCalculator = false
       if (!this._calculatorResultReceived || this._editingRecord || this.data.multiRonMode) {
@@ -422,12 +490,12 @@ const boardDefinition = {
 
   earlySettlement() {
     wx.showModal({
-      title: '提前结算',
-      content: '确定要以当前点棒状态结算本局吗？',
+      title: '结束对局',
+      content: '确定结束对局，并按当前点棒结算吗？',
       success: (res) => {
         if (res.confirm) {
           if (!this._canWriteGame()) return
-          this.setData({ showActionModal: false, gameOver: true, endedEarly: true })
+          this.setData({ showActionModal: false, gameOver: true, endedEarly: false, endReason: '手动结束' })
           this.doSettlement()
         }
       }
@@ -491,7 +559,7 @@ const boardDefinition = {
   },
 
   confirmRon() {
-    if (this.data.multiRonMode && this.data.ronEntries.some(entry => entry.editingPoints)) {
+    if (this.data.ronEntries.some(entry => entry.editingPoints)) {
       wx.showToast({ title: '请先保存正在输入的点数', icon: 'none' }); return
     }
     const single = !this.data.multiRonMode && this.data.ronEntries.find(entry => entry.idx === this.data.selectedWinner)
@@ -553,7 +621,7 @@ const boardDefinition = {
     this._navigateToCalc('tsumo', mode)
   },
 
-  _navigateToCalc(agariType, mode) {
+  _navigateToCalc(agariType, mode, returnToEntry = false) {
     const quick = mode === 'quick'
     const { roundWind, dealerIdx, honba, riichiSticks } = this._entryState()
     const { selectedWinner, roundRiichi } = this.data
@@ -569,27 +637,42 @@ const boardDefinition = {
     const multi = agariType === 'ron' && this.data.multiRonMode
     const multiEntry = multi && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
     const singleEntry = !multi && agariType === 'ron' && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
-    const calculatorInput = multi ? multiEntry && multiEntry.calculatorInput : singleEntry ? singleEntry.calculatorInput :
+    const tsumoResult = agariType === 'tsumo' && this.data.tsumoCalcResult
+    const calculatorInput = tsumoResult ? tsumoResult.calculatorInput : multi ? multiEntry && multiEntry.calculatorInput : singleEntry ? singleEntry.calculatorInput :
       this._editingRecord && this._editingRecord.input.calculatorInput
-    const quickInput = multi ? multiEntry && multiEntry.calcResult && multiEntry.calcResult.quickInput : singleEntry ? singleEntry.calcResult && singleEntry.calcResult.quickInput :
+    const quickInput = tsumoResult ? tsumoResult.quickInput : multi ? multiEntry && multiEntry.calcResult && multiEntry.calcResult.quickInput : singleEntry ? singleEntry.calcResult && singleEntry.calcResult.quickInput :
       this._editingRecord && this._editingRecord.input.quickInput
     this._calculatorResultReceived = false
     this._returningFromCalculator = true
     this._calculatorType = agariType
-    this.setData({ showRonModal: false, showTsumoModal: false })
+    // Keep the entry sheet beneath the pushed page, including during the
+    // native back transition. Only a confirmed round should dismiss it.
+    if (!(agariType === 'ron' ? this.data.showRonModal : this.data.showTsumoModal)) {
+      this.setData({ showRonModal: agariType === 'ron', showTsumoModal: agariType === 'tsumo' })
+    }
 
-    wx.navigateTo({
+    this._openInputOverlay({
       url: `/pages/${quick ? 'quick-score/quick-score' : 'calculator/calculator'}?mode=board&agariType=${agariType}&bakaze=${bakaze}&jikaze=${jikaze}&honba=${honba}&riichi=${winnerRiichi}&sticks=${totalSticks}`,
       events: {
         calcResult(data) {
           that._calculatorResultReceived = true
-          if (multi) {
-            const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
-              { ...entry, points: String(data.payment.total - honba * 300),
-                calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, draftPoints: '' } : entry)
+          if (returnToEntry && agariType === 'tsumo') {
             const riichi = that.data.roundRiichi.slice()
             if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
-            that.setData({ ronEntries, roundRiichi: riichi, showRonModal: true })
+            that.setData({ tsumoCalcResult: data, showManualInput: false, roundRiichi: riichi,
+              inputKoPayment: String(data.payment.koPayment - honba * 100),
+              inputOyaPayment: selectedWinner === that.data.entryDealerIdx ? '' : String(data.payment.oyaPayment - honba * 100) })
+            that._refreshTsumoEntry()
+            return
+          }
+          if (multi || returnToEntry) {
+            const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
+              { ...entry, points: String(data.payment.total - honba * 300),
+                calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, editingMethods: false, draftPoints: '' } : entry)
+            const riichi = that.data.roundRiichi.slice()
+            if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
+            that.setData({ roundRiichi: riichi, showRonModal: true })
+            that._setRonEntries(ronEntries)
             return
           }
           if (agariType === 'ron') {
@@ -608,6 +691,51 @@ const boardDefinition = {
         that.setData({ showRonModal: agariType === 'ron', showTsumoModal: agariType === 'tsumo' })
       }
     })
+  },
+
+  _openInputOverlay(request) {
+    clearTimeout(this._inputOverlayTimer)
+    const sequence = this._inputOverlaySequence = (this._inputOverlaySequence || 0) + 1
+    const options = {}
+    request.url.split('?')[1].split('&').forEach(pair => {
+      const [key, value] = pair.split('=')
+      options[key] = decodeURIComponent(value || '')
+    })
+    let restore = null
+    request.success({ eventChannel: { emit: (event, value) => { restore = value } } })
+    this._inputOverlayResult = request.events.calcResult
+    this._returningFromCalculator = false
+    this.setData({ inputOverlayVisible: false, inputOverlayConfig: null }, () => {
+      if (this._inputOverlaySequence !== sequence) return
+      this.setData({ inputOverlayConfig: { options, restore },
+        inputOverlayKind: request.url.includes('quick-score') ? 'quick' : 'hand' }, () => {
+        wx.nextTick(() => {
+          if (this._inputOverlaySequence === sequence) this.setData({ inputOverlayVisible: true })
+        })
+      })
+    })
+  },
+
+  closeInputOverlay() {
+    const sequence = this._inputOverlaySequence = (this._inputOverlaySequence || 0) + 1
+    this._inputOverlayResult = null
+    this.setData({ inputOverlayVisible: false })
+    clearTimeout(this._inputOverlayTimer)
+    this._inputOverlayTimer = setTimeout(() => {
+      if (this._inputOverlaySequence === sequence) this.setData({ inputOverlayConfig: null, inputOverlayKind: '' })
+    }, 220)
+  },
+
+  receiveInputOverlayResult(e) {
+    const receive = this._inputOverlayResult
+    if (!receive) return
+    this.closeInputOverlay()
+    receive(e.detail)
+  },
+
+  onUnload() {
+    clearTimeout(this._inputOverlayTimer)
+    this._inputOverlaySequence = (this._inputOverlaySequence || 0) + 1
   },
 
   _processCalcRon(calcResult) {
@@ -678,6 +806,7 @@ const boardDefinition = {
     setTimeout(() => {
       this.setData({
         showTsumoModal: true,
+        tsumoCalcResult: null, tsumoReady: false, tsumoBaseTotal: 0,
         selectedWinner: -1,
         inputKoPayment: '',
         inputOyaPayment: '',
@@ -689,22 +818,37 @@ const boardDefinition = {
     }, 150)
   },
 
+  goToTsumoCardHand() { this._navigateToCalc('tsumo', undefined, true) },
+  goToTsumoCardQuick() { this._navigateToCalc('tsumo', 'quick', true) },
+
+  _refreshTsumoEntry() {
+    const ko = Number(this.data.inputKoPayment)
+    const oya = this.data.selectedWinner === this.data.entryDealerIdx ? ko : Number(this.data.inputOyaPayment)
+    const valid = n => Number.isSafeInteger(n) && n > 0 && n % 100 === 0
+    const ready = this.data.selectedWinner >= 0 && valid(ko) && valid(oya)
+    this.setData({ tsumoReady: ready, tsumoBaseTotal: ready ? ko * 2 + oya : 0 })
+  },
+
   selectTsumoWinner(e) {
     const selectedWinner = parseInt(e.currentTarget.dataset.idx)
     if (selectedWinner !== this.data.selectedWinner) {
-      this.setData({ selectedWinner, inputKoPayment: '', inputOyaPayment: '' })
+      this.setData({ selectedWinner, inputKoPayment: '', inputOyaPayment: '', tsumoCalcResult: null })
+      this._refreshTsumoEntry()
     }
   },
 
   onKoPaymentInput(e) {
-    this.setData({ inputKoPayment: e.detail.value })
+    this.setData({ inputKoPayment: e.detail.value, tsumoCalcResult: null })
+    this._refreshTsumoEntry()
   },
 
   onOyaPaymentInput(e) {
-    this.setData({ inputOyaPayment: e.detail.value })
+    this.setData({ inputOyaPayment: e.detail.value, tsumoCalcResult: null })
+    this._refreshTsumoEntry()
   },
 
   confirmTsumo() {
+    if (this.data.tsumoCalcResult) { this._processCalcTsumo(this.data.tsumoCalcResult); return }
     this._commitRound('_applyManualTsumo', 'manual')
   },
 
@@ -783,7 +927,7 @@ const boardDefinition = {
       const players = this.data.players.map(p => ({ ...p }))
       const sticks = this._applyRiichi(players)
       this.setData({ players, riichiSticks: this.data.riichiSticks + sticks, honba: this.data.honba + 1 })
-      this.addRecord({ type: 'draw', round: `${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba - 1}本场`,
+      this.addRecord({ type: 'draw', round: `${this.data.roundCycle > 1 ? '第' + this.data.roundCycle + '轮 · ' : ''}${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba - 1}本场`,
         abortive: true, reason: this.data.abortReason, tenpai: this.data.abortReason,
         desc: '途中流局，无不听罚符，连庄加一本场' })
       this.advanceRound(true, true, true)
@@ -849,9 +993,10 @@ const boardDefinition = {
   // === 结算 ===
   doSettlement() {
     this._refreshHistoryCards()
-    // 已结算过则只显示弹窗，不重复计算和保存
+    // 已结算过则只打开结算页，不重复计算和保存
     if (this.data.finalResult.length > 0) {
-      this.setData({ showResultModal: true })
+      this.setData({ showResultModal: true, settlementReport: this._buildSettlementReport() })
+      this.openSettlement()
       return
     }
 
@@ -861,7 +1006,33 @@ const boardDefinition = {
     const last = this.data.roundHistory[this.data.roundHistory.length - 1]
     if (last && last.after && last.after.gameOver) last.after = Records.snapshot(this.data)
     this.saveHistory(result)
+    this.setData({ settlementReport: this._buildSettlementReport() })
+    this.openSettlement()
   },
+
+  openSettlement() {
+    // Calculator confirms via an event before navigating back. Wait for the
+    // board to become visible so that its navigateBack cannot pop settlement.
+    if (this._returningFromCalculator) { this._pendingSettlement = true; return }
+    wx.navigateTo({ url: `/pages/settlement/settlement?id=${encodeURIComponent(this.data.gameId)}&source=board` })
+  },
+
+  _buildSettlementReport() {
+    return Reports.build({ id: this.data.gameId, date: this.data.gameDate,
+      config: this.data.config, result: this.data.finalResult,
+      rounds: this.data.roundHistory, gameState: { endedEarly: this.data.endedEarly } })
+  },
+
+  copyBattleReport() {
+    wx.setClipboardData({ data: Reports.text(this._buildSettlementReport()),
+      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' }) })
+  },
+
+  previewBattleReport() {
+    wx.navigateTo({ url: `/pages/battle-report/battle-report?id=${encodeURIComponent(this.data.gameId)}` })
+  },
+
+  viewSettlementRounds() { this.setData({ showResultModal: false }) },
 
   saveHistory(result) {
     GameStorage.saveCompleted({ ...this.data, finalResult: result })
@@ -869,6 +1040,7 @@ const boardDefinition = {
 
   // 自动保存当前对局进度
   _autoSave() {
+    if (!this.data.gameOver) this.setData({ config: { ...this.data.config, gameType: 'free' }, roundCycle: this.data.roundCycle || 1 })
     this._refreshHistoryCards()
     if (!this.data.gameOver) GameStorage.saveCurrent(this.data)
   },

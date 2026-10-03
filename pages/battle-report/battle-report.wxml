@@ -1,0 +1,8 @@
+<view class="report-page">
+  <text class="report-message" wx:if="{{loading}}">正在生成本场战报…</text>
+  <view wx:if="{{error}}"><text class="report-message">{{error}}</text><button bindtap="generate">重新生成</button></view>
+  <image wx:if="{{imagePath}}" class="poster" src="{{imagePath}}" mode="widthFix" show-menu-by-longpress></image>
+  <button class="save" bindtap="save" disabled="{{!imagePath || saving}}" loading="{{saving}}">保存战报图片</button>
+  <text class="report-message">保存后可发送给微信好友或群聊</text>
+  <canvas type="2d" id="reportCanvas" class="export-canvas"></canvas>
+</view>

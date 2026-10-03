@@ -1,0 +1,33 @@
+page { background:#faf8ef; color:#132c25; }
+.settlement-page { height:100vh; display:flex; flex-direction:column; overflow:hidden; position:relative; font-family:'Songti SC','STSong','SimSun',serif; }
+.page-paper { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+.settlement-scroll { position:relative; flex:1; height:0; min-height:0; }
+.settlement-content { padding:0 26rpx 26rpx; }
+.heading { position:relative; text-align:center; padding:38rpx 0 28rpx; }
+.eyebrow { display:flex; align-items:center; justify-content:center; gap:22rpx; font-size:27rpx; letter-spacing:2rpx; }
+.hairline { width:65rpx; height:1rpx; background:#919888; }
+.title { display:block; font-size:68rpx; font-weight:700; letter-spacing:7rpx; line-height:1.25; margin:22rpx 0 10rpx; color:#092e25; }
+.date { display:block; font-size:28rpx; letter-spacing:1rpx; }
+.seal { position:absolute; top:114rpx; left:20rpx; border:2rpx solid #ae654b; border-radius:4rpx; padding:3rpx 4rpx; color:#ae654b; font-size:21rpx; line-height:1.1; }
+.seal-bottom { display:block; }
+.ranking { border:1rpx solid #deddd0; border-radius:14rpx; overflow:hidden; background:rgba(255,254,248,.62); }
+.row { display:flex; align-items:center; min-height:79rpx; border-bottom:1rpx solid #e5e3d8; font-size:33rpx; padding:0 24rpx; }
+.row:last-child { border-bottom:0; }
+.table-head { min-height:68rpx; font-size:25rpx; }
+.rank { width:90rpx; flex:none; text-align:center; }
+.name { flex:1; min-width:0; padding:10rpx 18rpx 10rpx 40rpx; overflow-wrap:anywhere; }
+.points { width:166rpx; text-align:right; flex:none; font-variant-numeric:tabular-nums; }
+.score { width:166rpx; text-align:right; flex:none; font-variant-numeric:tabular-nums; }
+.first { background:rgba(202,212,188,.52); }
+.first .rank { color:#9b7524; }
+.first .score { color:#9b7524; }
+.rules { text-align:center; font-size:25rpx; line-height:1.55; margin:20rpx 0 27rpx; }
+.rule-line { display:block; }
+.round-records { display:flex; flex-direction:column; gap:16rpx; }
+.round-record { border:1rpx solid #deddd0; border-radius:14rpx; background:rgba(255,254,248,.45); padding:22rpx 24rpx; }
+.round-label { display:block; font-size:28rpx; line-height:1.5; }
+.round-description { display:block; margin-top:6rpx; font-size:25rpx; line-height:1.6; color:#687064; overflow-wrap:anywhere; }
+.empty-records { display:block; padding:0 0 24rpx; font-size:25rpx; color:#687064; }
+.share-actions { position:relative; flex-shrink:0; display:flex; gap:18rpx; border-top:1rpx solid #c9ccbd; padding:20rpx 26rpx calc(20rpx + env(safe-area-inset-bottom)); background:#faf8ef; }
+.share-button { font-family:inherit; width:0!important; min-width:0!important; flex:1; margin:0!important; font-size:28rpx; line-height:1.5; padding:20rpx 4rpx!important; border:1rpx solid #173f33; border-radius:12rpx; color:#0b2d25; background:rgba(255,254,248,.45); }
+.share-actions .primary { color:#fffdf4; background:#163f33; }

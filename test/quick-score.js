@@ -52,6 +52,7 @@ function page(file) {
   delete require.cache[full]; require(full)
   const p = { ...definition, data: clone(definition.data), setData(v) { Object.assign(this.data, v) } }
   Object.keys(definition).forEach(k => { if (typeof definition[k] === 'function') p[k] = definition[k].bind(p) })
+  if (p._openInputOverlay) p._openInputOverlay = options => { navigation = options }
   return p
 }
 function board() {
@@ -59,6 +60,77 @@ function board() {
   const p = page('pages/game/board.js'); p.onLoad({ resume: '1' })
   p.setData({ selectedWinner: 1, selectedLoser: 0, honba: 2, roundRiichi: [false, true, false, false] })
   return p
+}
+// Pushing either input page must leave the original entry sheet and draft
+// intact, even before onShow runs during the native back transition.
+for (const type of ['ron', 'tsumo']) {
+  for (const mode of [undefined, 'quick']) {
+    const entry = board()
+    const modal = type === 'ron' ? 'showRonModal' : 'showTsumoModal'
+    entry.setData({ [modal]: true, inputPoints: '8000', showManualInput: true })
+    const original = clone(entry.data)
+    entry._navigateToCalc(type, mode)
+    assert.strictEqual(entry.data[modal], true, `${type}/${mode}: sheet stays visible while navigating`)
+    entry.onShow()
+    entry.onShow()
+    assert.strictEqual(entry.data[modal], true, 'back without confirmation retains sheet')
+    for (const key of ['selectedWinner', 'selectedLoser', 'roundRiichi', 'inputPoints', 'showManualInput', 'players', 'roundHistory']) {
+      assert.deepStrictEqual(entry.data[key], original[key], `back preserves ${key}`)
+    }
+    entry._navigateToCalc(type, mode)
+    navigation.fail()
+    assert.strictEqual(entry.data[modal], true, 'failed navigation retains sheet')
+  }
+}
+// A single winner uses the same review card as multiple winners. Returning
+// a calculation fills the card; only the sheet confirmation applies payment.
+for (const mode of [undefined, 'quick']) {
+  const entry = board()
+  entry.setData({ selectedWinner: -1, selectedLoser: 0, showRonModal: true, ronEntries: [] })
+  entry.selectMultiRonWinner({ currentTarget: { dataset: { idx: 1 } } })
+  const scores = clone(entry.data.players)
+  entry.goToMultiCalc({ currentTarget: { dataset: { idx: 1 } } }, mode)
+  navigation.events.calcResult(calc({ honba: 2 }))
+  entry.onShow()
+  assert.deepStrictEqual(entry.data.players, scores)
+  assert.strictEqual(entry.data.roundHistory.length, 0)
+  assert(entry.data.showRonModal)
+  assert(entry.data.ronReady)
+  assert.strictEqual(entry.data.ronCompleted, 1)
+  entry.confirmRon()
+  assert.strictEqual(entry.data.roundHistory.length, 1)
+  assert(!entry.data.showRonModal)
+}
+{
+  const entry = board()
+  entry.setData({ selectedWinner: -1, selectedLoser: 0, ronEntries: [] })
+  const event = { currentTarget: { dataset: { idx: 1 } } }
+  entry.selectMultiRonWinner(event)
+  entry.openMultiRonPoints(event)
+  assert(!entry.data.ronReady)
+  entry.onMultiRonDraft({ ...event, detail: { value: '8000' } })
+  entry.saveMultiRonPoints(event)
+  assert.strictEqual(entry.data.inputPoints, '8000')
+  assert(entry.data.ronReady)
+  entry.confirmRon()
+  assert.strictEqual(entry.data.roundHistory.length, 1)
+}
+// Tsumo review cards preserve payment splits and defer scoring until confirm.
+for (const dealer of [false, true]) {
+  const entry = board()
+  entry.setData({ selectedWinner: dealer ? entry.data.dealerIdx : 1, showTsumoModal: true })
+  entry._prepareEntry()
+  const original = clone(entry.data.players)
+  entry.goToTsumoCardQuick()
+  navigation.events.calcResult(calc({ agariType: 'tsumo', honba: 2, isOya: dealer }))
+  entry.onShow()
+  assert.deepStrictEqual(entry.data.players, original)
+  assert(entry.data.tsumoReady)
+  assert(entry.data.showTsumoModal)
+  assert.strictEqual(entry.data.roundHistory.length, 0)
+  entry.confirmTsumo()
+  assert.strictEqual(entry.data.roundHistory.length, 1)
+  assert(!entry.data.showTsumoModal)
 }
 let p = board()
 const before = clone(p.data.players)

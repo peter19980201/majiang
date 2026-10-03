@@ -3,6 +3,9 @@
   "navigationBarBackgroundColor": "#103e31",
   "navigationBarTextStyle": "white",
   "usingComponents": {
-    "tile": "/components/tile/tile"
+    "tile": "/components/tile/tile",
+    "hand-entry": "/components/calculator-entry/index",
+    "quick-entry": "/components/quick-score-entry/index",
+    "round-detail": "/components/round-detail/index"
   }
 }

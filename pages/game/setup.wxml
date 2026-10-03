@@ -1,16 +1,5 @@
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
 <view class="container">
-  <!-- 对局类型 -->
-  <view class="section">
-    <text class="section-title">对局类型</text>
-    <view class="seg-ctrl">
-      <text class="seg {{gameType === 'tonpuu' ? 'active' : ''}}"
-            bindtap="setGameType" data-val="tonpuu">东风战</text>
-      <text class="seg {{gameType === 'hanchan' ? 'active' : ''}}"
-            bindtap="setGameType" data-val="hanchan">半庄战</text>
-    </view>
-  </view>
-
   <!-- 点数设置 -->
   <view class="section">
     <view class="section-header"><text class="section-title">点棒设置</text><text class="section-note">每次调整 5,000 点</text></view>
@@ -40,15 +29,6 @@
             wx:for="{{umaOptions}}" wx:key="value"
             bindtap="setUma" data-val="{{item.value}}">{{item.label}}</text>
     </view>
-  </view>
-
-  <view class="section">
-    <text class="section-title">对局规则</text>
-    <view class="rule-row" wx:for="{{ruleOptions}}" wx:key="key">
-      <view class="rule-copy"><text class="setting-label">{{item.label}}</text><text class="rule-note">{{item.note}}</text></view>
-      <switch checked="{{rules[item.key]}}" color="#285342" bindchange="toggleRule" data-key="{{item.key}}" />
-    </view>
-    <text class="rule-note">规则在本场对局开始后固定，关闭特殊规则则使用基础流程。</text>
   </view>
 
   <!-- 玩家昵称 -->

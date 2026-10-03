@@ -1,0 +1,3 @@
+@import '/styles/scrollbars.wxss';
+@import '../../pages/game/round-detail.wxss';
+:host { display:block; color:#183e32; }

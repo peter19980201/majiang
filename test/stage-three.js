@@ -27,6 +27,7 @@ const config = { gameType: 'hanchan', startPoints: 25000, returnPoints: 30000,
 function game(rules = {}) {
   storage = {}
   const board = page('pages/game/board.js')
+  board._openInputOverlay = options => { navigation = options }
   board.onLoad({ config: encodeURIComponent(JSON.stringify({ ...config, rules })) })
   return board
 }
@@ -35,10 +36,10 @@ function total(board) { return board.data.players.reduce((sum, p) => sum + p.poi
 // Creation persists rule switches and uses plain nicknames without profile writes.
 const setup = page('pages/game/setup.js')
 storage.playerProfiles = [{ id: 'a', name: 'A' }]
-for (const key of Object.keys(DEFAULT_RULES)) setup.toggleRule({ currentTarget: { dataset: { key } }, detail: { value: true } })
+assert.strictEqual(setup.data.gameType, 'free')
 setup.startGame()
 const created = JSON.parse(decodeURIComponent(navigation.url.split('config=')[1]))
-assert.deepStrictEqual(created.rules, Object.fromEntries(Object.keys(DEFAULT_RULES).map(key => [key, true])))
+assert.deepStrictEqual(created.rules, DEFAULT_RULES)
 assert.deepStrictEqual(created.players, ['東家', '南家', '西家', '北家'])
 assert.strictEqual(created.playerIds, undefined)
 assert.strictEqual(created.rules.collectStats, undefined)
@@ -161,7 +162,7 @@ for (const bankruptcy of [false, true]) for (const remaining of [0, -100]) {
   board.setData({ selectedWinner: 0, selectedLoser: 1, inputPoints: '1000',
     players: board.data.players.map((p, idx) => ({ ...p, points: idx === 1 ? 1000 + remaining : p.points })) })
   board.confirmRon()
-  assert.strictEqual(board.data.gameOver, bankruptcy && remaining < 0)
+  assert.strictEqual(board.data.gameOver, false)
   if (board.data.gameOver) {
     assert.strictEqual(board.data.endReason, '飞人终局')
     assert.strictEqual(storage.gameHistory.length, 1)
@@ -195,5 +196,7 @@ const many = game()
 storage.gameHistory = Array.from({ length: 60 }, (_, i) => ({ id: `old-${i}`, config, result: [], rounds: [] }))
 many.setData({ roundWind: 1, roundNum: 4, dealerIdx: 3, selectedWinner: 1, selectedLoser: 0, inputPoints: '1000' })
 many.confirmRon()
+assert.strictEqual(storage.gameHistory.length, 60)
+many.earlySettlement()
 assert.strictEqual(storage.gameHistory.length, 61)
 console.log('Stage three passed: creation switches/nicknames, 32 multi-ron cases, hand input, abortive draws, bankruptcy, extension/dealer stop, correction and history retention.')

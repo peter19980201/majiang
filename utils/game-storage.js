@@ -36,8 +36,8 @@ function saveCompleted(data, abandoned = false) {
 function finishSavedGame(saved) {
   const state = saved.gameState
   return saveCompleted({ ...state, gameId: state.gameId || Records.newGameId(),
-    gameDate: state.gameDate || saved.date, gameOver: true, endedEarly: true,
-    finalResult: settle(state.config, state.players) }, true)
+    gameDate: state.gameDate || saved.date, gameOver: true, endedEarly: state.config.gameType !== 'free', endReason: '手动结束',
+    finalResult: settle(state.config, state.players) }, state.config.gameType !== 'free')
 }
 
 module.exports = { history, removeHistory, saveCurrent, saveCompleted, finishSavedGame }

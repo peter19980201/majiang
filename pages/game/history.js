@@ -1,5 +1,6 @@
 const { withShare } = require('../../utils/share')
 const GameStorage = require('../../utils/game-storage')
+const Reports = require('../../utils/battle-report')
 const RoundView = require('../../utils/round-view')
 const { summary } = require('../../utils/game-rules')
 Page(withShare({
@@ -10,6 +11,8 @@ Page(withShare({
     historyList: [],
     expandedId: -1
   },
+
+  onLoad(options) { if (options.expandId) this.setData({ expandedId: options.expandId }) },
 
   onShow() {
     const currentGame = wx.getStorageSync('currentGame') || null
@@ -67,6 +70,20 @@ Page(withShare({
       return
     }
     wx.navigateTo({ url: `/pages/game/board?historyId=${encodeURIComponent(e.currentTarget.dataset.id)}` })
+  },
+
+  viewSettlement(e) {
+    wx.navigateTo({ url: `/pages/settlement/settlement?id=${encodeURIComponent(e.currentTarget.dataset.id)}` })
+  },
+
+  copyBattleReport(e) {
+    const record = GameStorage.history().find(r => String(r.id) === String(e.currentTarget.dataset.id))
+    if (record) wx.setClipboardData({ data: Reports.text(Reports.build(record)),
+      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' }) })
+  },
+
+  previewBattleReport(e) {
+    wx.navigateTo({ url: `/pages/battle-report/battle-report?id=${encodeURIComponent(e.currentTarget.dataset.id)}` })
   },
 
   clearAll() {

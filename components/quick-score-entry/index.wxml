@@ -1,0 +1,2 @@
+<wxs module="fmt" src="../../utils/format.wxs"></wxs>
+<include src="../../pages/quick-score/quick-score.wxml"/>

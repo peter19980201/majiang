@@ -11,7 +11,7 @@
 
   <!-- 筛选标签 -->
   <view class="filter-row">
-    <scroll-view scroll-x class="cat-scroll">
+    <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" scroll-x class="cat-scroll">
       <view class="cat-tags">
         <text class="cat-tag {{activeCategory === '' ? 'active' : ''}}"
               bindtap="onCategoryTap" data-cat="">全部</text>

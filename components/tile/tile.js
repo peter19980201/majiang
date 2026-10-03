@@ -23,6 +23,10 @@ Component({
   lifetimes: { attached() { this.updateDisplay(this.data.tid,this.data.extra) } },
   methods: {
     updateDisplay(id,extra) {
+      // Both property observers and attached run during first render.
+      if (this._displayId === id && this._displayExtra === extra) return
+      this._displayId = id
+      this._displayExtra = extra
       if (id < 0 || id > 33) { this.setData({ face:'',faceSrc:'',bodySrc:'',number:'',suit:'',label:'',isRed:false }); return }
       const number=['一','二','三','四','五','六','七','八','九'][id%9]
       const face=id<9?'man':id<18?'pin':id<27?'sou':'honor'

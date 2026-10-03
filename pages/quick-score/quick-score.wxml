@@ -10,7 +10,7 @@
         <view class="seg-ctrl gap"><view class="seg {{agariType === 'ron' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="ron">荣和</view><view class="seg {{agariType === 'tsumo' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="tsumo">自摸</view></view>
         <view class="honba-row"><text class="honba-label">本场数</text><view class="stepper"><button class="step-btn" bindtap="changeHonba" data-delta="-1" disabled="{{honba === 0}}">−</button><text class="step-val">{{honba}}</text><button class="step-btn" bindtap="changeHonba" data-delta="1" disabled="{{honba === 99}}">+</button></view></view>
       </block>
-      <text wx:if="{{boardMode}}" class="hint">由对局自动带入。供托 {{boardSticks}} 本，由记分板结算归属。</text>
+      <text wx:if="{{boardMode}}" class="hint">由对局自动带入。供托 {{fmt.points(boardSticks * 1000)}} 点，由记分板结算归属。</text>
     </view>
     <view class="section">
       <view class="seg-ctrl"><view class="seg {{kind === 'hanfu' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="hanfu">番符</view><view class="seg {{kind === 'yakuman' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="yakuman">役满</view></view>

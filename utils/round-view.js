@@ -29,12 +29,14 @@ function points(record) {
 
 // List cards contain only rendered fields, not correction snapshots or hands.
 function card(record, latest = true) {
-  const parts = String(record.round || '').trim().split(/\s+/)
+  const label = String(record.round || '').trim()
+  const cycle = label.match(/^(第\d+轮)\s*·\s*/)
+  const parts = label.replace(/^第\d+轮\s*·\s*/, '').split(/\s+/)
   const tags = sortedYaku(record).map(yaku => yaku.name)
   return {
     type: record.type, round: record.round, winner: record.winner, loser: record.loser,
     points: points(record), tenpai: record.tenpai, level: record.level,
-    roundTitle: parts[0] || '本局',
+    roundTitle: (cycle ? cycle[1] + ' · ' : '') + (parts[0] || '本局'),
     honbaLabel: parts.slice(1).join(' ') || '本场未记录',
     typeLabel: record.abortive ? '途中流局' : record.winners ? '多家荣和' : { ron: '荣和', tsumo: '自摸', draw: '流局' }[record.type] || '记录',
     name: record.type === 'draw' ? (record.abortive ? '途中流局' : '流局') : record.winner,

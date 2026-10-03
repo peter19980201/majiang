@@ -1,0 +1,2 @@
+<wxs module="fmt" src="../../utils/format.wxs"/>
+<include src="../../pages/game/round-detail.wxml"/>

@@ -1,0 +1,21 @@
+<view class="settlement-page" wx:if="{{report}}">
+  <image class="page-paper" src="/assets/report/settlement-paper.jpg" mode="scaleToFill"></image>
+  <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="settlement-scroll" scroll-y>
+  <view class="settlement-content">
+    <view class="heading"><view class="eyebrow"><text class="hairline"></text><text>{{report.type}} · {{report.status}}</text><text class="hairline"></text></view><text class="seal">日<text class="seal-bottom">麻</text></text><text class="title">本场成绩</text><text class="date">{{report.date}}</text></view>
+    <view class="ranking">
+      <view class="row table-head"><text class="rank">排名</text><text class="name">玩家</text><text class="points">最终点数</text><text class="score">得点</text></view>
+      <view class="row {{index === 0 ? 'first' : ''}}" wx:for="{{report.rows}}" wx:key="rank"><view class="rank"><text>{{rankLabels[item.rank - 1]}}</text></view><text class="name">{{item.name}}</text><text class="points">{{item.pointsText}}</text><text class="score">{{item.finalText}}</text></view>
+    </view>
+    <view class="rules"><text class="rule-line">{{report.rules}}</text><text class="rule-line">{{report.uma}}</text></view>
+    <view class="round-records">
+      <view class="round-record" wx:for="{{report.rounds}}" wx:key="index">
+        <text class="round-label">{{item.round}}</text>
+        <text class="round-description">{{item.description}}</text>
+      </view>
+      <text class="empty-records" wx:if="{{!report.rounds.length}}">暂无逐局记录</text>
+    </view>
+  </view>
+  </scroll-view>
+  <view class="share-actions"><button class="share-button" bindtap="copy">复制文字战报</button><button class="share-button primary" bindtap="preview">生成图片战报</button></view>
+</view>

@@ -10,11 +10,11 @@
     <view class="current-header">
       <view class="current-badge">进行中</view>
       <text class="current-date">{{currentGame.date}}</text>
-      <text class="current-type">{{currentGame.gameState.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
+      <text class="current-type">{{currentGame.gameState.config.gameType === 'free' ? '自由记分' : currentGame.gameState.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
     </view>
     <view class="current-info">
-      <text class="current-round">{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 {{currentGame.gameState.honba}}本场</text>
-      <text class="current-supply" wx:if="{{currentGame.gameState.riichiSticks > 0}}">供托{{currentGame.gameState.riichiSticks}}本</text>
+      <text class="current-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 {{currentGame.gameState.honba}}本场</text>
+      <text class="current-supply" wx:if="{{currentGame.gameState.riichiSticks > 0}}">供托 {{fmt.points(currentGame.gameState.riichiSticks * 1000)}} 点</text>
     </view>
     <view class="current-players">
       <view class="cp-item" wx:for="{{currentGame.gameState.players}}" wx:key="index">
@@ -39,7 +39,7 @@
       <view class="card-header" bindtap="onExpandTap" data-id="{{item.id}}">
         <view class="card-info">
           <text class="card-date">{{item.date}}</text>
-          <text class="card-type">{{item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
+          <text class="card-type">{{item.config.gameType === 'free' ? '自由记分' : item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
           <text class="card-abandoned" wx:if="{{item.abandoned}}">中断</text>
         </view>
         <view class="card-right">
@@ -58,6 +58,7 @@
       <!-- 详情 -->
       <view class="card-detail" wx:if="{{expandedId === item.id}}"><view class="record-config">起始 {{item.config.startPoints}} · 返还 {{item.config.returnPoints}} · 顺位马 {{item.config.uma}}</view>
         <view class="record-config">{{item.ruleSummary}}</view>
+        <view class="current-actions"><text class="current-btn" bindtap="viewSettlement" data-id="{{item.id}}">查看结算</text><text class="current-btn" bindtap="copyBattleReport" data-id="{{item.id}}">复制文字战报</text><text class="current-btn resume" bindtap="previewBattleReport" data-id="{{item.id}}">生成图片战报</text></view>
         <view class="current-actions" wx:if="{{item.canCorrect}}">
           <text class="current-btn resume" bindtap="correctLastRound" data-id="{{item.id}}">查看并纠正最近一局</text>
         </view>

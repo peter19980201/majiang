@@ -8,7 +8,9 @@
     "pages/game/board",
     "pages/game/history",
     "pages/game/round-detail",
-    "pages/quick-score/quick-score"
+    "pages/quick-score/quick-score",
+    "pages/battle-report/battle-report",
+    "pages/settlement/settlement"
   ],
   "window": {
     "backgroundTextStyle": "light",

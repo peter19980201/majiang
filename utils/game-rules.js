@@ -5,6 +5,7 @@ const DEFAULT_RULES = {
 const ABORT_REASONS = ['九种九牌', '四风连打', '四家立直', '四杠散了', '三家和']
 function rules(config) { return { ...DEFAULT_RULES, ...(config.rules || {}), multipleRon: true } }
 function summary(config) {
+  if (config.gameType === 'free') return '自由记分'
   const enabled = rules(config)
   const labels = { bankruptcy: '飞人终局', extension: '延长战', dealerFinish: '庄家首位止' }
   const special = Object.keys(labels).filter(key => enabled[key]).map(key => labels[key])
@@ -13,6 +14,16 @@ function summary(config) {
 
 // Called after all payments (including riichi) have been applied.
 function nextRound(state, dealerContinues, isDraw, abortive = false) {
+  if (state.config.gameType === 'free') {
+    if (dealerContinues) return { honba: isDraw ? state.honba : state.honba + 1 }
+    let roundWind = state.roundWind
+    let roundNum = state.roundNum + 1
+    let roundCycle = state.roundCycle || 1
+    if (roundNum > 4) { roundNum = 1; roundWind++ }
+    if (roundWind > 3) { roundWind = 0; roundCycle++ }
+    return { dealerIdx: (state.dealerIdx + 1) % 4, roundWind, roundNum, roundCycle,
+      roundWindName: ['東', '南', '西', '北'][roundWind], honba: isDraw ? state.honba : 0 }
+  }
   const rule = rules(state.config)
   const normalEnd = state.config.gameType === 'tonpuu' ? 1 : 2
   const target = state.config.returnPoints

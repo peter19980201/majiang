@@ -8,7 +8,7 @@
   <view wx:if="{{currentGame}}" class="resume-card">
     <image class="card-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image>
     <text class="resume-badge">对局进行中</text>
-    <text class="resume-round">{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
+    <text class="resume-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
     <view class="resume-players"><view class="resume-player" wx:for="{{currentGame.gameState.players}}" wx:key="index"><text class="resume-name">{{item.name}}</text><text class="resume-points">{{fmt.points(item.points)}}</text></view></view>
     <view class="resume-actions"><view class="btn-primary" bindtap="resumeGame">继续对局 ›</view><view class="btn-secondary" bindtap="newGame">新建对局</view></view>
   </view>

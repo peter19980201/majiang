@@ -1,0 +1,2 @@
+<!-- Shared form includes fixed-size hand slots. -->
+<include src="../../pages/calculator/calculator.wxml"/>

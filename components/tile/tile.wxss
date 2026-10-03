@@ -1,3 +1,4 @@
+@import '/styles/scrollbars.wxss';
 :host {
   display:inline-block;
   vertical-align:middle;
@@ -134,3 +135,12 @@
 .tile.engraved.red5-on { box-shadow:0 0 0 3rpx #ae4a38; }
 .tile.engraved.dark .body-art { filter:brightness(.83) saturate(.7); }
 .tile.engraved.clickable:active { background:transparent; opacity:.8; }
+
+/* Fit an entered tile to its reserved hand slot. */
+.tile.slot {
+  width:100%;
+  height:100%;
+  font-size:22rpx;
+  border-radius:6rpx;
+  box-shadow:none;
+}

@@ -9,7 +9,7 @@
     <view wx:for="{{record.winners}}" wx:key="idx"><text class="detail-note">{{item.name}} · {{fmt.points(item.payment)}}点</text><text class="detail-note" wx:if="{{item.source === 'hanfu'}}">番符录入 · {{item.level}} {{item.han > 0 ? item.han + '番' : ''}} {{item.fu > 0 ? item.fu + '符' : ''}} · 未记录役种</text><view class="detail-tags"><text class="yaku-tag" wx:for="{{item.yaku}}" wx:for-item="y" wx:key="name">{{y.name}}</text></view></view>
     <text class="detail-note" wx:if="{{record.type === 'draw'}}">{{record.tenpai}}</text>
     <view class="result-meta" wx:if="{{record.level || record.han > 0}}"><text wx:if="{{record.level}}">{{record.level}}</text><text wx:if="{{record.han > 0}}">{{record.han}}番</text><text wx:if="{{record.han > 0 && record.fu > 0}}">{{record.fu}}符</text></view>
-    <text class="detail-note" wx:if="{{record.riichiCollected > 0}}">收取供托 · {{record.riichiCollected}}本</text>
+    <text class="detail-note" wx:if="{{record.riichiCollected > 0}}">收取供托 · {{fmt.points(record.riichiCollected * 1000)}} 点</text>
   </view>
   <view class="detail-card" wx:if="{{record.type !== 'draw' && !record.winners}}"><text class="detail-title">役种</text><view class="detail-tags" wx:if="{{record.tags.length}}"><text class="yaku-tag" wx:for="{{record.tags}}" wx:key="*this">{{item}}</text></view><text class="detail-note" wx:else>{{record.source === 'hanfu' ? '番符录入 · 未记录役种' : '手动录入的记录未保存役种'}}</text></view>
   <view class="detail-card" wx:if="{{record.changes.length}}">

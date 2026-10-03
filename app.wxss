@@ -1,3 +1,4 @@
+@import '/styles/scrollbars.wxss';
 @import '/styles/theme.wxss';
 page {
   background:#f6f4ed;

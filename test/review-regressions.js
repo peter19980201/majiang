@@ -185,7 +185,7 @@ test('storage: all three settlement entries retain snapshots and unique game IDs
     const record = storage.gameHistory[0]
     assert.strictEqual(storage.gameHistory.length, 1)
     assert.strictEqual(storage.currentGame, undefined)
-    assert(record.gameState.gameOver && record.gameState.endedEarly)
+    assert(record.gameState.gameOver && (record.gameState.endReason === '手动结束' || record.gameState.endedEarly))
     assert.deepStrictEqual(record.rounds, saved.gameState.roundHistory)
     assert.deepStrictEqual(record.gameState.roundHistory, saved.gameState.roundHistory)
     results.push(record.result)

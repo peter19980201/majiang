@@ -34,15 +34,12 @@ assert(board.data.historyCards[0].latest)
 
 function open(index = board.data.roundHistory.length - 1) {
   board.openRoundDetail({ currentTarget: { dataset: { index } } })
-  assert.strictEqual(navigation.url, '/pages/game/round-detail')
+  assert(board.data.roundDetailVisible)
+  assert.strictEqual(navigation, undefined, 'details must not navigate')
   const detail = page('pages/game/round-detail.js')
-  let listener
-  detail.getOpenerEventChannel = () => ({
-    on: (name, callback) => { assert.strictEqual(name, 'roundDetail'); listener = callback },
-    emit: name => navigation.events[name]()
-  })
-  detail.onLoad()
-  navigation.success({ eventChannel: { emit: (name, record) => listener(record) } })
+  detail._embedded = true
+  detail.setData({ record: board.data.roundDetailRecord })
+  detail.triggerEvent = name => name === 'editRound' ? board.editDetailRound() : board.deleteDetailRound()
   return detail
 }
 let detail = open()
@@ -60,11 +57,6 @@ detail.deleteRecord()
 modal.success({ confirm: false })
 assert.strictEqual(board.data.roundHistory.length, 1)
 assert.strictEqual(detail.data.busy, false)
-returnFails = true
-detail.editRecord()
-assert.strictEqual(detail.data.busy, false)
-assert.strictEqual(board.data.editingLastRound, false)
-returnFails = false
 detail.deleteRecord()
 modal.success({ confirm: true })
 assert.strictEqual(board.data.roundHistory.length, 0)
@@ -88,7 +80,7 @@ assert.strictEqual(detail.data.busy, false)
 board.setData({ roundHistory: original })
 board._autoSave()
 open()
-const stale = navigation.events
+const stale = { editRound: () => board.editDetailRound(), deleteRound: () => board.deleteDetailRound() }
 board.setData({ selectedWinner: 2, selectedLoser: 3, inputPoints: '5200' })
 board.confirmRon()
 const current = Records.clone(board.data.roundHistory)
@@ -103,16 +95,16 @@ assert.deepStrictEqual(detail.data.record.changes.map(p => p.delta), [-3900, 390
 detail.editRecord()
 detail.deleteRecord()
 // Even if a stale or forged UI event reaches the board, earlier rounds stay immutable.
-navigation.events.editRound()
-navigation.events.deleteRound()
+board.editDetailRound()
+board.deleteDetailRound()
 assert.deepStrictEqual(board.data.roundHistory, current)
 assert.strictEqual(board.data.editingLastRound, false)
-navigation = null
+navigation = undefined
 board.openRoundDetail({ currentTarget: { dataset: { index: -1 } } })
-assert.strictEqual(navigation, null)
+assert.strictEqual(navigation, undefined)
 assert.deepStrictEqual(board.data.historyCards.map(r => r.latest), [false, true])
 assert.strictEqual(View.describe({ type: 'draw', tenpai: '全员不听' }).name, '流局')
-console.log('Round detail passed: navigation, edit/cancel, delete/cancel, failed return, score restore, legacy and stale-record guards.')
+console.log('Round detail passed: drawer, edit/cancel, delete/cancel, score restore, legacy and stale-record guards.')
 
 // Stable descending order for legacy names and actual recorded open-hand/dora han.
 assert.deepStrictEqual(View.describe({ yakuSummary: '平和 一杯口 一气通贯 清一色' }).tags,
@@ -126,3 +118,16 @@ assert.deepStrictEqual(View.describe({ yaku: [{ name: '天和', han: -1, isYakum
 assert.deepStrictEqual(View.describe({ yakuSummary: '三色同顺 三暗刻',
   input: { calculatorInput: { melds: [{ type: 'chi' }] } } }).tags, ['三暗刻', '三色同顺'])
 console.log('All rounds are viewable; only latest is editable; yaku sort by actual han with legacy fallback.')
+
+assert.deepStrictEqual(board.data.recordTimeline.map(r => r.recordIndex), [1, 0])
+assert.strictEqual(board.data.recordTimeline[0].name, current[1].winner)
+board.setData({ recordsExpanded: false })
+board.toggleRecords()
+assert.strictEqual(board.data.recordsScrollTarget, 'record-list-top')
+board.toggleRecords()
+assert.strictEqual(board.data.recordsScrollTarget, '')
+board.toggleRecords()
+assert.strictEqual(board.data.recordsScrollTarget, 'record-list-top')
+board.openRoundDetail({ currentTarget: { dataset: { index: board.data.recordTimeline[0].recordIndex } } })
+assert.strictEqual(board.data.roundDetailRecord.name, current[1].winner)
+console.log('Timeline passed: newest-first display, original detail indices and reset-to-top on every opening.')

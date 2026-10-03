@@ -29,6 +29,7 @@ function page(file) {
   Object.keys(definition).forEach(key => {
     if (typeof definition[key] === 'function') instance[key] = definition[key].bind(instance)
   })
+  if (instance._openInputOverlay) instance._openInputOverlay = options => { navigation = options }
   return instance
 }
 const config = { gameType: 'hanchan', startPoints: 25000, returnPoints: 30000,
@@ -148,6 +149,8 @@ storage = {}
 const ended = board()
 ended.setData({ roundWind: 1, roundWindName: '南', roundNum: 4, dealerIdx: 3 })
 ron(ended, 0, 1)
+assert(!ended.data.gameOver)
+ended.earlySettlement()
 assert(ended.data.gameOver)
 assert.strictEqual(storage.gameHistory.length, 1)
 assert.strictEqual(storage.currentGame, undefined)
@@ -278,7 +281,7 @@ for (const location of ['home', 'history']) {
     list.abandonGame()
   }
   assert.strictEqual(storage.gameHistory[0].id, gameId)
-  assert(storage.gameHistory[0].gameState.endedEarly)
+  assert.strictEqual(storage.gameHistory[0].gameState.endReason, '手动结束')
   const archived = page('pages/game/board.js')
   archived.onLoad({ historyId: gameId })
   archived.editLastRound()
