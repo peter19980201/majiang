@@ -16,3 +16,7 @@ __pycache__/
 # Generated test runs
 test/reports/
 test/.venv/
+
+# Local import receipts and baseline run logs
+test/local-data/import-receipt.json
+design/2026-10-04-test-plan/baseline*.log
