@@ -1,0 +1,256 @@
+{
+  "schemaVersion": 1,
+  "suites": [
+    {
+      "id": "battle-report",
+      "file": "suites/battle-report.js",
+      "group": "report",
+      "features": [
+        "F16",
+        "F18"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "embedded-entry",
+      "file": "suites/embedded-entry.js",
+      "group": "ui",
+      "features": [
+        "F10",
+        "F11",
+        "F13"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "form-contract",
+      "file": "suites/form-contract.js",
+      "group": "ui",
+      "features": [
+        "F10",
+        "F13",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "free-play",
+      "file": "suites/free-play.js",
+      "group": "game",
+      "features": [
+        "F09",
+        "F14",
+        "F18"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "game-migrations",
+      "file": "suites/game-migrations.js",
+      "group": "storage",
+      "features": [
+        "F15",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "game-round",
+      "file": "suites/game-round.js",
+      "group": "game",
+      "features": [
+        "F10",
+        "F11",
+        "F12",
+        "F14"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "manual-tsumo",
+      "file": "suites/manual-tsumo.js",
+      "group": "game",
+      "features": [
+        "F11"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "quick-score",
+      "file": "suites/quick-score.js",
+      "group": "scoring",
+      "features": [
+        "F07",
+        "F10",
+        "F11",
+        "F14",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "red-five-entry",
+      "file": "suites/red-five-entry.js",
+      "group": "ui",
+      "features": [
+        "F02",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "review-regressions",
+      "file": "suites/review-regressions.js",
+      "group": "regression",
+      "features": [
+        "F04",
+        "F05",
+        "F14",
+        "F15",
+        "F18"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "round-corrections",
+      "file": "suites/round-corrections.js",
+      "group": "game",
+      "features": [
+        "F14",
+        "F15",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "round-detail",
+      "file": "suites/round-detail.js",
+      "group": "ui",
+      "features": [
+        "F14",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "share",
+      "file": "suites/share.js",
+      "group": "report",
+      "features": [
+        "F21"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "stage-three",
+      "file": "suites/stage-three.js",
+      "group": "game",
+      "features": [
+        "F08",
+        "F10",
+        "F12",
+        "F23"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "test",
+      "file": "suites/test.js",
+      "group": "engine",
+      "features": [
+        "F04",
+        "F05"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "ui-state",
+      "file": "suites/ui-state.js",
+      "group": "ui",
+      "features": [
+        "F01",
+        "F06",
+        "F12",
+        "F19",
+        "F20"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "winning-hands-expanded",
+      "file": "suites/winning-hands-expanded.js",
+      "group": "engine",
+      "features": [
+        "F04",
+        "F05"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "winning-hands",
+      "file": "suites/winning-hands.js",
+      "group": "engine",
+      "features": [
+        "F04",
+        "F05"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "yakuman-display",
+      "file": "suites/yakuman-display.js",
+      "group": "ui",
+      "features": [
+        "F14",
+        "F22"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "runner-contract",
+      "file": "suites/runner-contract.js",
+      "group": "infrastructure",
+      "features": [],
+      "timeoutMs": 10000
+    },
+    {
+      "id": "local-data",
+      "file": "suites/local-data.js",
+      "group": "game",
+      "features": [
+        "F09",
+        "F10",
+        "F11",
+        "F12",
+        "F15",
+        "F16"
+      ],
+      "timeoutMs": 60000
+    },
+    {
+      "id": "nagashi",
+      "file": "suites/nagashi.js",
+      "group": "game",
+      "features": [
+        "F12",
+        "F14",
+        "F16",
+        "F18",
+        "F24"
+      ],
+      "timeoutMs": 60000
+    }
+  ],
+  "optional": [
+    {
+      "id": "oracle",
+      "file": "winning-hands-oracle.py",
+      "runtime": "python",
+      "dependency": "mahjong==1.4.0"
+    }
+  ],
+  "generators": [
+    "generate-winning-hands.py",
+    "local-data/generate-hanchan.js"
+  ]
+}

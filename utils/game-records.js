@@ -1,7 +1,7 @@
 const STATE_KEYS = ['config', 'players', 'roundWind', 'roundWindName', 'roundNum', 'roundCycle',
   'honba', 'riichiSticks', 'dealerIdx', 'gameOver', 'endedEarly', 'endReason', 'finalResult']
 const INPUT_KEYS = ['selectedWinner', 'selectedLoser', 'inputPoints', 'inputKoPayment',
-  'inputOyaPayment', 'roundRiichi', 'drawTenpai', 'multiRonMode', 'ronEntries', 'drawType', 'abortReason']
+  'inputOyaPayment', 'roundRiichi', 'drawTenpai', 'multiRonMode', 'ronEntries', 'drawType', 'nagashiWinners', 'abortReason']
 
 function clone(value) {
   return JSON.parse(JSON.stringify(value))

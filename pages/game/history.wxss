@@ -211,7 +211,7 @@
   height:175rpx;
 }
 
-.card-header,.rank-row,.card-detail {
+.card-header,.rank-row {
   position:relative;
 }
 
@@ -320,76 +320,6 @@
   font-size:22rpx;
   margin-top:8rpx;
 }
-
-.card-detail {
-  border-top:1rpx solid #dce2ce;
-  margin-top:24rpx;
-  padding-top:20rpx;
-}
-
-.record-config {
-  font-size:21rpx;
-  line-height:1.7;
-  color:#7b8a6c;
-  margin-bottom:22rpx;
-}
-
-.detail-section {
-  margin-top:20rpx;
-}
-
-.detail-title {
-  display:block;
-  font-size:27rpx;
-  font-weight:600;
-  margin-bottom:12rpx;
-}
-
-.round-item {
-  display:flex;
-  gap:16rpx;
-  padding:16rpx 0;
-  border-bottom:1rpx solid #e7e9dc;
-  align-items:baseline;
-}
-
-.rd-round {
-  font-size:22rpx;
-  color:#809072;
-  flex-shrink:0;
-}
-
-.rd-desc {
-  font-size:25rpx;
-}
-
-.settle-row {
-  padding:12rpx 0;
-  border-bottom:1rpx solid #e7e9dc;
-}
-
-.settle-name {
-  display:block;
-  font-size:26rpx;
-  font-weight:600;
-}
-
-.settle-info {
-  display:block;
-  font-size:22rpx;
-  color:#768669;
-  margin-top:6rpx;
-  line-height:1.7;
-}
-
-
-
-.settle-row { display:flex; align-items:center; justify-content:space-between; gap:16rpx; }
-.settle-main { flex:1; min-width:0; }
-.settle-name { overflow-wrap:break-word; }
-.settle-score { display:block; font-size:27rpx; margin-top:6rpx; }
-.settle-final { font-size:38rpx; font-family:'Songti SC','STSong',serif; font-weight:700; flex-shrink:0; }
-
 
 .current-game { position:relative; overflow:hidden; }
 .current-art { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }

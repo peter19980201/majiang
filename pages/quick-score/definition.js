@@ -11,18 +11,30 @@ module.exports = withShare({
     tableOya: false, tableType: 'ron', rows: [], limits: [], busy: false
   },
   onLoad(options = {}) {
+    this.initializeInput(options)
+    if (options.mode === 'board') {
+      this.getOpenerEventChannel().on('restoreQuickInput', input => this.restoreInput(input))
+    }
+  },
+  initializeInput(options = {}) {
     if (options.tab === 'table') this.setData({ tab: 'table' })
     if (options.mode === 'board') {
       this.setData({ boardMode: true, isOya: Number(options.jikaze) === 27,
         agariType: options.agariType, honba: Number(options.honba), boardSticks: Number(options.sticks) || 0 })
-      this.getOpenerEventChannel().on('restoreQuickInput', input => {
-        this.setData({ kind: input.kind, han: input.han, fu: input.fu, yakumanTimes: input.yakumanTimes })
-        this.refresh()
-      })
+
     }
     this.refresh()
     if (this.data.tab === 'table') this.refreshTable()
   },
+  restoreInput(input) {
+    this.setData({ kind: input.kind, han: input.han, fu: input.fu, yakumanTimes: input.yakumanTimes })
+    this.refresh()
+  },
+  submitResult(result) {
+    this.getOpenerEventChannel().emit('calcResult', result)
+    wx.navigateBack({ fail: () => this.setData({ error: '已发送记分结果，请返回对局查看。勿重复记分。' }) })
+  },
+  dismissInput() { wx.navigateBack() },
   select(e) {
     const { key, value } = e.currentTarget.dataset
     if (!['kind', 'han', 'fu', 'yakumanTimes', 'isOya', 'agariType'].includes(key)) return
@@ -65,8 +77,7 @@ module.exports = withShare({
     const result = Quick.calculate(this.data)
     if (result.error) return
     this.setData({ busy: true })
-    this.getOpenerEventChannel().emit('calcResult', result)
-    if (!this._embedded) wx.navigateBack({ fail: () => this.setData({ error: '已发送记分结果，请返回对局查看。勿重复记分。' }) })
+    this.submitResult(result)
   },
-  goBack() { if (this._embedded) this.triggerEvent('dismiss'); else wx.navigateBack() }
+  goBack() { this.dismissInput() }
 })

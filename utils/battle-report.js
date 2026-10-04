@@ -3,6 +3,7 @@ const Rules = require('./game-rules')
 const signed = value => { const n = Number(value); return Number.isFinite(n) ? `${n >= 0 ? '+' : ''}${n.toFixed(1)}` : '—' }
 const points = value => Number.isFinite(Number(value)) ? Number(value).toLocaleString('en-US') : '—'
 function build(record) {
+  const cards = new Map((record.rounds || []).map(round => [round, RoundView.card(round)]))
   const config = record.config || {}
   const players = record.gameState && record.gameState.players || []
   const seatTile = (name, idx, seats = players) => {
@@ -22,9 +23,9 @@ function build(record) {
       bigHands.push({
         seatTile: seatTile(winner.name, winner.idx, round.before && round.before.players || players),
         typeLabel: round.type === 'tsumo' ? '自摸' : '荣和',
-        pointsText: points(round.winners ? winner.payment : RoundView.card(round).points || 0),
-        loser: round.loser || '', honbaLabel: RoundView.card(round).honbaLabel,
-        name: winner.name, round: round.round || '', shortRound: RoundView.card(round).roundTitle, level, weight,
+        pointsText: points(round.winners ? winner.payment : cards.get(round).points || 0),
+        loser: round.loser || '', honbaLabel: cards.get(round).honbaLabel,
+        name: winner.name, round: round.round || '', shortRound: cards.get(round).roundTitle, level, weight,
         tags: RoundView.sortedYaku(winner).map(y => y.name).join(' · ') || '未记录役种' })
     }
   }
@@ -39,15 +40,15 @@ function build(record) {
     uma: `顺位马 ${rows.map(p => p.umaText).join(' / ')}`, ruleSummary: Rules.summary(config),
     highlights: bigHands.slice(0, 3), rounds: (record.rounds || []).map(r => ({
       round: r.round || '',
-      roundTitle: RoundView.card(r).roundTitle,
-      honbaLabel: RoundView.card(r).honbaLabel,
+      roundTitle: cards.get(r).roundTitle,
+      honbaLabel: cards.get(r).honbaLabel,
       isDraw: r.type === 'draw',
-      typeLabel: RoundView.card(r).typeLabel,
-      drawDescription: r.abortive ? r.reason || r.desc || '' : r.tenpai || '',
+      typeLabel: cards.get(r).typeLabel,
+      drawDescription: r.nagashi ? r.desc : r.abortive ? r.reason || r.desc || '' : r.tenpai || '',
       loser: r.loser || '',
       winners: r.type === 'draw' ? [] : (r.winners || [{ ...r, name: r.winner }]).map(w => ({
         name: w.name || '', seatTile: seatTile(w.name, w.idx, r.before && r.before.players || players),
-        pointsText: points(r.winners ? w.payment : RoundView.card(r).points || 0),
+        pointsText: points(r.winners ? w.payment : cards.get(r).points || 0),
         hanFuText: /役满/.test(w.level || '') ? w.level :
           [Number(w.han) > 0 ? `${w.han}番` : '', Number(w.fu) > 0 ? `${w.fu}符` : ''].filter(Boolean).join(''),
         tags: RoundView.sortedYaku(w).map(y => y.name)
@@ -58,8 +59,8 @@ function build(record) {
           tags: RoundView.sortedYaku(w).map(y => y.name)
         })) : [],
       description: r.winners ? r.winners.map(w => `${w.name} 荣和 ${w.payment}点`).join('；') :
-        r.type === 'draw' ? (r.abortive ? `途中流局 · ${r.reason || r.desc || ''}` : `流局 · ${r.tenpai || ''}`) :
-        `${r.winner || ''} ${r.type === 'tsumo' ? '自摸' : '荣和'} ${RoundView.card(r).points || 0}点${r.loser ? ` · 放铳 ${r.loser}` : ''}` })) }
+        r.type === 'draw' ? (r.nagashi ? r.desc : r.abortive ? `途中流局 · ${r.reason || r.desc || ''}` : `流局 · ${r.tenpai || ''}`) :
+        `${r.winner || ''} ${r.type === 'tsumo' ? '自摸' : '荣和'} ${cards.get(r).points || 0}点${r.loser ? ` · 放铳 ${r.loser}` : ''}` })) }
 }
 function text(report) {
   return [ `${report.title} · ${report.status}`, report.date, '',

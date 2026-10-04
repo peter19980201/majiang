@@ -8,3 +8,11 @@ project.private.config.json
 
 # Claude Code
 .claude/
+
+# Python test helpers
+__pycache__/
+*.py[cod]
+
+# Generated test runs
+test/reports/
+test/.venv/

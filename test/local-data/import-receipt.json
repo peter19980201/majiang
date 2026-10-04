@@ -1,0 +1,14 @@
+{
+  "games": 8,
+  "rounds": 81,
+  "total": 20,
+  "originalPreserved": true,
+  "verified": true,
+  "tsumo": 8,
+  "source": "WeChat DevTools console LOCAL_HANCHAN_VERIFIED; read-back equality checks",
+  "roundTypes": {
+    "tsumo": 8,
+    "ron": 46,
+    "draw": 27
+  }
+}

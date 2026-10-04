@@ -9,8 +9,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-# 运行测试（110个用例，覆盖核心引擎全部模块）
-node test/test.js
+# 运行全部 JavaScript 回归测试（各套件独立进程）
+node test/run.js
+
+# 持续监听代码变更并运行全部回归
+node test/watch.js
+
+# 仅运行基础引擎测试
+node test/run.js --suite=test
 
 # 预览/调试需在微信开发者工具中打开项目目录
 ```
@@ -34,6 +40,20 @@ node test/test.js
 - **score.js**: 基本点/满贯判定/分账计算
 - **calculator.js**: 入口函数 `calculate(input)`，对所有合法拆解计算取最优（得点最高）
 - **yaku-data.js**: 役种速查表数据（名称、说明、示例牌型），纯展示用
+
+### 对局领域与持久化
+
+- **game-round.js**: `evaluate(before, input, action, calcResult)` 在隔离状态上计算单局结果，不访问 Page 或 wx；流局预览共用 `drawTransfers()`。
+- **game-rules.js**: 庄家轮转、本场与终局条件。
+- **game-records.js**: 状态/输入快照与记录 ID。
+- **round-transaction.js**: 准备新增/替换记录及前后快照，不操作页面或存储。
+- **ron-entry.js**: 旧单家记录恢复和荣和卡片派生状态。
+- **game-storage.js**: 当前对局和历史持久化；页面统一使用 current()/history() 读取，不绕过迁移入口。
+- **game-migrations.js**: schemaVersion 识别、旧格式转换与基本校验。存储入口先备份再写入新版，拒绝未来版本；格式迁移不得修改对局规则。
+- **game-settlement.js**: 排名与顺位马结算。
+- **round-view.js / battle-report.js**: 记录展示、旧记录兼容和战报转换。
+
+记分板负责表单、提交和页面交互，不承载点数转移算法或纠错记录组装。表单通过 initializeInput/restoreInput/submitResult/dismissInput 接口在独立页面与内嵌组件间复用；内嵌组件不模拟 EventChannel。后续结构建议见 `design/2026-10-03-code-review/README.md`。
 
 ### 牌编码规则
 
@@ -77,7 +97,9 @@ node test/test.js
 
 ## 测试约定
 
-测试文件 `test/test.js` 使用自编断言框架（无第三方依赖）。构造测试用例时注意：
+独立测试模块位于 `test/`，用例集中在 `test/suites/`，索引为 `test/manifest.json`，使用说明见 `test/README.md`。每次修改业务代码必须同步检查并维护相关用例，新增功能或修复缺陷应有对应回归；完成后运行 `node test/run.js`，报告失败和未执行范围。纯重构应保留有效断言，不能只更新期望迎合现有输出。新套件必须登记到 manifest。原 `test/*.js` 命令仅作兼容入口，不在兼容文件内新增测试。详见根目录 `AGENTS.md`。
+
+基础引擎套件 `test/suites/test.js` 使用自编断言框架（无第三方依赖）。构造测试用例时注意：
 
 - 手牌数 = 13 - 3 × 副露组数（不含和了牌）
 - 断幺九等役会被自动检测，构造测试用例时需考虑额外役种对番数的影响

@@ -1,3 +1,4 @@
+const GameStorage = require('../../utils/game-storage')
 const { withShare } = require('../../utils/share')
 const Reports = require('../../utils/battle-report')
 const Painter = require('../../utils/battle-report-canvas')
@@ -6,7 +7,7 @@ Page(withShare({
   onLoad(options) { this._id = options.id },
   onReady() { this.generate() },
   generate() {
-    const record = (wx.getStorageSync('gameHistory') || []).find(r => String(r.id) === String(this._id))
+    const record = GameStorage.history().find(r => String(r.id) === String(this._id))
     if (!record) { this.setData({ error: '未找到这场对局，请返回历史记录重新打开', loading: false, imagePath: '', report: null }); return }
     const report = Reports.build(record)
     this.setData({ report, loading: true, error: '', imagePath: '' })

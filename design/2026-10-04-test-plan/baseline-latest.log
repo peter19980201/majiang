@@ -1,0 +1,333 @@
+
+--- battle-report.js ---
+Battle report passed: saved scores, multi-ron highlights, text/canvas agreement, long names, missing records, image export and denied permissions.
+
+--- embedded-entry.js ---
+Embedded input passed: no navigation, cancel preservation, quick/hand confirmation, restored inputs and unchanged scores.
+
+--- form-contract.js ---
+Form contracts passed: legacy restoration, derived ron state and matching standalone/embedded form data with separate host actions.
+
+--- free-play.js ---
+Free play passed: 32-round rotation, dealer continuation, second-cycle labels, resume/undo, report and manual finish.
+
+--- game-round.js ---
+Round domain passed: no platform APIs, immutable inputs, isolated outputs, point conservation, invalid payments and abortive draws.
+Record preparation passed: isolated append/replace, stable IDs and invalid-input rejection.
+
+--- manual-tsumo.js ---
+Manual tsumo passed: exact 700/1300 split, 512 payment/riichi scenarios, invalid input and winner switching.
+
+--- quick-score.js ---
+Quick scoring passed: 20 fixed payment examples, invalid inputs, lookup table, board integration, correction, multi-ron, old fixtures, locked context and duplicate confirmation.
+
+--- red-five-entry.js ---
+Red-five entry passed: all suits, hand/agari insertion, duplicate and four-copy limits, removal, scoring and old/new restoration.
+
+--- review-regressions.js ---
+PASS engine: edge/ryanmen ambiguity uses pinfu without edge fu
+PASS engine: pair/sequence ambiguity uses ryanmen without tanki fu
+PASS engine: sequence win preserves three concealed triplets on ron
+PASS engine: ambiguous pinfu tsumo remains 20 fu
+PASS engine: actual edge, closed and pair waits retain their fu
+PASS engine: winning triplet is open for ron, concealed for tsumo
+PASS engine: dora never supplies a yaku and input remains immutable
+PASS engine: a concealed kan prevents pinfu and retains kan fu
+PASS record: manual and calculator ron both display total including honba
+PASS record: all seats, honba and riichi agree across manual/calculator paths
+PASS record: legacy manual ron adds honba once; calculator/tsumo remain unchanged
+PASS record: cards omit snapshots while correction, cancel and undo preserve them
+PASS record: invalid calculator payments cannot change scores or storage
+PASS storage: all three settlement entries retain snapshots and unique game IDs
+PASS storage: deleting another game preserves raw correction snapshots
+PASS storage: legacy history displays honba while preserving original records
+Review regressions: 16 passed, 0 failed.
+
+--- round-corrections.js ---
+Round corrections passed: five result paths, cancel/replace/type switch, resume, settlement rollback, hand restore and legacy protection.
+
+--- round-detail.js ---
+Round detail passed: drawer, edit/cancel, delete/cancel, score restore, legacy and stale-record guards.
+All rounds are viewable; only latest is editable; yaku sort by actual han with legacy fallback.
+Timeline passed: newest-first display, original detail indices and reset-to-top on every opening.
+
+--- share.js ---
+Share checks passed: all 11 pages, home timeline, local data isolation, lifecycle preservation.
+
+--- stage-three.js ---
+Stage three passed: creation switches/nicknames, 32 multi-ron cases, hand input, abortive draws, bankruptcy, extension/dealer stop, correction and history retention.
+
+--- test.js ---
+
+=== tiles.js 基础工具 ===
+
+=== decompose.js 手牌拆解 ===
+
+=== score.js 点数表 ===
+
+=== calculator.js 综合计算 ===
+  → 20符4番 亲家付 2600点 / 子家各付 1300点
+  → 断幺九: 30符1番 放铳者付 1000点
+  → 满贯测试: 5番 满贯 亲家付 4000点 / 子家各付 2000点
+    役种: 立直(1), 一发(1), 门前清自摸和(1), 平和(1), 宝牌(1)
+  → 国士: 国士无双十三面 双倍役满 亲家付 32000点 / 子家各付 16000点
+  → 四暗刻: 四暗刻单骑 双倍役满 子家各付 32000点
+  → 七对子: 25符2番 放铳者付 1600点
+  → 役牌白: 30符1番 放铳者付 1000点
+  → 混一色: 40符5番 放铳者付 8000点
+
+=== 测试结果 ===
+通过: 110/110
+失败: 0/110
+
+所有测试通过!
+
+--- ui-state.js ---
+UI state checks passed: 256 draw scenarios, payment cards, reactive tile faces, safe resume/new-game behavior.
+Seven-pairs illustration: 14 tiles, seven distinct pairs.
+Rendered tile assets and seven-pairs grouping verified.
+
+--- winning-hands-expanded.js ---
+{
+  "total": 6000,
+  "passed": 6000,
+  "failed": 0,
+  "samePointsDifferences": 0,
+  "uniqueShapes": 4151,
+  "coverage": {
+    "category": {
+      "regular": 3450,
+      "seven-pairs": 700,
+      "kokushi": 300,
+      "reference-variants": 1500,
+      "high-fu": 50
+    },
+    "outcomes": {
+      "normal": 3963,
+      "no-yaku": 1354,
+      "yakuman": 683
+    },
+    "fu": {
+      "20": 165,
+      "25": 674,
+      "30": 1172,
+      "40": 1096,
+      "50": 500,
+      "60": 153,
+      "70": 71,
+      "80": 58,
+      "90": 17,
+      "100": 26,
+      "110": 8,
+      "120": 11,
+      "130": 12
+    },
+    "han": {
+      "1": 564,
+      "2": 853,
+      "3": 734,
+      "4": 569,
+      "5": 410,
+      "6": 293,
+      "7": 183,
+      "8": 87,
+      "9": 97,
+      "10": 64,
+      "11": 40,
+      "12": 36,
+      "13": 23,
+      "14": 7,
+      "15": 1,
+      "16": 1,
+      "20": 1
+    },
+    "yaku": {
+      "海底摸月": 221,
+      "对对和": 340,
+      "赤宝牌": 1405,
+      "役牌:自风": 162,
+      "役牌:场风": 152,
+      "门前清自摸和": 1151,
+      "立直": 962,
+      "断幺九": 539,
+      "双立直": 523,
+      "三暗刻": 327,
+      "清一色": 306,
+      "役牌:发": 335,
+      "混一色": 338,
+      "宝牌": 573,
+      "抢杠": 235,
+      "里宝牌": 205,
+      "一杯口": 136,
+      "役牌:白": 259,
+      "役牌:中": 151,
+      "地和": 94,
+      "一发": 326,
+      "岭上开花": 56,
+      "河底捞鱼": 242,
+      "平和": 351,
+      "天和": 28,
+      "三杠子": 44,
+      "四暗刻单骑": 24,
+      "三色同顺": 47,
+      "二杯口": 92,
+      "四暗刻": 53,
+      "纯全带幺九": 27,
+      "一气通贯": 38,
+      "混全带幺九": 49,
+      "混老头": 31,
+      "三色同刻": 22,
+      "七对子": 674,
+      "国士无双十三面": 56,
+      "国士无双": 278,
+      "字一色": 33,
+      "小四喜": 15,
+      "清老头": 17,
+      "绿一色": 35,
+      "大四喜": 30,
+      "大三元": 14,
+      "小三元": 14,
+      "九莲宝灯": 32,
+      "纯正九莲宝灯": 3,
+      "四杠子": 11
+    },
+    "meld": {
+      "kakan": 410,
+      "chi": 1722,
+      "pon": 1544,
+      "minkan": 540,
+      "ankan": 603
+    },
+    "winds": {
+      "東场東家": 371,
+      "南场北家": 397,
+      "南场東家": 369,
+      "西场北家": 326,
+      "東场北家": 358,
+      "西场西家": 348,
+      "東场西家": 371,
+      "南场南家": 355,
+      "北场西家": 365,
+      "西场南家": 374,
+      "東场南家": 399,
+      "北场北家": 396,
+      "西场東家": 400,
+      "南场西家": 382,
+      "北场東家": 370,
+      "北场南家": 419
+    },
+    "winType": {
+      "tsumo": 3039,
+      "ron": 2961
+    }
+  }
+}
+
+--- winning-hands.js ---
+PASS H001 平和荣和：78听9是两面
+PASS H002 平和自摸
+PASS H003 立直平和
+PASS H004 立直一发平和自摸
+PASS H005 双立直替代立直
+PASS H006 双立直一发自摸
+PASS H007 海底自摸
+PASS H008 河底荣和
+PASS H009 抢加杠
+PASS H010 门清断幺平和
+PASS H011 副露断幺两面荣和最低30符
+PASS H012 副露断幺自摸无门清自摸役
+PASS H013 边张12听3
+PASS H014 边张89听7
+PASS H015 嵌张13听2
+PASS H016 单骑雀头
+PASS H017 边张自摸
+PASS H018 役牌雀头白白加2符
+PASS H019 役牌雀头東東加2符
+PASS H020 役牌雀头南南加2符
+PASS H021 役牌雀头東東加4符
+PASS H022 客风雀头仍可平和
+PASS H023 明刻役牌白
+PASS H024 明刻役牌发
+PASS H025 明刻役牌中
+PASS H026 明刻役牌场风
+PASS H027 明刻役牌自风
+PASS H028 连风刻子同时计场风和自风
+PASS H029 一杯口不兼七对子
+PASS H030 二杯口优于七对子
+PASS H031 三色同顺门清
+PASS H032 一气通贯门清
+PASS H033 混全带幺九门清
+PASS H034 纯全带幺九门清
+PASS H035 混一色门清
+PASS H036 清一色门清
+PASS H037 三色同顺副露减番
+PASS H038 一气通贯副露减番
+PASS H039 混全带幺九副露减番
+PASS H040 纯全带幺九副露减番
+PASS H041 混一色副露减番
+PASS H042 清一色副露减番
+PASS H043 对对和两个明刻两个暗刻
+PASS H044 三暗刻非对对和
+PASS H045 荣和完成第四刻只能三暗刻
+PASS H046 三色同刻
+PASS H047 混老头对对和
+PASS H048 小三元兼两份役牌
+PASS H049 七对子荣和
+PASS H050 七对子自摸
+PASS H051 七对子断幺
+PASS H052 七对子混老头
+PASS H053 七对子混一色
+PASS H054 七对子清一色
+PASS H055 中张minkan符数
+PASS H056 中张kakan符数
+PASS H057 中张ankan符数
+PASS H058 幺九minkan符数
+PASS H059 幺九kakan符数
+PASS H060 幺九ankan符数
+PASS H061 字牌minkan符数
+PASS H062 字牌kakan符数
+PASS H063 字牌ankan符数
+PASS H064 暗杠保持门清并可立直自摸
+PASS H065 岭上开花
+PASS H066 三杠子
+PASS H067 三个暗杠高符
+PASS H068 荣和完成中张刻子按明刻2符
+PASS H069 自摸完成中张刻子按暗刻4符
+PASS H070 同张可属边张或两面，取平和
+PASS H071 同张可属雀头或顺子，取平和
+PASS H072 同张可属刻子或顺子，保留三暗刻
+PASS H073 宝牌指示牌不是宝牌本身
+PASS H074 里宝牌无立直不计
+PASS H075 立直里宝牌两张
+PASS H076 赤五同时为普通宝牌可叠加
+PASS H077 风牌指示北循环至东
+PASS H078 三元牌指示中循环至白
+PASS H079 数字指示9循环至1
+PASS H080 杠的四张均计宝牌
+PASS H081 累计役满保留实际番符
+PASS H082 国士无双普通单面
+PASS H083 国士无双十三面
+PASS H084 四暗刻双碰自摸
+PASS H085 四暗刻单骑荣和
+PASS H086 四暗刻单骑自摸
+PASS H087 大三元
+PASS H088 字一色七对子
+PASS H089 绿一色含发
+PASS H090 绿一色不含发
+PASS H091 清老头
+PASS H092 小四喜
+PASS H093 大四喜双倍
+PASS H094 大四喜复合字一色
+PASS H095 四杠子
+PASS H096 普通九莲宝灯
+PASS H097 纯正九莲宝灯九面
+PASS H098 天和
+PASS H099 地和
+PASS H100 役满不叠普通役和宝牌
+
+胡牌番符测试：100/100 通过，0 失败。
+
+--- yakuman-display.js ---
+Yakuman display passed: 8 saved-record cases against the detail-page WXML.
+
+18/18 suites passed.

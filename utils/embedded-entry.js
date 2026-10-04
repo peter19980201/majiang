@@ -1,25 +1,20 @@
-// Reuse the standalone form without creating a second page or event channel.
+// Shared forms expose initialize/restore/submit interfaces. Only the host handles navigation.
 module.exports = function embeddedEntry(definition) {
   const methods = {}
   Object.keys(definition).forEach(key => {
     if (typeof definition[key] === 'function' && !['onLoad', 'onShow', 'onShareAppMessage', 'onShareTimeline'].includes(key)) methods[key] = definition[key]
   })
-  methods.getOpenerEventChannel = function () {
-    return {
-      on: (event, listener) => {
-        if (this.properties.config.restore) listener(this.properties.config.restore)
-      },
-      emit: (event, result) => { if (event === 'calcResult') this.triggerEvent('result', result) }
-    }
-  }
+  methods.submitResult = function (result) { this.triggerEvent('result', result) }
+  methods.dismissInput = function () { this.triggerEvent('dismiss') }
   return {
     properties: { config: { type: Object, value: {} } },
     data: JSON.parse(JSON.stringify(definition.data)),
     methods,
     lifetimes: {
       attached() {
-        this._embedded = true
-        definition.onLoad.call(this, this.properties.config.options || {})
+        const { options = {}, restore } = this.properties.config
+        this.initializeInput(options)
+        if (restore) this.restoreInput(restore)
       }
     }
   }

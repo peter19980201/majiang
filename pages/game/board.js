@@ -1,11 +1,12 @@
 const { withShare } = require('../../utils/share')
-const WIND_NAMES = ['東', '南', '西', '北']
+const GameRound = require('../../utils/game-round')
 const Records = require('../../utils/game-records')
 const RoundView = require('../../utils/round-view')
 const GameRules = require('../../utils/game-rules')
 const { settle } = require('../../utils/game-settlement')
 const GameStorage = require('../../utils/game-storage')
-const Reports = require('../../utils/battle-report')
+const RonEntry = require('../../utils/ron-entry')
+const RoundTransaction = require('../../utils/round-transaction')
 
 const boardDefinition = {
   data: {
@@ -47,7 +48,6 @@ const boardDefinition = {
     showRonModal: false,
     showTsumoModal: false,
     showDrawModal: false,
-    showResultModal: false,
     // 和了录入
     selectedWinner: -1,
     selectedLoser: -1,
@@ -70,19 +70,18 @@ const boardDefinition = {
     drawTenpai: [false, false, false, false],
     drawPreview: [],
     drawTenpaiCount: 0,
-    drawType: 'exhaustive',
+    drawType: 'exhaustive', nagashiWinners: [false, false, false, false],
     abortReason: '九种九牌',
     abortReasons: GameRules.ABORT_REASONS,
     // 结算
-    finalResult: [],
-    settlementReport: null
+    finalResult: []
   },
 
   onLoad(options) {
     if (options.historyId) {
-      const history = wx.getStorageSync('gameHistory') || []
+      const history = GameStorage.history()
       const saved = history.find(record => String(record.id) === options.historyId)
-      const current = wx.getStorageSync('currentGame')
+      const current = GameStorage.current()
       if (current && current.gameState && current.gameState.gameId !== options.historyId) {
         wx.showToast({ title: '请先结束当前对局再修改历史', icon: 'none' })
         wx.navigateBack()
@@ -99,10 +98,10 @@ const boardDefinition = {
     }
     // 恢复进行中的对局
     if (options.resume) {
-      const saved = wx.getStorageSync('currentGame')
+      const saved = GameStorage.current()
       if (saved && saved.gameState) {
         this.setData(saved.gameState)
-        this.setData({ gameId: saved.gameState.gameId || Records.newGameId(), gameDate: saved.date })
+        this.setData({ gameId: saved.gameState.gameId, gameDate: saved.date })
         this._autoSave()
         return
       }
@@ -122,52 +121,28 @@ const boardDefinition = {
   },
 
   getRoundLabel() {
-    return `${this.data.roundCycle > 1 ? '第' + this.data.roundCycle + '轮 · ' : ''}${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba}本场`
+    return GameRound.roundLabel(this.data)
   },
 
   _entryState() {
     const state = this._editingRecord ? this._editingRecord.before : this.data
-    return { ...state, roundCycle: state.roundCycle || 1, config: this.data.config.gameType === 'free' ? { ...state.config, gameType: 'free' } : state.config }
+    return { ...state, config: this.data.config.gameType === 'free' ? { ...state.config, gameType: 'free' } : state.config }
   },
 
   _prepareEntry() {
     const state = this._entryState()
     this.setData({ entryHonba: state.honba, entryRiichiSticks: state.riichiSticks,
       entryDealerIdx: state.dealerIdx,
-      entryRoundLabel: `${state.roundCycle > 1 ? '第' + state.roundCycle + '轮 · ' : ''}${WIND_NAMES[state.roundWind]}${state.roundNum}局 ${state.honba}本场`,
+      entryRoundLabel: GameRound.roundLabel(state),
       abortReasons: GameRules.ABORT_REASONS })
   },
 
-  // Winner count determines the form; no separate single/multiple mode switch.
   _refreshRonChoices() {
-    if (!this.data.multiRonMode && !this.data.ronEntries.length && this.data.selectedWinner >= 0) {
-      const idx = this.data.selectedWinner
-      const old = this._editingRecord
-      const quickInput = old && old.input.quickInput
-      const calcResult = old && old.input.source !== 'manual' ? {
-        source: old.input.source, quickInput, calculatorInput: old.input.calculatorInput,
-        han: old.han, fu: old.fu, level: old.level, yaku: old.yaku || [],
-        payment: { total: Number(this.data.inputPoints) + this._entryState().honba * 300 }
-      } : null
-      this.setData({ ronEntries: [{ idx, name: this.data.players[idx].name,
-        points: this.data.inputPoints, calcResult, calculatorInput: old && old.input.calculatorInput }] })
-    }
-    const entries = this.data.ronEntries
-    const pending = entries.filter(entry => !Number(entry.points) || entry.editingPoints)
-    this.setData({ ronCompleted: entries.length - pending.length,
-      ronReady: entries.length > 0 && !pending.length && this.data.selectedLoser >= 0,
-      ronPendingHint: !entries.length ? '请选择和了者' : this.data.selectedLoser < 0 ? '请选择放铳者' :
-        pending.length ? `还需录入 ${pending.map(entry => entry.name).join('、')}的和牌` : '已完成录入，可以确认荣和',
-      ronChoices: this.data.players.map((p, idx) => ({ name: p.name, idx,
-      active: this.data.ronEntries.some(entry => entry.idx === idx), disabled: idx === this.data.selectedLoser })) })
+    this.setData(RonEntry.view(this.data.ronEntries, this.data.players, this.data.selectedLoser))
   },
 
   _setRonEntries(ronEntries) {
-    const single = ronEntries.length === 1 ? ronEntries[0] : null
-    this.setData({ ronEntries, multiRonMode: ronEntries.length > 1,
-      selectedWinner: single ? single.idx : -1,
-      inputPoints: single ? single.points || '' : '',
-      showManualInput: Boolean(single && single.points) })
+    this.setData({ ronEntries })
     this._refreshRonChoices()
   },
 
@@ -187,7 +162,7 @@ const boardDefinition = {
     const idx = Number(e.currentTarget.dataset.idx)
     const ronEntries = this.data.ronEntries.map(entry => entry.idx === idx ?
       { ...entry, points: e.detail.value, calcResult: null } : entry)
-    this.setData({ ronEntries })
+    this._setRonEntries(ronEntries)
   },
 
   openMultiRonPoints(e) {
@@ -227,52 +202,12 @@ const boardDefinition = {
     if (this.data.selectedLoser < 0) {
       wx.showToast({ title: '请先选择放铳者', icon: 'none' }); return
     }
-    this.setData({ selectedWinner: Number(e.currentTarget.dataset.idx) })
-    this._navigateToCalc('ron', mode, true)
-  },
-
-  _applyMultiRon() {
-    const { ronEntries, selectedLoser, players: current } = this.data
-    const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < current.length
-    if (!validSeat(selectedLoser) ||
-        ronEntries.length < 2 || ronEntries.length > 3 ||
-        new Set(ronEntries.map(entry => entry.idx)).size !== ronEntries.length ||
-        ronEntries.some(entry => !validSeat(entry.idx) || entry.idx === selectedLoser)) {
-      wx.showToast({ title: '请选择放铳者及两至三位和了者', icon: 'none' }); return
-    }
-    if (ronEntries.some(entry => !Number.isSafeInteger(Number(entry.points)) ||
-        Number(entry.points) <= 0 || Number(entry.points) % 100 !== 0)) {
-      wx.showToast({ title: '请填写各家点数（100的倍数）', icon: 'none' }); return
-    }
-    const players = current.map(p => ({ ...p }))
-    const sticks = this.data.riichiSticks + this._applyRiichi(players)
-    const winners = ronEntries.map(entry => ({ idx: entry.idx, name: players[entry.idx].name,
-      points: Number(entry.points), payment: Number(entry.points) + this.data.honba * 300,
-      source: entry.calcResult && entry.calcResult.source === 'hanfu' ? 'hanfu' : entry.calcResult ? 'calculator' : 'manual',
-      han: entry.calcResult ? entry.calcResult.han : null, fu: entry.calcResult ? entry.calcResult.fu : null,
-      level: entry.calcResult ? entry.calcResult.level : '',
-      yaku: entry.calcResult ? RoundView.sortedYaku(entry.calcResult) : [] }))
-    winners.forEach(winner => {
-      players[winner.idx].points += winner.payment
-      players[selectedLoser].points -= winner.payment
-    })
-    const nearest = winners.slice().sort((a, b) =>
-      ((a.idx - selectedLoser + 4) % 4) - ((b.idx - selectedLoser + 4) % 4))[0]
-    players[nearest.idx].points += sticks * 1000
-    this.setData({ players, riichiSticks: 0 })
-    this.addRecord({ type: 'ron', round: this.getRoundLabel(), winner: winners.map(p => p.name).join('、'),
-      winners, loser: players[selectedLoser].name, points: winners.reduce((sum, p) => sum + p.payment, 0),
-      basePayment: winners.reduce((sum, p) => sum + p.points, 0),
-      honbaBonus: this.data.honba * 300 * winners.length,
-      riichiCollected: sticks, riichiRecipient: nearest.name,
-      desc: winners.map(p => `${p.name} ${p.payment}点`).join(' / ') + `；供托归${nearest.name}` })
-    this.advanceRound(winners.some(p => p.idx === this.data.dealerIdx))
-    this._autoSave()
+    this._navigateToCalc('ron', mode, true, Number(e.currentTarget.dataset.idx))
   },
 
   selectDrawType(e) {
     const drawType = e.currentTarget.dataset.type
-    if (!['exhaustive', 'abortive'].includes(drawType)) return
+    if (!['exhaustive', 'abortive', 'nagashi'].includes(drawType)) return
     this.setData({ drawType })
     this.updateDrawPreview()
   },
@@ -285,56 +220,18 @@ const boardDefinition = {
   },
 
   // All result paths calculate on a draft; only a valid result replaces the saved state.
-  _commitRound(method, source, calcResult) {
+  _commitRound(action, source, calcResult) {
     if (this.data.gameOver && !this._editingRecord) return
     if (!this._canWriteGame()) return
-    const original = this.data
-    const history = this._editingRecord ? original.roundHistory.slice(0, -1) : original.roundHistory.slice()
-    const before = Records.snapshot(this._entryState())
-    // Page methods are bound to the native live instance. Inherit raw methods
-    // so every nested score/rotation call stays on this isolated draft.
-    const draft = Object.create(boardDefinition)
-    draft.data = { ...Records.clone(before), ...Records.input(original),
-      roundHistory: history, gameOver: false, finalResult: [] }
-    if (calcResult && calcResult.calculatorInput) {
-      draft.data.roundRiichi[draft.data.selectedWinner] = Boolean(
-        calcResult.calculatorInput.riichi || calcResult.calculatorInput.doubleRiichi)
-    }
-    draft.setData = values => Object.assign(draft.data, values)
-    draft._autoSave = () => {}
-    draft.doSettlement = () => {}
-    draft[method](calcResult)
-    if (draft.data.roundHistory.length !== history.length + 1) return
-    // An explicitly ended game stays ended after correction; undo can reopen it.
-    if (this._editingRecord && original.gameOver &&
-        (original.endReason === '手动结束' || original.endedEarly || !this._editingRecord.after.gameOver)) {
-      draft.data.gameOver = true
-      draft.data.endedEarly = original.config.gameType !== 'free'
-      draft.data.endReason = original.config.gameType === 'free' ? '手动结束' : original.endReason
-    }
-    const record = draft.data.roundHistory[draft.data.roundHistory.length - 1]
-    const hasQuickInput = (calcResult && calcResult.source === 'hanfu') ||
-      (record.winners && original.ronEntries.some(entry => entry.calcResult && entry.calcResult.source === 'hanfu'))
-    record.version = hasQuickInput ? 4 : 3
-    record.id = this._editingRecord ? this._editingRecord.id : Records.newGameId()
-    record.before = before
-    record.after = Records.snapshot(draft.data)
-    record.input = { ...Records.input(original), roundRiichi: draft.data.roundRiichi.slice(),
-      drawType: draft.data.drawType, abortReason: draft.data.abortReason, source,
-      quickInput: calcResult && calcResult.quickInput ? Records.clone(calcResult.quickInput) : null,
-      calculatorInput: calcResult && calcResult.calculatorInput ? Records.clone(calcResult.calculatorInput) : null }
-    if (calcResult) {
-      const payment = calcResult.payment
-      if (record.type === 'ron') record.input.inputPoints = String(payment.total - before.honba * 300)
-      else {
-        record.input.inputKoPayment = String(payment.koPayment - before.honba * 100)
-        record.input.inputOyaPayment = payment.oyaPayment === undefined ? '' : String(payment.oyaPayment - before.honba * 100)
-      }
+    const prepared = RoundTransaction.prepare(this.data, this._entryState(), this._editingRecord, action, source, calcResult)
+    if (prepared.error) {
+      wx.showToast({ title: prepared.error, icon: 'none' })
+      return
     }
     this._editingRecord = null
-    this.setData({ ...Records.snapshot(draft.data), roundHistory: draft.data.roundHistory,
+    this.setData({ ...prepared.state,
       editingLastRound: false, showRonModal: false, showTsumoModal: false, showDrawModal: false,
-      showResultModal: false, roundRiichi: [false, false, false, false] })
+      roundRiichi: [false, false, false, false] })
     if (this.data.gameOver) this.doSettlement()
     else {
       this._removeSavedSettlement()
@@ -347,7 +244,7 @@ const boardDefinition = {
   },
 
   _canWriteGame() {
-    const saved = wx.getStorageSync('currentGame')
+    const saved = GameStorage.current()
     if (saved && saved.gameState && saved.gameState.gameId !== this.data.gameId) {
       wx.showToast({ title: '另一场对局进行中，请先结束', icon: 'none' })
       return false
@@ -403,11 +300,11 @@ const boardDefinition = {
   },
 
   _restoreLastRound(record) {
-    if (this._editingRecord || !record || !record.before || !record.input) return
+    if (this._editingRecord || !record || !record.correctionAvailable) return
     if (this.data.roundHistory[this.data.roundHistory.length - 1] !== record) return
     if (!this._canWriteGame()) return
-    this.setData({ ...Records.clone(record.before), roundCycle: record.before.roundCycle || 1, roundHistory: this.data.roundHistory.slice(0, -1),
-      finalResult: [], gameOver: false, showResultModal: false,
+    this.setData({ ...Records.clone(record.before), roundHistory: this.data.roundHistory.slice(0, -1),
+      finalResult: [], gameOver: false,
       roundRiichi: [false, false, false, false] })
     this._removeSavedSettlement()
     this._autoSave()
@@ -417,7 +314,7 @@ const boardDefinition = {
     if (this._editingRecord) return
     const record = this.data.roundHistory[this.data.roundHistory.length - 1]
     if (!record) return
-    if (!record.before || !record.input) {
+    if (!record.correctionAvailable) {
       wx.showToast({ title: '这条旧记录暂不支持删除', icon: 'none' })
       return
     }
@@ -429,20 +326,20 @@ const boardDefinition = {
   editLastRound() {
     const record = this.data.roundHistory[this.data.roundHistory.length - 1]
     if (!record) return
-    if (!record.before || !record.input) {
+    if (!record.correctionAvailable) {
       wx.showToast({ title: '这条旧记录暂不支持修改', icon: 'none' })
       return
     }
     this._editingRecord = Records.clone(record)
-    this.setData({ multiRonMode: false, ronEntries: [], drawType: 'exhaustive', abortReason: '九种九牌',
+    this.setData({ multiRonMode: false, ronEntries: [], drawType: 'exhaustive', nagashiWinners: [false, false, false, false], abortReason: '九种九牌',
       ...Records.clone(record.input), editingLastRound: true,
-      showResultModal: false, showManualInput: record.input.source === 'manual',
+      showManualInput: record.input.source === 'manual',
       showRonModal: record.type === 'ron', showTsumoModal: record.type === 'tsumo',
       showDrawModal: record.type === 'draw' })
     this.setData({ tsumoCalcResult: null })
     this._prepareEntry()
     this._refreshTsumoEntry()
-    this._refreshRonChoices()
+    if (record.type === 'ron') this._setRonEntries(RonEntry.restore(record, this.data.players, this._entryState().honba))
     if (record.type === 'draw') this.updateDrawPreview()
   },
 
@@ -458,22 +355,6 @@ const boardDefinition = {
     this._editingRecord = null
     this.setData({ editingLastRound: false, showRonModal: false, showTsumoModal: false,
       showDrawModal: false, roundRiichi: [false, false, false, false] })
-  },
-
-  onShow() {
-    if (this._pendingSettlement) {
-      this._pendingSettlement = false
-      this._returningFromCalculator = false
-      this.openSettlement()
-      return
-    }
-    if (this._returningFromCalculator) {
-      this._returningFromCalculator = false
-      if (!this._calculatorResultReceived || this._editingRecord || this.data.multiRonMode) {
-        const type = this._calculatorType
-        this.setData({ showRonModal: type === 'ron', showTsumoModal: type === 'tsumo' })
-      }
-    }
   },
 
   // === 操作弹窗 ===
@@ -511,19 +392,6 @@ const boardDefinition = {
     if (this.data.showDrawModal) this.updateDrawPreview()
   },
 
-  // 处理本局立直: 扣除1000点/人, 返回新增立直棒数
-  _applyRiichi(players) {
-    const riichi = this.data.roundRiichi
-    let newSticks = 0
-    for (let i = 0; i < 4; i++) {
-      if (riichi[i]) {
-        players[i].points -= 1000
-        newSticks++
-      }
-    }
-    return newSticks
-  },
-
   // === 荣和 ===
   startRon() {
     this._prepareEntry()
@@ -554,11 +422,14 @@ const boardDefinition = {
   },
 
   onPointsInput(e) {
-    this.setData({ inputPoints: e.detail.value, ronEntries: this.data.ronEntries.map(entry =>
-      entry.idx === this.data.selectedWinner ? { ...entry, points: e.detail.value, calcResult: null } : entry) })
+    const entries = this.data.ronEntries.map(entry =>
+      entry.idx === this.data.selectedWinner ? { ...entry, points: e.detail.value, calcResult: null, calculatorInput: null } : entry)
+    if (entries.length) this._setRonEntries(entries)
+    else this.setData({ inputPoints: e.detail.value })
   },
 
   confirmRon() {
+    if (this.data.ronEntries.length) this._refreshRonChoices()
     if (this.data.ronEntries.some(entry => entry.editingPoints)) {
       wx.showToast({ title: '请先保存正在输入的点数', icon: 'none' }); return
     }
@@ -567,24 +438,7 @@ const boardDefinition = {
       this._processCalcRon(single.calcResult)
       return
     }
-    this._commitRound(this.data.multiRonMode ? '_applyMultiRon' : '_applyManualRon', 'manual')
-  },
-
-  _applyManualRon() {
-    const { selectedWinner, selectedLoser, inputPoints } = this.data
-    const pts = Number(inputPoints)
-    const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < this.data.players.length
-    if (!validSeat(selectedWinner) || !validSeat(selectedLoser)) {
-      wx.showToast({ title: '请完善信息', icon: 'none' }); return
-    }
-    if (!Number.isSafeInteger(pts) || pts <= 0 || pts % 100 !== 0) {
-      wx.showToast({ title: '点数须为正数且是100的倍数', icon: 'none' }); return
-    }
-    if (selectedWinner === selectedLoser) {
-      wx.showToast({ title: '和了者和放铳者不能相同', icon: 'none' }); return
-    }
-
-    this._applyWin({ type: 'ron', total: pts + this.data.honba * 300 })
+    this._commitRound(this.data.multiRonMode ? 'multiRon' : 'ron', 'manual')
   },
 
   closeRon() {
@@ -621,10 +475,11 @@ const boardDefinition = {
     this._navigateToCalc('tsumo', mode)
   },
 
-  _navigateToCalc(agariType, mode, returnToEntry = false) {
+  _navigateToCalc(agariType, mode, returnToEntry = false, winner = this.data.selectedWinner) {
     const quick = mode === 'quick'
     const { roundWind, dealerIdx, honba, riichiSticks } = this._entryState()
-    const { selectedWinner, roundRiichi } = this.data
+    const selectedWinner = winner
+    const { roundRiichi } = this.data
     const bakaze = 27 + roundWind
     const jikaze = 27 + ((selectedWinner - dealerIdx + 4) % 4)
     const winnerRiichi = roundRiichi[selectedWinner] ? 1 : 0
@@ -634,7 +489,7 @@ const boardDefinition = {
     const totalSticks = riichiSticks + newSticks
 
     const that = this
-    const multi = agariType === 'ron' && this.data.multiRonMode
+    const multi = agariType === 'ron' && this.data.ronEntries.length > 1
     const multiEntry = multi && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
     const singleEntry = !multi && agariType === 'ron' && this.data.ronEntries.find(entry => entry.idx === selectedWinner)
     const tsumoResult = agariType === 'tsumo' && this.data.tsumoCalcResult
@@ -642,53 +497,39 @@ const boardDefinition = {
       this._editingRecord && this._editingRecord.input.calculatorInput
     const quickInput = tsumoResult ? tsumoResult.quickInput : multi ? multiEntry && multiEntry.calcResult && multiEntry.calcResult.quickInput : singleEntry ? singleEntry.calcResult && singleEntry.calcResult.quickInput :
       this._editingRecord && this._editingRecord.input.quickInput
-    this._calculatorResultReceived = false
-    this._returningFromCalculator = true
-    this._calculatorType = agariType
-    // Keep the entry sheet beneath the pushed page, including during the
-    // native back transition. Only a confirmed round should dismiss it.
     if (!(agariType === 'ron' ? this.data.showRonModal : this.data.showTsumoModal)) {
       this.setData({ showRonModal: agariType === 'ron', showTsumoModal: agariType === 'tsumo' })
     }
 
     this._openInputOverlay({
-      url: `/pages/${quick ? 'quick-score/quick-score' : 'calculator/calculator'}?mode=board&agariType=${agariType}&bakaze=${bakaze}&jikaze=${jikaze}&honba=${honba}&riichi=${winnerRiichi}&sticks=${totalSticks}`,
-      events: {
-        calcResult(data) {
-          that._calculatorResultReceived = true
-          if (returnToEntry && agariType === 'tsumo') {
-            const riichi = that.data.roundRiichi.slice()
-            if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
-            that.setData({ tsumoCalcResult: data, showManualInput: false, roundRiichi: riichi,
-              inputKoPayment: String(data.payment.koPayment - honba * 100),
-              inputOyaPayment: selectedWinner === that.data.entryDealerIdx ? '' : String(data.payment.oyaPayment - honba * 100) })
-            that._refreshTsumoEntry()
-            return
-          }
-          if (multi || returnToEntry) {
-            const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
-              { ...entry, points: String(data.payment.total - honba * 300),
-                calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, editingMethods: false, draftPoints: '' } : entry)
-            const riichi = that.data.roundRiichi.slice()
-            if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
-            that.setData({ roundRiichi: riichi, showRonModal: true })
-            that._setRonEntries(ronEntries)
-            return
-          }
-          if (agariType === 'ron') {
-            that._processCalcRon(data)
-          } else {
-            that._processCalcTsumo(data)
-          }
+      kind: quick ? 'quick' : 'hand',
+      options: { mode: 'board', agariType, bakaze, jikaze, honba, riichi: winnerRiichi, sticks: totalSticks },
+      restore: Records.clone((quick ? quickInput : calculatorInput) || null),
+      onResult(data) {
+        if (returnToEntry && agariType === 'tsumo') {
+          const riichi = that.data.roundRiichi.slice()
+          if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
+          that.setData({ tsumoCalcResult: data, showManualInput: false, roundRiichi: riichi,
+            inputKoPayment: String(data.payment.koPayment - honba * 100),
+            inputOyaPayment: selectedWinner === that.data.entryDealerIdx ? '' : String(data.payment.oyaPayment - honba * 100) })
+          that._refreshTsumoEntry()
+          return
         }
-      },
-      success(res) {
-        if (quick && quickInput) res.eventChannel.emit('restoreQuickInput', Records.clone(quickInput))
-        if (!quick && calculatorInput) res.eventChannel.emit('restoreInput', Records.clone(calculatorInput))
-      },
-      fail() {
-        that._returningFromCalculator = false
-        that.setData({ showRonModal: agariType === 'ron', showTsumoModal: agariType === 'tsumo' })
+        if (multi || returnToEntry) {
+          const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
+            { ...entry, points: String(data.payment.total - honba * 300),
+              calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, editingMethods: false, draftPoints: '' } : entry)
+          const riichi = that.data.roundRiichi.slice()
+          if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
+          that.setData({ roundRiichi: riichi, showRonModal: true })
+          that._setRonEntries(ronEntries)
+          return
+        }
+        if (agariType === 'ron') {
+          that._processCalcRon(data)
+        } else {
+          that._processCalcTsumo(data)
+        }
       }
     })
   },
@@ -696,19 +537,12 @@ const boardDefinition = {
   _openInputOverlay(request) {
     clearTimeout(this._inputOverlayTimer)
     const sequence = this._inputOverlaySequence = (this._inputOverlaySequence || 0) + 1
-    const options = {}
-    request.url.split('?')[1].split('&').forEach(pair => {
-      const [key, value] = pair.split('=')
-      options[key] = decodeURIComponent(value || '')
-    })
-    let restore = null
-    request.success({ eventChannel: { emit: (event, value) => { restore = value } } })
-    this._inputOverlayResult = request.events.calcResult
-    this._returningFromCalculator = false
+    const { options, restore, kind, onResult } = request
+    this._inputOverlayResult = onResult
     this.setData({ inputOverlayVisible: false, inputOverlayConfig: null }, () => {
       if (this._inputOverlaySequence !== sequence) return
       this.setData({ inputOverlayConfig: { options, restore },
-        inputOverlayKind: request.url.includes('quick-score') ? 'quick' : 'hand' }, () => {
+        inputOverlayKind: kind }, () => {
         wx.nextTick(() => {
           if (this._inputOverlaySequence === sequence) this.setData({ inputOverlayVisible: true })
         })
@@ -739,64 +573,11 @@ const boardDefinition = {
   },
 
   _processCalcRon(calcResult) {
-    this._commitRound('_applyCalcRon', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
-  },
-
-  _applyCalcRon(calcResult) {
-    this._applyWin({ ...calcResult.payment, type: 'ron' }, calcResult)
+    this._commitRound('calcRon', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
   },
 
   _processCalcTsumo(calcResult) {
-    this._commitRound('_applyCalcTsumo', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
-  },
-
-  _applyCalcTsumo(calcResult) {
-    this._applyWin({ ...calcResult.payment, type: 'tsumo' }, calcResult)
-  },
-
-  // Both input sources supply payments that already include honba.
-  _applyWin(payment, calcResult) {
-    const { selectedWinner, selectedLoser, dealerIdx, honba } = this.data
-    const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < this.data.players.length
-    const validPayment = value => Number.isSafeInteger(value) && value > 0 && value % 100 === 0
-    const isTsumo = payment.type === 'tsumo'
-    if (!validSeat(selectedWinner) || (!isTsumo &&
-        (!validSeat(selectedLoser) || selectedWinner === selectedLoser))) {
-      wx.showToast({ title: '请选择有效的和了者及放铳者', icon: 'none' }); return
-    }
-    const amounts = this.data.players.map((_, idx) => {
-      if (idx === selectedWinner) return 0
-      if (isTsumo) return idx === dealerIdx ? payment.oyaPayment : payment.koPayment
-      return idx === selectedLoser ? payment.total : 0
-    })
-    if (!amounts.filter((_, idx) => idx !== selectedWinner && (isTsumo || idx === selectedLoser)).every(validPayment)) {
-      wx.showToast({ title: '支付额须为正数且是100的倍数', icon: 'none' }); return
-    }
-    const total = amounts.reduce((sum, amount) => sum + amount, 0)
-    if (total !== payment.total) {
-      wx.showToast({ title: '支付额与总点数不一致', icon: 'none' }); return
-    }
-    const players = this.data.players.map(p => ({ ...p }))
-    const allSticks = this.data.riichiSticks + this._applyRiichi(players)
-    amounts.forEach((amount, idx) => { players[idx].points -= amount })
-    players[selectedWinner].points += total + allSticks * 1000
-    const record = {
-      type: payment.type, round: this.getRoundLabel(), winner: players[selectedWinner].name,
-      points: total, basePayment: total - honba * 300, honbaBonus: honba * 300,
-      riichiCollected: allSticks
-    }
-    if (isTsumo) {
-      record.desc = selectedWinner === dealerIdx ? `子家各付${payment.koPayment}点` :
-        `庄家${payment.oyaPayment}点/子家${payment.koPayment}点`
-    } else record.loser = players[selectedLoser].name
-    if (calcResult) {
-      Object.assign(record, { han: calcResult.han, fu: calcResult.fu, level: calcResult.level,
-        yaku: Records.clone(calcResult.yaku || []),
-        yakuSummary: (calcResult.yaku || []).map(y => y.name).join(' ') })
-    }
-    this.setData({ players, riichiSticks: 0 })
-    this.addRecord(record)
-    this.advanceRound(selectedWinner === dealerIdx)
+    this._commitRound('calcTsumo', calcResult.source === 'hanfu' ? 'hanfu' : 'calculator', calcResult)
   },
 
   // === 自摸 ===
@@ -849,26 +630,7 @@ const boardDefinition = {
 
   confirmTsumo() {
     if (this.data.tsumoCalcResult) { this._processCalcTsumo(this.data.tsumoCalcResult); return }
-    this._commitRound('_applyManualTsumo', 'manual')
-  },
-
-  _applyManualTsumo() {
-    const { selectedWinner, inputKoPayment, inputOyaPayment } = this.data
-    if (!Number.isInteger(selectedWinner) || selectedWinner < 0 || selectedWinner >= this.data.players.length) {
-      wx.showToast({ title: '请选择和了者', icon: 'none' }); return
-    }
-
-    const isOya = selectedWinner === this.data.dealerIdx
-    const koPayment = Number(inputKoPayment)
-    const oyaPayment = isOya ? koPayment : Number(inputOyaPayment)
-    const validPayment = value => Number.isSafeInteger(value) && value > 0 && value % 100 === 0
-    if (!validPayment(koPayment) || !validPayment(oyaPayment)) {
-      wx.showToast({ title: '支付额须为正数且是100的倍数', icon: 'none' }); return
-    }
-    const bonus = this.data.honba * 100
-    this._applyWin({ type: 'tsumo', koPayment: koPayment + bonus,
-      oyaPayment: oyaPayment + bonus,
-      total: (isOya ? koPayment * 3 : koPayment * 2 + oyaPayment) + bonus * 3 })
+    this._commitRound('tsumo', 'manual')
   },
 
   closeTsumo() {
@@ -883,7 +645,7 @@ const boardDefinition = {
       this.setData({
         showDrawModal: true,
         drawTenpai: [false, false, false, false],
-        drawType: 'exhaustive',
+        drawType: 'exhaustive', nagashiWinners: [false, false, false, false],
         abortReason: '九种九牌',
         multiRonMode: false,
         ronEntries: [],
@@ -901,78 +663,28 @@ const boardDefinition = {
     this.updateDrawPreview()
   },
 
+  toggleNagashi(e) {
+    const idx = Number(e.currentTarget.dataset.idx)
+    if (!Number.isInteger(idx) || idx < 0 || idx > 3) return
+    const selected = (this.data.nagashiWinners || [false, false, false, false]).slice()
+    selected[idx] = !selected[idx]
+    this.setData({ nagashiWinners: selected })
+    this.updateDrawPreview()
+  },
+
   updateDrawPreview() {
     const { drawTenpai, roundRiichi, drawType } = this.data
     const { players } = this._entryState()
     const count = drawTenpai.filter(Boolean).length
-    const drawPreview = players.map((p, i) => {
-      const transfer = drawType !== 'abortive' && count > 0 && count < 4 ? (drawTenpai[i] ? 3000 / count : -3000 / (4 - count)) : 0
-      return { name: p.name, delta: transfer - (roundRiichi[i] ? 1000 : 0) }
-    })
+    const transfers = drawType === 'nagashi' ? GameRound.nagashiTransfers(this.data.nagashiWinners, this._entryState().dealerIdx) : GameRound.drawTransfers(drawTenpai, drawType === 'abortive')
+    const drawPreview = players.map((p, i) => ({
+      name: p.name, delta: transfers[i] - (roundRiichi[i] ? 1000 : 0)
+    }))
     this.setData({ drawPreview, drawTenpaiCount: count })
   },
 
   confirmDraw() {
-    this._commitRound('_applyDraw', 'manual')
-  },
-
-  _applyDraw() {
-    if (this.data.drawType === 'abortive') {
-      if (!GameRules.ABORT_REASONS.includes(this.data.abortReason)) {
-        wx.showToast({ title: '请选择流局原因', icon: 'none' }); return
-      }
-      if (this.data.abortReason === '四家立直' && !this.data.roundRiichi.every(Boolean)) {
-        wx.showToast({ title: '四家立直须勾选全部玩家立直', icon: 'none' }); return
-      }
-      const players = this.data.players.map(p => ({ ...p }))
-      const sticks = this._applyRiichi(players)
-      this.setData({ players, riichiSticks: this.data.riichiSticks + sticks, honba: this.data.honba + 1 })
-      this.addRecord({ type: 'draw', round: `${this.data.roundCycle > 1 ? '第' + this.data.roundCycle + '轮 · ' : ''}${WIND_NAMES[this.data.roundWind]}${this.data.roundNum}局 ${this.data.honba - 1}本场`,
-        abortive: true, reason: this.data.abortReason, tenpai: this.data.abortReason,
-        desc: '途中流局，无不听罚符，连庄加一本场' })
-      this.advanceRound(true, true, true)
-      this._autoSave()
-      return
-    }
-    const tenpai = this.data.drawTenpai
-    const tenpaiCount = tenpai.filter(Boolean).length
-    const players = this.data.players.slice().map(p => ({ ...p }))
-
-    // 处理本局立直 (流局时立直棒累积到供托，不被收走)
-    const newSticks = this._applyRiichi(players)
-
-    // 不听罚符: 3000点由不听者支付给听牌者
-    if (tenpaiCount > 0 && tenpaiCount < 4) {
-      const payTotal = 3000
-      const payEach = Math.floor(payTotal / (4 - tenpaiCount))
-      const receiveEach = Math.floor(payTotal / tenpaiCount)
-      for (let i = 0; i < 4; i++) {
-        if (tenpai[i]) {
-          players[i].points += receiveEach
-        } else {
-          players[i].points -= payEach
-        }
-      }
-    }
-
-    const tenpaiNames = players.filter((_, i) => tenpai[i]).map(p => p.name)
-    const record = {
-      type: 'draw',
-      round: this.getRoundLabel(),
-      tenpai: tenpaiNames.length > 0 ? tenpaiNames.join('、') + '听牌' : '全员不听'
-    }
-
-    // 流局: 庄家听牌=连庄, 否则轮庄
-    const dealerTenpai = tenpai[this.data.dealerIdx]
-    // 流局立直棒累积到供托
-    this.setData({ players, showDrawModal: false, riichiSticks: this.data.riichiSticks + newSticks })
-    this.addRecord(record)
-
-    // 流局本场数+1
-    const honba = this.data.honba + 1
-    this.setData({ honba })
-    this.advanceRound(dealerTenpai, true)
-    this._autoSave()
+    this._commitRound('draw', 'manual')
   },
 
   closeDraw() {
@@ -980,10 +692,6 @@ const boardDefinition = {
   },
 
   // === 局进行 ===
-  addRecord(record) {
-    const history = this.data.roundHistory.concat([record])
-    this.setData({ roundHistory: history })
-  },
 
   advanceRound(dealerWin, isDraw, abortive) {
     this.setData(GameRules.nextRound(this.data, dealerWin, isDraw, abortive))
@@ -995,44 +703,22 @@ const boardDefinition = {
     this._refreshHistoryCards()
     // 已结算过则只打开结算页，不重复计算和保存
     if (this.data.finalResult.length > 0) {
-      this.setData({ showResultModal: true, settlementReport: this._buildSettlementReport() })
       this.openSettlement()
       return
     }
 
     const result = settle(this.data.config, this.data.players)
 
-    this.setData({ finalResult: result, showResultModal: true })
+    this.setData({ finalResult: result })
     const last = this.data.roundHistory[this.data.roundHistory.length - 1]
     if (last && last.after && last.after.gameOver) last.after = Records.snapshot(this.data)
     this.saveHistory(result)
-    this.setData({ settlementReport: this._buildSettlementReport() })
     this.openSettlement()
   },
 
   openSettlement() {
-    // Calculator confirms via an event before navigating back. Wait for the
-    // board to become visible so that its navigateBack cannot pop settlement.
-    if (this._returningFromCalculator) { this._pendingSettlement = true; return }
     wx.navigateTo({ url: `/pages/settlement/settlement?id=${encodeURIComponent(this.data.gameId)}&source=board` })
   },
-
-  _buildSettlementReport() {
-    return Reports.build({ id: this.data.gameId, date: this.data.gameDate,
-      config: this.data.config, result: this.data.finalResult,
-      rounds: this.data.roundHistory, gameState: { endedEarly: this.data.endedEarly } })
-  },
-
-  copyBattleReport() {
-    wx.setClipboardData({ data: Reports.text(this._buildSettlementReport()),
-      fail: () => wx.showToast({ title: '复制失败，请重试', icon: 'none' }) })
-  },
-
-  previewBattleReport() {
-    wx.navigateTo({ url: `/pages/battle-report/battle-report?id=${encodeURIComponent(this.data.gameId)}` })
-  },
-
-  viewSettlementRounds() { this.setData({ showResultModal: false }) },
 
   saveHistory(result) {
     GameStorage.saveCompleted({ ...this.data, finalResult: result })
@@ -1040,13 +726,9 @@ const boardDefinition = {
 
   // 自动保存当前对局进度
   _autoSave() {
-    if (!this.data.gameOver) this.setData({ config: { ...this.data.config, gameType: 'free' }, roundCycle: this.data.roundCycle || 1 })
+    if (!this.data.gameOver) this.setData({ config: { ...this.data.config, gameType: 'free' } })
     this._refreshHistoryCards()
     if (!this.data.gameOver) GameStorage.saveCurrent(this.data)
-  },
-
-  closeResult() {
-    this.setData({ showResultModal: false })
   },
 
   goHome() {

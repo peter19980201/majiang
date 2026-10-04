@@ -1,7 +1,8 @@
+const Migrations = require('../../utils/game-migrations')
 const { withShare } = require('../../utils/share')
 const T = require('../../utils/tiles')
 const RED_FLAGS = { 4: 'redM5', 13: 'redP5', 22: 'redS5' }
-const CALCULATOR_INPUT_KEYS = ['hand', 'handRed', 'agariRed', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
+const CALCULATOR_INPUT_KEYS = ['hand', 'handRed', 'agariRed', 'redPlacementInferred', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
   'haitei', 'rinshan', 'chankan', 'tenhou', 'chihou', 'dora', 'uraDora', 'redM5', 'redP5', 'redS5']
 
 module.exports = withShare({
@@ -9,6 +10,7 @@ module.exports = withShare({
     hand: [],
     handRed: [],
     agariRed: false,
+    redPlacementInferred: false,
     melds: [],
     agariTile: null,
     inputTarget: 'hand',
@@ -59,7 +61,15 @@ module.exports = withShare({
     maxHandCount: 13
   },
 
-  onLoad(options) {
+  onLoad(options = {}) {
+    this.initializeInput(options)
+    if (options.mode === 'board') {
+      wx.setNavigationBarTitle({ title: '录入和牌' })
+      this.getOpenerEventChannel().on('restoreInput', input => this.restoreInput(input))
+    }
+  },
+
+  initializeInput(options = {}) {
     if (options.mode === 'board') {
       const bakaze = parseInt(options.bakaze) || 27
       const jikaze = parseInt(options.jikaze) || 27
@@ -76,38 +86,23 @@ module.exports = withShare({
         riichi,
         boardSticks: sticks
       })
-      if (!this._embedded) wx.setNavigationBarTitle({ title: '录入和牌' })
-      this.getOpenerEventChannel().on('restoreInput', input => {
-        const restored = {}
-        CALCULATOR_INPUT_KEYS.forEach(key => {
-          if (input[key] !== undefined) restored[key] = JSON.parse(JSON.stringify(input[key]))
-        })
-        this.setData(restored)
-        // Older records stored only one red-five flag per suit.
-        if (input.handRed === undefined) {
-          const handRed = this.data.hand.map(() => false)
-          let agariRed = false
-          const melds = JSON.parse(JSON.stringify(this.data.melds))
-          Object.keys(RED_FLAGS).forEach(key => {
-            const id = Number(key)
-            if (!input[RED_FLAGS[id]]) return
-            const index = this.data.hand.indexOf(id)
-            if (index !== -1) handRed[index] = true
-            else if (this.data.agariTile === id) agariRed = true
-            else {
-              const meld = melds.find(m => m.tiles.includes(id))
-              if (meld) {
-                meld.redTiles = meld.redTiles || meld.tiles.map(() => false)
-                meld.redTiles[meld.tiles.indexOf(id)] = true
-              }
-            }
-          })
-          this.setData({ handRed, agariRed, melds })
-        }
-        this.updateRemaining()
-      })
     }
-    // Empty-hand counts already match data defaults; restored hands update above.
+    // Empty-hand counts match defaults; restoreInput updates them for saved hands.
+  },
+
+  restoreInput(input) {
+    input = Migrations.calculatorInput(input)
+    const restored = {}
+    CALCULATOR_INPUT_KEYS.forEach(key => {
+      if (input[key] !== undefined) restored[key] = JSON.parse(JSON.stringify(input[key]))
+    })
+    this.setData(restored)
+    this.updateRemaining()
+  },
+
+  submitResult(result) {
+    this.getOpenerEventChannel().emit('calcResult', result)
+    wx.navigateBack()
   },
 
   updateRemaining() {
@@ -420,9 +415,9 @@ module.exports = withShare({
 
   // === 记分板模式结果 ===
   confirmBoardResult() {
-    const eventChannel = this.getOpenerEventChannel()
-    eventChannel.emit('calcResult', this.data.boardResult)
-    if (!this._embedded) wx.navigateBack()
+    if (!this.data.boardResult || this._submitted) return
+    this._submitted = true
+    this.submitResult(this.data.boardResult)
   },
 
   cancelBoardResult() {

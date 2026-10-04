@@ -1,0 +1,13 @@
+{
+  "name": "majiang-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Independent regression module for the native WeChat Mahjong assistant",
+  "scripts": {
+    "test": "node run.js",
+    "watch": "node watch.js",
+    "list": "node run.js --list",
+    "oracle": "node run.js --oracle"
+  },
+  "engines": { "node": ">=18" }
+}
