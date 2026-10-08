@@ -840,3 +840,5 @@ page {
 .round-cycle { display:block; color:#e9d691; font-size:var(--font-small, 24rpx); margin-bottom:8rpx; }
 
 .win-draw-mode-tabs { grid-template-columns:repeat(3,minmax(0,1fr)); }
+
+@import '/styles/felt.wxss';

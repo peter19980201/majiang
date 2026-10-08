@@ -11,7 +11,7 @@
       <text class="resume-badge">对局进行中</text>
       <text class="resume-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
       <view class="resume-players"><view class="resume-player" wx:for="{{currentGame.gameState.players}}" wx:key="index"><text class="resume-name">{{item.name}}</text><text class="resume-points">{{fmt.points(item.points)}}</text></view></view>
-      <view class="resume-actions"><button class="btn-primary" bindtap="resumeGame">继续对局 ›</button></view>
+      <view class="resume-actions"><button class="btn-primary" bindtap="resumeGame">继续对局</button><button class="btn-secondary resume-end" bindtap="endGame">提前结束</button></view>
     </block>
     <view wx:else class="resume-empty">
       <text class="resume-round">暂无进行中的对局</text>
@@ -19,8 +19,8 @@
     </view>
   </view>
   <view class="home-calculators">
-    <navigator class="menu-item" url="/pages/calculator/calculator"><text class="menu-icon">計</text><text class="menu-name">手牌算分</text><text class="menu-desc">输入手牌，计算番符与点数</text><text class="menu-arrow">›</text></navigator>
-    <navigator class="menu-item" url="/pages/quick-score/quick-score"><text class="menu-icon">番</text><text class="menu-name">番符算分</text><text class="menu-desc">输入番符，计算支付点数</text><text class="menu-arrow">›</text></navigator>
+    <navigator class="menu-item" url="/pages/calculator/calculator"><image class="calculator-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image><text class="menu-icon">計</text><text class="menu-name">手牌算分</text><text class="menu-desc">输入手牌，计算番符与点数</text><text class="menu-arrow">›</text></navigator>
+    <navigator class="menu-item" url="/pages/quick-score/quick-score"><image class="calculator-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image><text class="menu-icon">番</text><text class="menu-name">番符算分</text><text class="menu-desc">输入番符，计算支付点数</text><text class="menu-arrow">›</text></navigator>
   </view>
   <view class="home-footer"><text>参考规则：雀魂</text></view>
 </view>

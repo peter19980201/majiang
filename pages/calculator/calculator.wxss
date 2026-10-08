@@ -560,3 +560,5 @@
 }
 .hand-table .meld-label { color:#dae5d5; }
 .hand-table .meld-del { color:#f1cbb6; }
+
+@import '/styles/felt.wxss';

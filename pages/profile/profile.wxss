@@ -7,3 +7,5 @@
 .profile-name { font-size:var(--font-heading, 36rpx); font-weight:600; }
 .profile-note { font-size:var(--font-small, 24rpx); color:#697268; }
 .profile-feedback { display:flex; justify-content:space-between; width:100%; margin:0; color:#24483e; font-size:var(--font-body, 28rpx); line-height:1.5; }
+
+@import '/styles/felt.wxss';

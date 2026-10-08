@@ -8,3 +8,5 @@
 .table-note { margin:14rpx 0 24rpx; }
 .limit-row { display:flex; justify-content:space-between; align-items:center; gap:16rpx; padding:14rpx 0; border-bottom:1rpx solid #e8e5dc; font-size:var(--font-small, 24rpx); }
 .limit-row .hint { margin:0; font-size:var(--font-caption, 22rpx); }
+
+@import '/styles/felt.wxss';

@@ -54,3 +54,5 @@ page { background:#123f33; color:#103c32; }
 .image-icon view { width:22rpx; height:20rpx; border:3rpx solid currentColor; transform:rotate(40deg); position:absolute; top:17rpx; left:8rpx; }
 
 .win-points .win-han-fu { font-size:var(--font-caption, 22rpx); color:#6c706e; font-weight:400; margin:0 10rpx 0 0; }
+
+@import '/styles/felt.wxss';

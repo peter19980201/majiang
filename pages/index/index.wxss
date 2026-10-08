@@ -199,11 +199,63 @@
 .resume-round { margin-top:12rpx; }
 .resume-players { margin:18rpx 0; }
 .resume-actions { margin-top:auto; }
-.resume-actions .btn-primary { width:100%; margin:0; }
+.resume-actions .btn-primary,.resume-actions .btn-secondary { flex:1; width:0; min-width:0; margin:0; padding-left:12rpx; padding-right:12rpx; }
+.resume-actions .resume-end { color:#7a5141; border-color:#cbb8a5; }
 .resume-empty { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:18rpx; }
 .home-calculators { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18rpx; margin-top:22rpx; }
-.home-calculators .menu-item { position:relative; min-width:0; margin:0; padding:24rpx 20rpx; flex-direction:column; align-items:flex-start; gap:12rpx; }
-.home-calculators .menu-icon { width:auto; }
-.home-calculators .menu-arrow { position:absolute; top:24rpx; right:20rpx; }
-.home-calculators .menu-desc { min-height:72rpx; }
+/* Both entry cards share the same quiet paper-and-bamboo treatment. */
+.home-calculators .menu-item {
+  position:relative;
+  overflow:hidden;
+  min-width:0;
+  height:250rpx;
+  box-sizing:border-box;
+  margin:0;
+  padding:22rpx 20rpx;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12rpx;
+  background:#f8f8ef;
+  border-color:#d9ddcf;
+  box-shadow:0 3rpx 8rpx rgba(39,46,25,.08);
+}
+.calculator-art {
+  position:absolute;
+  left:0;
+  top:88rpx;
+  width:100%;
+  height:220rpx;
+  opacity:.65;
+  pointer-events:none;
+}
+.home-calculators .menu-item::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,#f8f8ef 0%,rgba(248,248,239,.95) 30%,rgba(248,248,239,0) 65%);
+  pointer-events:none;
+}
+.home-calculators .menu-icon,
+.home-calculators .menu-name,
+.home-calculators .menu-desc,
+.home-calculators .menu-arrow { position:relative; z-index:1; }
+.home-calculators .menu-icon {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:60rpx;
+  height:60rpx;
+  flex-shrink:0;
+  border:2rpx solid #d4dacb;
+  border-radius:8rpx;
+  background:rgba(225,230,216,.65);
+  font-size:var(--font-display, 48rpx);
+  line-height:1;
+}
+.home-calculators .menu-name { color:#142f29; font-weight:700; }
+.home-calculators .menu-arrow { position:absolute; top:28rpx; right:20rpx; line-height:1; }
+.home-calculators .menu-desc { margin-top:4rpx; font-size:var(--font-caption, 22rpx); line-height:1.6; }
+.home-calculators .menu-item:active { opacity:.8; }
 .home-footer { justify-content:center; }
+
+@import '/styles/felt.wxss';

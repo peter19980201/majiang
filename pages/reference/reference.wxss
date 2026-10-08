@@ -283,3 +283,5 @@
 .rules-tabs { margin-bottom:24rpx; }
 .rules-tabs .seg { flex:1; margin:0; background:transparent; line-height:1.5; }
 .rules-tabs .seg.active { background:#204e40; }
+
+@import '/styles/felt.wxss';

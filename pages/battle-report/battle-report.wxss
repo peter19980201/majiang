@@ -4,3 +4,5 @@ page { background:#faf8ef; }
 .save { width:100%!important; box-sizing:border-box; margin:24rpx 0 0!important; background:#163f33; color:#fffdf4; font-family:inherit; font-size:var(--font-label, 32rpx); line-height:1.5; padding:21rpx 0!important; border-radius:12rpx; }
 .report-message { display:block; text-align:center; margin:20rpx 0 0; color:#858776; font-size:var(--font-small, 24rpx); }
 .export-canvas { position:fixed; left:-2000px; top:0; width:750px; height:1160px; pointer-events:none; }
+
+@import '/styles/felt.wxss';

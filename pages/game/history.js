@@ -4,6 +4,7 @@ const Reports = require('../../utils/battle-report')
 Page(withShare({
   data: {
     currentGame: null,
+    swipeReset: 0,
     rankLabels: ['一位', '二位', '三位', '四位'],
     historyList: [],
     settlementVisible: false,
@@ -11,6 +12,7 @@ Page(withShare({
   },
 
   onShow() {
+    this.setData({ swipeReset:this.data.swipeReset + 1 })
     const currentGame = GameStorage.current() || null
     const list = GameStorage.history()
     this.setData({ currentGame, historyList: list.map(game => ({
@@ -67,18 +69,5 @@ Page(withShare({
     const record = GameStorage.history().find(r => String(r.id) === String(id))
     if (!record) return
     this.setData({ settlementReport:Reports.build(record), settlementVisible:true })
-  },
-
-  clearAll() {
-    wx.showModal({
-      title: '清空全部',
-      content: '确定要删除所有历史记录吗？',
-      success: (res) => {
-        if (res.confirm) {
-          GameStorage.clearHistory()
-          this.onShow()
-        }
-      }
-    })
   }
 }))

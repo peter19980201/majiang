@@ -1,0 +1,95 @@
+// Gesture frames stay in the view layer: no touchmove -> setData round trip.
+var WIDTH = 72
+function paint(node, state) {
+  node.setStyle({ transform:'translate3d(' + state.x + 'px,0,0)' })
+}
+function settle(node, target, velocity) {
+  var s = node.getState()
+  s.token = (s.token || 0) + 1
+  var token = s.token
+  s.v = velocity || 0
+  function frame() {
+    if (s.token !== token) return
+    s.v = (s.v + (target - s.x) * 0.16) * 0.55
+    s.x = Math.max(-WIDTH, Math.min(0, s.x + s.v))
+    if (Math.abs(target - s.x) < 0.2 && Math.abs(s.v) < 0.2) {
+      s.x = target
+      paint(node, s)
+      return
+    }
+    paint(node, s)
+    node.requestAnimationFrame(frame)
+  }
+  node.requestAnimationFrame(frame)
+}
+function start(e, owner) {
+  if (!e.touches.length) return
+  var node = e.instance, s = node.getState(), page = owner.getState()
+  var id = e.currentTarget.dataset.id
+  if (page.active && page.id !== id) settle(page.active, 0, 0)
+  page.active = node
+  page.id = id
+  s.token = (s.token || 0) + 1
+  s.x = s.x || 0
+  s.initial = s.x
+  s.startX = e.touches[0].clientX
+  s.startY = e.touches[0].clientY
+  s.lastX = s.startX
+  s.lastTime = e.timeStamp
+  s.velocity = 0
+  s.axis = ''
+  s.moved = false
+  s.touching = true
+}
+function move(e) {
+  var node = e.instance, s = node.getState()
+  if (!s.touching || !e.touches.length) return
+  var x = e.touches[0].clientX, y = e.touches[0].clientY
+  var dx = x - s.startX, dy = y - s.startY
+  if (!s.axis && Math.max(Math.abs(dx), Math.abs(dy)) > 6) {
+    s.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y'
+    s.moved = true
+  }
+  if (s.axis !== 'x') return
+  var dt = e.timeStamp - s.lastTime
+  if (dt > 0) s.velocity = (x - s.lastX) / dt
+  s.lastX = x
+  s.lastTime = e.timeStamp
+  s.x = Math.max(-WIDTH, Math.min(0, s.initial + dx))
+  paint(node, s)
+  return false
+}
+function end(e) {
+  var node = e.instance, s = node.getState()
+  if (!s.touching) return
+  s.touching = false
+  if (s.axis !== 'x') return
+  var velocity = e.timeStamp - s.lastTime < 100 ? s.velocity : 0
+  var projected = s.x + velocity * 100
+  settle(node, projected < -WIDTH / 2 ? -WIDTH : 0, velocity * 16)
+}
+function cancel(e) {
+  var s = e.instance.getState()
+  s.touching = false
+  s.moved = true
+  settle(e.instance, s.initial || 0, 0)
+}
+function tap(e, owner) {
+  var s = e.instance.getState()
+  if (s.moved) return
+  if (s.x < -1) { settle(e.instance, 0, 0); return; }
+  owner.callMethod('onExpandTap', { currentTarget:{ dataset:{ id:e.currentTarget.dataset.id } } })
+}
+function reset(value, old, owner) {
+  var page = owner.getState()
+  if (page.active) {
+    var s = page.active.getState()
+    s.token = (s.token || 0) + 1
+    s.x = 0
+    s.touching = false
+    paint(page.active, s)
+  }
+  page.active = null
+  page.id = null
+}
+module.exports = { start:start, move:move, end:end, cancel:cancel, tap:tap, reset:reset }

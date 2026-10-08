@@ -262,6 +262,38 @@
         "F26"
       ],
       "timeoutMs": 10000
+    },
+    {
+      "id": "felt-surfaces",
+      "file": "suites/felt-surfaces.js",
+      "group": "ui",
+      "features": [
+        "F27"
+      ],
+      "timeoutMs": 10000
+    },
+    {
+      "id": "home-end-game",
+      "file": "suites/home-end-game.js",
+      "group": "ui",
+      "features": [
+        "F01",
+        "F15",
+        "F16",
+        "F26"
+      ],
+      "timeoutMs": 10000
+    },
+    {
+      "id": "history-swipe",
+      "file": "suites/history-swipe.js",
+      "group": "ui",
+      "features": [
+        "F15",
+        "F16",
+        "F26"
+      ],
+      "timeoutMs": 10000
     }
   ],
   "optional": [

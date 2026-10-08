@@ -288,3 +288,5 @@
 .winning-block .hand-group-label { color:#9b6223; }
 .melds-row { width:100%; margin-top:0; padding-top:16rpx; border-top:1rpx solid #e2e4d8; }
 .context-tags { width:100%; margin-top:0; }
+
+@import '/styles/felt.wxss';
