@@ -1,0 +1,4 @@
+@import '../../styles/theme.wxss';
+@import '../../styles/score-table.wxss';
+:host { display:block; color:#182f2b; font-size:var(--font-body, 28rpx); line-height:1.5; }
+.section,.seg,.score-table,.table-row,.limit-row { box-sizing:border-box; }

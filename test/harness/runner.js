@@ -46,7 +46,7 @@ function snapshot() {
       }
     }
   }
-  for (const dir of ['pages', 'components', 'utils', 'styles', 'assets', 'test']) walk(path.join(project, dir))
+  for (const dir of ['pages', 'components', 'custom-tab-bar', 'utils', 'styles', 'assets', 'test']) walk(path.join(project, dir))
   for (const file of ['app.js', 'app.json', 'app.wxss', 'project.config.json']) {
     hash.update(file); hash.update(fs.readFileSync(path.join(project, file)))
   }

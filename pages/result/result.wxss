@@ -6,7 +6,7 @@
   background:#224e3e;
   color:#f8f5e6;
   text-align:center;
-  font-size:29rpx;
+  font-size:var(--font-body, 28rpx);
   font-family:'Songti SC','STSong',serif;
   font-weight:600;
   margin:0 -24rpx;
@@ -28,7 +28,7 @@
 }
 
 .score-caption {
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
   color:#6a7165;
   order:0;
 }
@@ -38,7 +38,7 @@
   align-self:center;
   color:#9b6d24;
   background:#f4ebd3;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   border-radius:9rpx;
   padding:4rpx 18rpx;
   margin:10rpx 0 0;
@@ -49,7 +49,7 @@
   display:block;
   color:#976013;
   font-family:'Songti SC','STSong',serif;
-  font-size:98rpx;
+  font-size:var(--font-hero, 96rpx);
   font-weight:800;
   line-height:1.2;
   margin:10rpx 0;
@@ -57,14 +57,14 @@
 
 .score-unit {
   font-family:-apple-system,sans-serif;
-  font-size:27rpx;
+  font-size:var(--font-body, 28rpx);
   margin-left:12rpx;
 }
 
 .result-fuban {
   order:3;
   display:block;
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
   font-weight:600;
 }
 
@@ -72,7 +72,7 @@
   order:4;
   display:block;
   margin-top:12rpx;
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#77816f;
 }
 
@@ -95,21 +95,21 @@
 
 .payment-label {
   display:block;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   color:#6a7664;
 }
 
 .payment-number {
   display:block;
   font-family:'Songti SC','STSong',serif;
-  font-size:48rpx;
+  font-size:var(--font-display, 48rpx);
   color:#245240;
   font-weight:700;
 }
 
 .payment-unit {
   font-family:-apple-system,sans-serif;
-  font-size:21rpx;
+  font-size:var(--font-caption, 22rpx);
   margin-left:8rpx;
 }
 
@@ -144,7 +144,7 @@
 }
 
 .meld-label {
-  font-size:21rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#7d826f;
 }
 
@@ -155,7 +155,7 @@
 }
 
 .ctx-tag {
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#65745b;
   background:#e9ede0;
   border-radius:7rpx;
@@ -168,7 +168,7 @@
 
 .yaku-section-title {
   display:block;
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
   margin-bottom:14rpx;
 }
 
@@ -193,13 +193,13 @@
 
 .yaku-cn {
   display:block;
-  font-size:30rpx;
+  font-size:var(--font-label, 32rpx);
   font-weight:600;
 }
 
 .yaku-ja {
   display:block;
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#77826d;
   margin-top:3rpx;
 }
@@ -207,7 +207,7 @@
 .yaku-han {
   font-family:'Songti SC','STSong',serif;
   font-weight:700;
-  font-size:32rpx;
+  font-size:var(--font-label, 32rpx);
   white-space:nowrap;
 }
 
@@ -234,12 +234,12 @@
 }
 
 .fu-title {
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
 }
 
 .fu-arrow {
   color:#808773;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
 }
 
 .fu-detail {
@@ -252,7 +252,7 @@
   justify-content:space-between;
   gap:16rpx;
   padding:16rpx 24rpx;
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
 }
 
 .fu-row+.fu-row {
@@ -283,7 +283,7 @@
 .hand-card { display:flex; flex-wrap:wrap; gap:18rpx 20rpx; }
 .hand-card .section-title { width:100%; margin-bottom:0; }
 .hand-block { flex:1; min-width:0; }
-.hand-group-label { display:block; font-size:21rpx; color:#7b806f; margin-bottom:12rpx; }
+.hand-group-label { display:block; font-size:var(--font-caption, 22rpx); color:#7b806f; margin-bottom:12rpx; }
 .winning-block { flex-shrink:0; padding:10rpx 12rpx; background:#f4ecd8; border-radius:12rpx; }
 .winning-block .hand-group-label { color:#9b6223; }
 .melds-row { width:100%; margin-top:0; padding-top:16rpx; border-top:1rpx solid #e2e4d8; }

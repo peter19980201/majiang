@@ -1,5 +1,7 @@
 const assert = require('node:assert/strict')
-const { execute, validate } = require('../harness/runner')
+const { execute, validate, snapshot } = require('../harness/runner')
+const fs = require('node:fs')
+const path = require('node:path')
 const manifest = require('../manifest.json')
 validate(manifest)
 assert.throws(() => validate({ suites: [] }), /Unregistered|No registered/)
@@ -18,4 +20,18 @@ assert(timed.error.includes('ETIMEDOUT'))
 const missing = execute('/nonexistent/majiang-test-runtime', [])
 assert.equal(missing.status, 'failed')
 assert(missing.error.includes('ENOENT'))
+// Simulate a tab-bar source edit in memory; never touch runtime files or storage.
+const originalRead = fs.readFileSync
+const before = snapshot()
+const tabSource = path.resolve(__dirname, '../../custom-tab-bar/index.js')
+let after
+try {
+  fs.readFileSync = function (file, ...args) {
+    const bytes = originalRead.call(this, file, ...args)
+    return String(file) === tabSource ? Buffer.concat([bytes, Buffer.from('\n// changed')]) : bytes
+  }
+  after = snapshot()
+} finally { fs.readFileSync = originalRead }
+assert.notEqual(after, before, 'custom tab source edits must invalidate regression/watch fingerprints')
+assert.equal(snapshot(), before)
 console.log('Runner contract passed: registration, path isolation, success/failure evidence, timeout and missing runtime.')

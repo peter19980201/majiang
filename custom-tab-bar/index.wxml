@@ -1,0 +1,7 @@
+<view class="tab-bar">
+  <image class="tab-bar-rise" src="/assets/navigation/bar-rise.svg" mode="scaleToFill" aria-hidden="true" />
+  <button wx:for="{{tabs}}" wx:key="icon" class="tab-item {{selected === item.route ? 'selected' : ''}} {{item.icon === 'add' ? 'new-game' : ''}}" bindtap="activate" data-index="{{index}}" aria-label="{{item.label}}" aria-current="{{selected === item.route ? 'page' : 'false'}}">
+    <view class="tab-icon-slot" aria-hidden="true"><image class="tab-icon {{item.icon === 'add' ? 'tab-icon-add' : ''}}" src="{{item.icon === 'add' ? '/assets/navigation/add.svg' : '/assets/navigation/' + item.icon + (selected === item.route ? '-active.svg' : '-idle.svg')}}" mode="aspectFit" /></view>
+    <text>{{item.label}}</text>
+  </button>
+</view>

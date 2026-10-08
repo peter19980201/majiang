@@ -1,10 +1,11 @@
+@import '/styles/typography.wxss';
 @import '/styles/scrollbars.wxss';
 @import '/styles/theme.wxss';
 page {
   background:#f6f4ed;
   color:#182f2b;
   font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
   line-height:1.5;
 }
 

@@ -4,6 +4,7 @@ const T = require('../../utils/tiles')
 
 Page(withShare({
   data: {
+    rulesTab: 'yaku',
     categories: CATEGORIES,
     activeCategory: '',
     keyword: '',
@@ -29,6 +30,11 @@ Page(withShare({
       return item
     })
     this.applyFilter()
+  },
+
+  selectRulesTab(e) {
+    const tab = e.currentTarget.dataset.tab
+    if (['yaku', 'points'].includes(tab)) this.setData({ rulesTab: tab })
   },
 
   onCategoryTap(e) {

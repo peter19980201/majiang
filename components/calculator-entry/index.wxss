@@ -1,5 +1,5 @@
 @import '../../app.wxss';
 @import '../../pages/calculator/calculator.wxss';
-:host { display:block; color:#182f2b; font-size:28rpx; line-height:1.5; }
+:host { display:block; color:#182f2b; font-size:var(--font-body, 28rpx); line-height:1.5; }
 .calculator { padding-bottom:24rpx; }
 .calc-bottom { position:static; padding:20rpx 0; background:transparent; }

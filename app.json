@@ -10,7 +10,8 @@
     "pages/game/round-detail",
     "pages/quick-score/quick-score",
     "pages/battle-report/battle-report",
-    "pages/settlement/settlement"
+    "pages/settlement/settlement",
+    "pages/profile/profile"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -21,5 +22,30 @@
   },
   "lazyCodeLoading": "requiredComponents",
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "tabBar": {
+    "custom": true,
+    "color": "#7b817a",
+    "selectedColor": "#24483e",
+    "backgroundColor": "#f6f4ed",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/game/history",
+        "text": "战绩"
+      },
+      {
+        "pagePath": "pages/reference/reference",
+        "text": "规则"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  }
 }

@@ -1,0 +1,13 @@
+:host { display:block; }
+.tab-bar { position:fixed; z-index:100; left:0; right:0; bottom:0; display:flex; padding:10rpx 12rpx calc(10rpx + env(safe-area-inset-bottom)); border-top:1rpx solid #dadccf; background:#f6f4ed; }
+.tab-item { position:relative; z-index:1; overflow:visible; flex:1; min-width:0; margin:0; padding:8rpx 0; border-radius:0; background:transparent; color:#a8aca9; font-size:var(--font-caption, 22rpx); line-height:1.5; display:flex; flex-direction:column; align-items:center; gap:6rpx; }
+.tab-item::after { border:0; }
+.tab-item.selected { color:#205640; font-weight:600; }
+.tab-item:active { opacity:.65; }
+.tab-icon-slot { height:56rpx; display:flex; align-items:center; justify-content:center; }
+.tab-icon { display:block; width:48rpx; height:48rpx; }
+.tab-icon-add { width:72rpx; height:72rpx; }
+/* The filled curve masks the straight border below it and joins the bar at both ends. */
+.tab-bar-rise { position:absolute; width:180rpx; height:36rpx; left:50%; top:-34rpx; transform:translateX(-50%); pointer-events:none; }
+.new-game { margin-top:-28rpx; padding-top:36rpx; }
+.new-game .tab-icon-slot { transform:translateY(-18rpx); }

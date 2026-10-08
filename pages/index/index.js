@@ -1,5 +1,6 @@
 const { withShare } = require('../../utils/share')
 const GameStorage = require('../../utils/game-storage')
+const { openNewGame } = require('../../utils/main-navigation')
 Page(withShare({
   data: { currentGame: null },
   onShow() {
@@ -7,24 +8,7 @@ Page(withShare({
     this.setData({ currentGame: saved && saved.gameState && !saved.gameState.gameOver ? saved : null })
   },
   resumeGame() { wx.navigateTo({ url: '/pages/game/board?resume=1' }) },
-  newGame() {
-    const saved = GameStorage.current()
-    if (!saved || !saved.gameState) {
-      wx.navigateTo({ url: '/pages/game/setup' })
-      return
-    }
-    wx.showModal({
-      title: '新建对局', content: '当前对局将结算并保存到历史记录，是否继续？',
-      confirmText: '新建对局',
-      success: (res) => {
-        if (res.confirm) {
-          this._settleAndSave(saved)
-          this.setData({ currentGame: null })
-          wx.navigateTo({ url: '/pages/game/setup' })
-        }
-      }
-    })
-  },
+  newGame() { openNewGame(() => this.setData({ currentGame:null })) },
   goCalculator() {
     wx.navigateTo({ url: '/pages/calculator/calculator' })
   },
@@ -54,9 +38,9 @@ Page(withShare({
     GameStorage.finishSavedGame(saved)
   },
   goReference() {
-    wx.navigateTo({ url: '/pages/reference/reference' })
+    wx.switchTab({ url: '/pages/reference/reference' })
   },
   goHistory() {
-    wx.navigateTo({ url: '/pages/game/history' })
+    wx.switchTab({ url: '/pages/game/history' })
   }
 }, { timeline: true }))

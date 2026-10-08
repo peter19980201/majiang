@@ -31,14 +31,7 @@
     <view class="confirm-row" wx:if="{{boardMode}}"><button class="btn-secondary confirm-button" bindtap="goBack">返回</button><button class="btn-primary confirm-button {{!result || busy ? 'confirm-disabled' : ''}}" disabled="{{!result || busy}}" bindtap="confirm">{{busy ? '已发送结果' : '确认并返回记分'}} </button></view>
   </block>
   <block wx:else>
-    <view class="section">
-      <view class="seg-ctrl"><view class="seg {{!tableOya ? 'active' : ''}}" bindtap="selectTable" data-key="tableOya" data-value="false">闲家</view><view class="seg {{tableOya ? 'active' : ''}}" bindtap="selectTable" data-key="tableOya" data-value="true">庄家</view></view>
-      <view class="seg-ctrl gap"><view class="seg {{tableType === 'ron' ? 'active' : ''}}" bindtap="selectTable" data-key="tableType" data-value="ron">荣和</view><view class="seg {{tableType === 'tsumo' ? 'active' : ''}}" bindtap="selectTable" data-key="tableType" data-value="tsumo">自摸</view></view>
-      <text class="hint">零本场，不含供托。{{tableType === 'ron' ? '显示放铳者支付额。' : tableOya ? '显示每位闲家支付额。' : '数值顺序：闲家 / 庄家支付额。'}}</text>
-    </view>
-    <view class="score-table"><view class="table-row table-head"><text>符数</text><text>1番</text><text>2番</text><text>3番</text><text>4番</text></view><view class="table-row" wx:for="{{rows}}" wx:key="fu"><text class="fu-cell">{{item.fu}}符</text><text wx:for="{{item.cells}}" wx:for-item="cell" wx:key="han">{{cell.text}}</text></view></view>
-    <text class="hint table-note">— 表示该番符与和牌方式不成立。25符为七对子。</text>
-    <view class="section"><view class="limit-row" wx:for="{{limits}}" wx:key="name"><view><text>{{item.level}}</text><text class="hint">{{item.name}}</text></view><text>{{item.payment}}</text></view><text class="hint">单倍役满支付额同累计役满；多倍役满请切换番符算分中的“役满”。</text></view>
+    <include src="../../components/points-table/table.wxml"/>
   </block>
   <text class="rule-note">{{ruleNote}} 本工具按输入的番符算点，不校验具体役种是否成立。</text>
 </view>

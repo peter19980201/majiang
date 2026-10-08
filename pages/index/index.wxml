@@ -1,28 +1,26 @@
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
-<view class="home">
+<view class="home tab-page">
   <view class="home-heading">
     <image class="header-art" src="/assets/home/header.jpg" mode="scaleToFill" aria-hidden="true"></image>
     <view class="title-row"><text class="home-title">日麻计分助手</text><text class="home-seal">雀</text></view>
     <text class="home-subtitle">符数 · 番数 · 点数</text>
   </view>
-  <view wx:if="{{currentGame}}" class="resume-card">
+  <view class="resume-card">
     <image class="card-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image>
-    <text class="resume-badge">对局进行中</text>
-    <text class="resume-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
-    <view class="resume-players"><view class="resume-player" wx:for="{{currentGame.gameState.players}}" wx:key="index"><text class="resume-name">{{item.name}}</text><text class="resume-points">{{fmt.points(item.points)}}</text></view></view>
-    <view class="resume-actions"><view class="btn-primary" bindtap="resumeGame">继续对局 ›</view><view class="btn-secondary" bindtap="newGame">新建对局</view></view>
+    <block wx:if="{{currentGame}}">
+      <text class="resume-badge">对局进行中</text>
+      <text class="resume-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
+      <view class="resume-players"><view class="resume-player" wx:for="{{currentGame.gameState.players}}" wx:key="index"><text class="resume-name">{{item.name}}</text><text class="resume-points">{{fmt.points(item.points)}}</text></view></view>
+      <view class="resume-actions"><button class="btn-primary" bindtap="resumeGame">继续对局 ›</button></view>
+    </block>
+    <view wx:else class="resume-empty">
+      <text class="resume-round">暂无进行中的对局</text>
+      <text class="menu-desc">点击底部「＋新建」，开始一场对局</text>
+    </view>
   </view>
-  <view wx:else class="quick-card" bindtap="goCalculator">
-    <image class="card-art" src="/assets/home/quick-score.jpg" mode="scaleToFill" aria-hidden="true"></image>
-    <text class="quick-title">快速计分</text><text class="quick-desc">输入手牌，算清每一分</text>
-    <view class="quick-cta">开始计分 <text class="quick-arrow">›</text></view>
+  <view class="home-calculators">
+    <navigator class="menu-item" url="/pages/calculator/calculator"><text class="menu-icon">計</text><text class="menu-name">手牌算分</text><text class="menu-desc">输入手牌，计算番符与点数</text><text class="menu-arrow">›</text></navigator>
+    <navigator class="menu-item" url="/pages/quick-score/quick-score"><text class="menu-icon">番</text><text class="menu-name">番符算分</text><text class="menu-desc">输入番符，计算支付点数</text><text class="menu-arrow">›</text></navigator>
   </view>
-  <view class="home-menu">
-    <view class="menu-item" bindtap="goCalculator" wx:if="{{currentGame}}"><text class="menu-icon">計</text><view class="menu-info"><text class="menu-name">快速计分</text></view><text class="menu-arrow">›</text></view>
-    <view class="menu-item" bindtap="goGameSetup" wx:else><text class="menu-icon">局</text><view class="menu-info"><text class="menu-name">新建对局</text></view><text class="menu-arrow">›</text></view>
-    <view class="menu-item" bindtap="goReference"><text class="menu-icon">役</text><view class="menu-info"><text class="menu-name">役种速查</text></view><text class="menu-arrow">›</text></view>
-    <view class="menu-item" bindtap="goHistory"><text class="menu-icon">史</text><view class="menu-info"><text class="menu-name">历史对局</text></view><text class="menu-arrow">›</text></view>
-  </view>
-  <view class="home-quick-links"><navigator class="home-quick-link" url="/pages/quick-score/quick-score">番符算分</navigator><navigator class="home-quick-link" url="/pages/quick-score/quick-score?tab=table">点数速查</navigator></view>
-  <view class="home-footer"><button class="feedback-entry" open-type="feedback" hover-class="feedback-hover">◌ 意见反馈</button><text>参考规则：雀魂</text></view>
+  <view class="home-footer"><text>参考规则：雀魂</text></view>
 </view>

@@ -1,6 +1,7 @@
 {
-  "navigationBarTitleText": "役种速查",
+  "navigationBarTitleText": "规则",
   "usingComponents": {
-    "tile": "/components/tile/tile"
+    "tile": "/components/tile/tile",
+    "points-table": "/components/points-table/index"
   }
 }

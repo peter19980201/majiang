@@ -9,12 +9,12 @@
 }
 
 .section-title {
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   margin-bottom:14rpx;
 }
 
 .clear-btn,.add-meld-btn {
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   padding:8rpx 16rpx;
   border-radius:10rpx;
   color:#365d47;
@@ -43,7 +43,7 @@
   width:100%;
   text-align:center;
   padding:30rpx 0;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   color:#788578;
   border:1rpx dashed #d9dfd0;
   border-radius:12rpx;
@@ -107,12 +107,12 @@
 }
 
 .meld-label {
-  font-size:20rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#6e796d;
 }
 
 .meld-del {
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
   color:#aa5140;
   padding:0 12rpx;
 }
@@ -121,7 +121,7 @@
   width:100%;
   padding:28rpx 10rpx;
   color:#7b8678;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   border:1rpx dashed #d9dfd0;
   border-radius:10rpx;
   text-align:center;
@@ -142,7 +142,7 @@
   padding:12rpx 0;
   border-radius:11rpx;
   color:#566657;
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
 }
 
 .tab.active,.suit-tab.active {
@@ -165,7 +165,7 @@
 }
 
 .remain-badge-lg {
-  font-size:21rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#6c796b;
 }
 
@@ -205,7 +205,7 @@
 }
 
 .setting-label {
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
   width:92rpx;
   flex-shrink:0;
 }
@@ -234,7 +234,7 @@
 
 .step-val {
   height:54rpx;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   padding:6rpx 18rpx;
 }
 
@@ -247,7 +247,7 @@
 .chip {
   text-align:center;
   padding:16rpx 2rpx;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   background:#efeee7;
   color:#586554;
   border:1rpx solid #e2e2d6;
@@ -272,7 +272,7 @@
 }
 
 .dora-label {
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
   min-width:120rpx;
 }
 
@@ -284,7 +284,7 @@
 }
 
 .dora-hint {
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#858d7d;
 }
 
@@ -298,7 +298,7 @@
   border:1rpx dashed #cbd3c1;
   color:#6c8565;
   border-radius:8rpx;
-  font-size:32rpx;
+  font-size:var(--font-label, 32rpx);
 }
 
 .dora-picker {
@@ -310,7 +310,7 @@
 .dora-picker-hint {
   display:block;
   text-align:center;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   color:#506545;
   margin-bottom:16rpx;
 }
@@ -319,7 +319,7 @@
   display:block;
   text-align:center;
   padding:14rpx;
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
 }
 
 .sheet-heading {
@@ -331,7 +331,7 @@
   right:0;
   top:0;
   padding:0 16rpx;
-  font-size:38rpx;
+  font-size:var(--font-title, 40rpx);
   color:#76826d;
 }
 
@@ -350,14 +350,14 @@
 
 .meld-type-icon {
   display:block;
-  font-size:32rpx;
+  font-size:var(--font-label, 32rpx);
   color:#26503b;
   font-weight:600;
 }
 
 .meld-type-desc {
   display:block;
-  font-size:19rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#718166;
   margin-top:8rpx;
 }
@@ -389,7 +389,7 @@
   border-radius:8rpx;
   background:#e2eadb;
   color:#355940;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
 }
 
 .br-score-section {
@@ -400,7 +400,7 @@
 
 .br-level {
   display:block;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   color:#9d701e;
 }
 
@@ -412,12 +412,12 @@
 }
 
 .br-fuhan {
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
 }
 
 .br-total {
   font-family:'Songti SC','STSong',serif;
-  font-size:60rpx;
+  font-size:var(--font-score, 64rpx);
   font-weight:700;
   color:#31573d;
 }
@@ -425,7 +425,7 @@
 .br-payment,.br-sticks {
   display:block;
   margin-top:12rpx;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   color:#64745a;
 }
 
@@ -443,7 +443,7 @@
   justify-content:space-between;
   padding:16rpx 8rpx;
   border-bottom:1rpx solid #e7e8da;
-  font-size:27rpx;
+  font-size:var(--font-body, 28rpx);
 }
 
 .br-yaku-han {
@@ -472,11 +472,11 @@
 }
 
 .calc-btn {
-  font-size:30rpx;
+  font-size:var(--font-label, 32rpx);
 }
 
 .quick-links { display:flex; gap:16rpx; margin-bottom:20rpx; }
-.quick-link { flex:1; text-align:center; padding:22rpx 8rpx; background:#e5eadf; border-radius:16rpx; color:#24483e; font-size:26rpx; font-weight:600; }
+.quick-link { flex:1; text-align:center; padding:22rpx 8rpx; background:#e5eadf; border-radius:16rpx; color:#24483e; font-size:var(--font-body, 28rpx); font-weight:600; }
 
 /* Unified felt surface for the hand, winning tile and open melds. */
 .hand-table {
@@ -509,7 +509,7 @@
 }
 .hand-table .section-title {
   color:#fffdf2;
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
 }
 .hand-table .row-sections {
   position:relative;
@@ -544,7 +544,7 @@
   border-radius:6rpx;
   background:rgba(223,235,211,.12);
   color:rgba(216,232,203,.4);
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
 }
 .agari-slot { width:46rpx; }
 .hand-table .agari-area { min-height:64rpx; }

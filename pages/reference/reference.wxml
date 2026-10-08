@@ -1,4 +1,6 @@
-<view class="container">
+<view class="container rules-page">
+  <view class="seg-ctrl rules-tabs"><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button></view>
+  <view hidden="{{rulesTab !== 'yaku'}}">
   <!-- 搜索栏 -->
   <view class="search-bar">
     <view class="search-input-wrap">
@@ -66,4 +68,6 @@
   <view class="empty" wx:if="{{filteredYaku.length === 0}}">
     <text class="empty-symbol">役</text><text class="empty-text">没有找到匹配的役种</text><text class="empty-hint">试试其他名称，或调整筛选条件</text>
   </view>
+  </view>
+  <view hidden="{{rulesTab !== 'points'}}"><points-table /></view>
 </view>

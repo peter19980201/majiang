@@ -1,0 +1,16 @@
+/* Shared type scale. Fallbacks also support isolated component hosts.
+ * caption: compact tags; small: secondary copy; body: reading/options;
+ * label: buttons/section labels; heading/title/display: title hierarchy;
+ * score/hero: emphasized numeric results. Tile artwork uses its own scale.
+ */
+page {
+  --font-caption:22rpx;
+  --font-small:24rpx;
+  --font-body:28rpx;
+  --font-label:32rpx;
+  --font-heading:36rpx;
+  --font-title:40rpx;
+  --font-display:48rpx;
+  --font-score:64rpx;
+  --font-hero:96rpx;
+}

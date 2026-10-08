@@ -20,7 +20,7 @@
 
 .home-title {
   font-family:'Songti SC','STSong',serif;
-  font-size:48rpx;
+  font-size:var(--font-display, 48rpx);
   font-weight:800;
   letter-spacing:1rpx;
   color:#142f29;
@@ -28,7 +28,7 @@
 
 .home-seal {
   font-family:'Songti SC','STSong',serif;
-  font-size:29rpx;
+  font-size:var(--font-body, 28rpx);
   border:3rpx solid #315647;
   border-radius:5rpx;
   line-height:1.12;
@@ -40,57 +40,15 @@
   display:block;
   margin-top:14rpx;
   color:#707970;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   letter-spacing:7rpx;
 }
 
-.quick-card {
-  position:relative;
-  overflow:hidden;
-  height:376rpx;
-  border-radius:26rpx;
-  padding:36rpx;
-  color:#fffdf4;
-  background:#194c3b;
-  box-shadow:0 8rpx 18rpx rgba(27,48,28,.13);
-}
 
-.quick-title {
-  display:block;
-  font-family:'Songti SC','STSong',serif;
-  font-size:48rpx;
-  font-weight:700;
-}
 
-.quick-desc {
-  display:block;
-  font-size:26rpx;
-  color:#e1e7dc;
-  margin-top:10rpx;
-}
 
-.quick-cta {
-  display:inline-flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:30rpx;
-  margin-top:34rpx;
-  background:#f8f5e9;
-  color:#194435;
-  padding:18rpx 30rpx;
-  font-size:30rpx;
-  font-weight:600;
-  border-radius:100rpx;
-}
 
-.quick-arrow {
-  font-size:36rpx;
-  line-height:1;
-}
 
-.home-menu {
-  margin-top:22rpx;
-}
 
 .menu-item {
   display:flex;
@@ -111,33 +69,29 @@
 
 .menu-icon {
   font-family:'Songti SC','STSong',serif;
-  font-size:42rpx;
+  font-size:var(--font-title, 40rpx);
   font-weight:800;
   color:#275040;
   width:65rpx;
   text-align:center;
 }
 
-.menu-info {
-  flex:1;
-  min-width:0;
-}
 
 .menu-name {
   display:block;
-  font-size:30rpx;
+  font-size:var(--font-label, 32rpx);
   font-weight:600;
 }
 
 .menu-desc {
   display:block;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   color:#7a8076;
   margin-top:4rpx;
 }
 
 .menu-arrow {
-  font-size:38rpx;
+  font-size:var(--font-title, 40rpx);
   color:#3d5247;
 }
 
@@ -149,25 +103,10 @@
   margin-top:28rpx;
   padding-top:14rpx;
   color:#697268;
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
 }
 
-button.feedback-entry {
-  flex:0 0 auto;
-  width:auto!important;
-  min-width:0!important;
-  margin:0!important;
-  padding:12rpx 0!important;
-  text-align:left;
-  background:transparent;
-  color:#314a3c;
-  line-height:1.5;
-  font-size:24rpx;
-}
 
-.feedback-hover {
-  opacity:.6;
-}
 
 .resume-card {
   position:relative;
@@ -184,13 +123,13 @@ button.feedback-entry {
   color:#fff;
   padding:6rpx 14rpx;
   border-radius:9rpx;
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
 }
 
 .resume-round {
   display:block;
   font-family:'Songti SC','STSong',serif;
-  font-size:40rpx;
+  font-size:var(--font-title, 40rpx);
   font-weight:700;
   margin-top:18rpx;
 }
@@ -213,7 +152,7 @@ button.feedback-entry {
 
 .resume-name {
   display:block;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
@@ -222,7 +161,7 @@ button.feedback-entry {
 
 .resume-points {
   display:block;
-  font-size:29rpx;
+  font-size:var(--font-body, 28rpx);
   font-weight:600;
   margin-top:4rpx;
 }
@@ -236,9 +175,6 @@ button.feedback-entry {
   flex:1.4;
 }
 
-.resume-actions .btn-secondary {
-  flex:1;
-}
 
 /* Artwork is decorative; native controls and scores stay above it. */
 .header-art,.card-art {
@@ -249,13 +185,25 @@ button.feedback-entry {
   height:100%;
   pointer-events:none;
 }
-.home-subtitle,.quick-title,.quick-desc,.quick-cta,
+.home-subtitle,
 .resume-badge,.resume-round,.resume-players,.resume-actions {
   position:relative;
   z-index:1;
 }
-.quick-desc { font-size:25rpx; }
-.quick-cta { min-width:310rpx; }
 
-.home-quick-links { display:flex; gap:16rpx; margin-top:22rpx; }
-.home-quick-link { flex:1; padding:22rpx; text-align:center; border:1rpx solid #c4c9c0; border-radius:16rpx; color:#24483e; font-size:26rpx; }
+
+/* Shared game slot keeps the two calculators stationary in both states. */
+.home.tab-page { padding-bottom:calc(140rpx + env(safe-area-inset-bottom)); }
+.resume-card { height:380rpx; display:flex; flex-direction:column; }
+.resume-badge { align-self:flex-start; }
+.resume-round { margin-top:12rpx; }
+.resume-players { margin:18rpx 0; }
+.resume-actions { margin-top:auto; }
+.resume-actions .btn-primary { width:100%; margin:0; }
+.resume-empty { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:18rpx; }
+.home-calculators { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18rpx; margin-top:22rpx; }
+.home-calculators .menu-item { position:relative; min-width:0; margin:0; padding:24rpx 20rpx; flex-direction:column; align-items:flex-start; gap:12rpx; }
+.home-calculators .menu-icon { width:auto; }
+.home-calculators .menu-arrow { position:absolute; top:24rpx; right:20rpx; }
+.home-calculators .menu-desc { min-height:72rpx; }
+.home-footer { justify-content:center; }

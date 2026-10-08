@@ -1,4 +1,4 @@
 @import '../../app.wxss';
 @import '../../pages/quick-score/quick-score.wxss';
-:host { display:block; color:#182f2b; font-size:28rpx; line-height:1.5; }
+:host { display:block; color:#182f2b; font-size:var(--font-body, 28rpx); line-height:1.5; }
 .top-tabs { display:none; }

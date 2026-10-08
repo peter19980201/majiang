@@ -239,6 +239,29 @@
         "F24"
       ],
       "timeoutMs": 60000
+    },
+    {
+      "id": "typography",
+      "file": "suites/typography.js",
+      "group": "ui",
+      "features": [
+        "F25"
+      ],
+      "timeoutMs": 10000
+    },
+    {
+      "id": "main-navigation",
+      "file": "suites/main-navigation.js",
+      "group": "ui",
+      "features": [
+        "F01",
+        "F07",
+        "F08",
+        "F17",
+        "F19",
+        "F26"
+      ],
+      "timeoutMs": 10000
     }
   ],
   "optional": [

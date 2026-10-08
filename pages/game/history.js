@@ -25,7 +25,7 @@ Page(withShare({
   },
 
   resumeGame() {
-    wx.redirectTo({ url: '/pages/game/board?resume=1' })
+    wx.navigateTo({ url: '/pages/game/board?resume=1' })
   },
 
   abandonGame() {

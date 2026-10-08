@@ -1,0 +1,9 @@
+<view class="container profile-page">
+  <view class="profile-heading">
+    <image class="profile-art" src="/assets/home/header.jpg" mode="scaleToFill" aria-hidden="true" />
+    <text class="profile-title">我的</text>
+  </view>
+  <view class="profile-brand"><text class="profile-mark">雀</text><text class="profile-name">日麻计分助手</text><text class="profile-note">参考规则：雀魂</text></view>
+  <view class="card"><text class="section-title">本地记录</text><text class="profile-note">对局数据仅保存在当前设备。</text></view>
+  <button class="card profile-feedback" open-type="feedback"><text>意见反馈</text><text>›</text></button>
+</view>

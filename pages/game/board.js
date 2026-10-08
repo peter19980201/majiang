@@ -736,7 +736,7 @@ const boardDefinition = {
   },
 
   goHistory() {
-    wx.navigateTo({ url: '/pages/game/history' })
+    wx.switchTab({ url: '/pages/game/history' })
   }
 }
 

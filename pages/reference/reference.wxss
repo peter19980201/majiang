@@ -41,12 +41,12 @@
   flex:1;
   min-width:0;
   height:82rpx;
-  font-size:27rpx;
+  font-size:var(--font-body, 28rpx);
 }
 
 .search-clear {
   padding:10rpx;
-  font-size:32rpx;
+  font-size:var(--font-label, 32rpx);
   color:#6e7d67;
 }
 
@@ -69,7 +69,7 @@
   padding:15rpx 27rpx;
   border-radius:100rpx;
   background:#edeee5;
-  font-size:25rpx;
+  font-size:var(--font-small, 24rpx);
   color:#506646;
   white-space:nowrap;
 }
@@ -92,7 +92,7 @@
   align-items:center;
   gap:16rpx;
   padding:4rpx 0;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   color:#55684b;
 }
 
@@ -122,7 +122,7 @@
 }
 
 .filter-count {
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#839077;
 }
 
@@ -151,7 +151,7 @@
 
 .yaku-name-cn {
   display:block;
-  font-size:31rpx;
+  font-size:var(--font-label, 32rpx);
   font-weight:600;
   line-height:1.3;
 }
@@ -159,7 +159,7 @@
 .yaku-name-ja {
   display:block;
   color:#859079;
-  font-size:22rpx;
+  font-size:var(--font-caption, 22rpx);
   margin-top:8rpx;
 }
 
@@ -173,20 +173,20 @@
 }
 
 .badge {
-  font-size:21rpx;
+  font-size:var(--font-caption, 22rpx);
   white-space:nowrap;
 }
 
 .badge.han {
   font-family:'Songti SC','STSong',serif;
-  font-size:34rpx;
+  font-size:var(--font-heading, 36rpx);
   color:#a87c26;
   font-weight:700;
 }
 
 .badge.han.open {
   font-family:inherit;
-  font-size:21rpx;
+  font-size:var(--font-caption, 22rpx);
   color:#6a7c5f;
   font-weight:400;
 }
@@ -199,7 +199,7 @@
 }
 
 .badge.yakuman {
-  font-size:28rpx;
+  font-size:var(--font-body, 28rpx);
   color:#a27421;
   font-weight:700;
 }
@@ -209,7 +209,7 @@
 }
 
 .yaku-chevron {
-  font-size:30rpx;
+  font-size:var(--font-label, 32rpx);
   color:#728467;
   margin-left:5rpx;
 }
@@ -218,7 +218,7 @@
   display:block;
   padding:4rpx 24rpx 24rpx;
   color:#56694d;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   line-height:1.65;
 }
 
@@ -237,14 +237,14 @@
 .detail-label {
   display:block;
   color:#506844;
-  font-size:24rpx;
+  font-size:var(--font-small, 24rpx);
   margin-bottom:10rpx;
   font-weight:600;
 }
 
 .detail-text {
   display:block;
-  font-size:26rpx;
+  font-size:var(--font-body, 28rpx);
   line-height:1.75;
   color:#4e6242;
 }
@@ -269,7 +269,7 @@
 
 .example-note {
   display:block;
-  font-size:23rpx;
+  font-size:var(--font-small, 24rpx);
   line-height:1.6;
   color:#78886a;
   margin-top:16rpx;
@@ -278,3 +278,8 @@
 
 .example-pairs { display:flex; flex-wrap:wrap; gap:20rpx 18rpx; margin-top:18rpx; }
 .example-pair { display:flex; gap:4rpx; padding-bottom:9rpx; border-bottom:1rpx solid #c3baa1; }
+
+.rules-page { padding-bottom:calc(140rpx + env(safe-area-inset-bottom)); }
+.rules-tabs { margin-bottom:24rpx; }
+.rules-tabs .seg { flex:1; margin:0; background:transparent; line-height:1.5; }
+.rules-tabs .seg.active { background:#204e40; }
