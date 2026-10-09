@@ -1,3 +1,5 @@
+<image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container" wx:if="{{result}}">
   <!-- Hero: Points display -->
   <view class="result-context" wx:if="{{result.input}}"><image class="result-art" src="/assets/art/table-texture.jpg" mode="aspectFill" aria-hidden="true"></image><text class="result-context-label">{{result.input.jikaze === 27 ? '庄家' : '子家'}} · {{result.input.agariType === 'tsumo' ? '自摸' : '荣和'}} · {{result.input.honba || 0}}本场</text></view>

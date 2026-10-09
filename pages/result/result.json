@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "计分结果",
+  "navigationBarTitleText": "",
   "navigationBarBackgroundColor": "#f6f4ed",
   "usingComponents": {
     "tile": "/components/tile/tile"

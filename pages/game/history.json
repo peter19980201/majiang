@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "历史对局",
+  "navigationBarTitleText": "",
   "usingComponents": {
     "tile": "/components/tile/tile",
     "settlement-view": "/components/settlement-view/index"

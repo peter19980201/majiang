@@ -1,3 +1,5 @@
+<image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container calculator">
   <view class="quick-links" wx:if="{{!boardMode}}"><navigator class="quick-link" url="/pages/quick-score/quick-score">番符快捷算分 ›</navigator><navigator class="quick-link" url="/pages/quick-score/quick-score?tab=table">点数速查表 ›</navigator></view>
   <!-- 手牌展示区 -->

@@ -1,3 +1,5 @@
+<image class="page-landscape page-landscape-tab" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container rules-page">
   <view class="seg-ctrl rules-tabs"><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button></view>
   <view hidden="{{rulesTab !== 'yaku'}}">

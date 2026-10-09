@@ -128,3 +128,39 @@ const tabStyle = read('custom-tab-bar/index.wxss')
 assert(/\.tab-bar-rise\s*\{[^}]*pointer-events:none/.test(tabStyle), 'decorative rise must not block navigation taps')
 assert(/\.tab-item\s*\{[^}]*overflow:visible/.test(tabStyle), 'raised add icon must not be clipped')
 console.log('Main navigation: four tabs, new-game cancellation/debounce, return routes, fixed home slot, retained rule filters and four table modes passed.')
+
+// Keep native navigation spacing and controls, but no small page titles.
+const navigationConfig = JSON.parse(read('app.json'))
+assert.equal(navigationConfig.window.navigationBarTitleText, '')
+for (const route of navigationConfig.pages) {
+  const config = JSON.parse(read(route + '.json'))
+  assert.equal(config.navigationBarTitleText ?? navigationConfig.window.navigationBarTitleText, '', route)
+  assert.notEqual(config.navigationStyle, 'custom', 'retain native navigation spacing: ' + route)
+}
+assert(!read('pages/calculator/definition.js').includes('setNavigationBarTitle'), 'board input must not restore a small navigation title')
+
+const profileMarkup = read('pages/profile/profile.wxml')
+assert(profileMarkup.includes('profile-user'))
+assert(!profileMarkup.includes('本地记录'))
+assert(!profileMarkup.includes('profile-brand'))
+assert(profileMarkup.includes('/assets/navigation/feedback.svg'))
+assert(read('assets/navigation/feedback.svg').includes('<svg'))
+
+assert(profileMarkup.includes('/assets/home/profile-landscape.jpg'))
+assert(!profileMarkup.includes('/assets/home/header.jpg'), 'profile uses the landscape background instead of the tile banner')
+assert(fs.statSync(path.join(root,'assets/home/profile-landscape.jpg')).size < 500000, 'keep the profile background lightweight')
+
+assert(profileMarkup.includes('/assets/home/profile-motto.png'))
+assert(fs.statSync(path.join(root,'assets/home/profile-motto.png')).size < 250000)
+
+for (const route of navigationConfig.pages) {
+  const markup = read(route + '.wxml')
+  assert(markup.includes('class="page-landscape'), route + ' shares the landscape backdrop')
+  assert.equal((markup.match(/src="\/assets\/home\/profile-landscape.jpg"/g) || []).length, 1, route + ' mounts background once')
+}
+assert(!read('pages/index/index.wxml').includes('class="header-art"'))
+assert(!read('pages/game/history.wxml').includes('class="history-art"'))
+
+for (const route of navigationConfig.pages) {
+  assert.equal((read(route + '.wxml').match(/src="\/assets\/home\/profile-motto.png"/g) || []).length, 1, route + ' includes the shared calligraphy once')
+}

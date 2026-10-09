@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "快速计分",
+  "navigationBarTitleText": "",
   "usingComponents": {
     "tile": "/components/tile/tile"
   }

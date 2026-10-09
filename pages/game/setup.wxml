@@ -1,3 +1,5 @@
+<image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
 <view class="container">
   <!-- 点数设置 -->

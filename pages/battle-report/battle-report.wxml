@@ -1,3 +1,5 @@
+<image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="report-page">
   <text class="report-message" wx:if="{{loading}}">正在生成本场战报…</text>
   <view wx:if="{{error}}"><text class="report-message">{{error}}</text><button bindtap="generate">重新生成</button></view>

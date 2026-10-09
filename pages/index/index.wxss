@@ -4,9 +4,9 @@
 
 .home-heading {
   position:relative;
-  height:340rpx;
+  min-height:188rpx;
   margin:0 -28rpx;
-  padding:36rpx 28rpx 0;
+  padding:36rpx 28rpx 24rpx;
   overflow:hidden;
 }
 

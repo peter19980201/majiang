@@ -64,7 +64,6 @@ module.exports = withShare({
   onLoad(options = {}) {
     this.initializeInput(options)
     if (options.mode === 'board') {
-      wx.setNavigationBarTitle({ title: '录入和牌' })
       this.getOpenerEventChannel().on('restoreInput', input => this.restoreInput(input))
     }
   },

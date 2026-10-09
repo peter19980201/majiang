@@ -1,9 +1,15 @@
+<image class="page-landscape page-landscape-tab" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+<image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container profile-page">
   <view class="profile-heading">
-    <image class="profile-art" src="/assets/home/header.jpg" mode="scaleToFill" aria-hidden="true" />
-    <text class="profile-title">我的</text>
+    <view class="profile-user" aria-label="头像和昵称预留区">
+      <view class="profile-avatar"><image class="profile-avatar-icon" src="/assets/navigation/profile-active.svg" mode="aspectFit" aria-hidden="true" /></view>
+      <text class="profile-user-name">用户昵称</text>
+    </view>
   </view>
-  <view class="profile-brand"><text class="profile-mark">雀</text><text class="profile-name">日麻计分助手</text><text class="profile-note">参考规则：雀魂</text></view>
-  <view class="card"><text class="section-title">本地记录</text><text class="profile-note">对局数据仅保存在当前设备。</text></view>
-  <button class="card profile-feedback" open-type="feedback"><text>意见反馈</text><text>›</text></button>
+  <button class="card profile-feedback" open-type="feedback">
+    <image class="feedback-icon" src="/assets/navigation/feedback.svg" mode="aspectFit" aria-hidden="true" />
+    <text class="feedback-label">意见反馈</text>
+    <text class="feedback-arrow" aria-hidden="true">›</text>
+  </button>
 </view>

@@ -25,3 +25,12 @@ button::after {
   padding:24rpx;
   padding-bottom:calc(36rpx + env(safe-area-inset-bottom));
 }
+
+/* A single local landscape shared by all page backdrops. */
+page { position:relative; z-index:0; }
+.page-landscape { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; pointer-events:none; background:#f6f4ed; }
+.page-landscape { opacity:.6; }
+.page-landscape-tab { height:calc(100% - 110rpx - env(safe-area-inset-bottom)); }
+page { background:#f6f4ed!important; }
+
+.page-motto-art { position:fixed; top:40rpx; right:22rpx; width:204rpx; height:108rpx; z-index:-1; pointer-events:none; }

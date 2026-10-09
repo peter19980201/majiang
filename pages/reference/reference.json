@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "规则",
+  "navigationBarTitleText": "",
   "usingComponents": {
     "tile": "/components/tile/tile",
     "points-table": "/components/points-table/index"

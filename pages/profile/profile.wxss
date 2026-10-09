@@ -1,11 +1,14 @@
 .profile-page { padding:0 28rpx calc(140rpx + env(safe-area-inset-bottom)); }
 .profile-heading { position:relative; height:240rpx; margin:0 -28rpx; padding:36rpx 28rpx 0; overflow:hidden; }
-.profile-art { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
-.profile-title { position:relative; color:#142f29; font-family:'Songti SC','STSong',serif; font-size:var(--font-display, 48rpx); font-weight:800; }
-.profile-brand { display:flex; flex-direction:column; align-items:center; gap:16rpx; padding:0 0 48rpx; }
-.profile-mark { display:flex; justify-content:center; align-items:center; width:124rpx; height:124rpx; border-radius:24rpx; background:#24483e; color:#fffdf4; font-family:'Songti SC','STSong',serif; font-size:var(--font-score, 64rpx); }
-.profile-name { font-size:var(--font-heading, 36rpx); font-weight:600; }
-.profile-note { font-size:var(--font-small, 24rpx); color:#697268; }
-.profile-feedback { display:flex; justify-content:space-between; width:100%; margin:0; color:#24483e; font-size:var(--font-body, 28rpx); line-height:1.5; }
+.profile-user { position:relative; display:flex; align-items:center; gap:22rpx; padding-right:210rpx; }
+.profile-avatar { display:flex; align-items:center; justify-content:center; flex-shrink:0; width:96rpx; height:96rpx; border-radius:50%; border:2rpx solid #d8dfd1; background:#edf0e6; }
+.profile-avatar-icon { width:48rpx; height:48rpx; opacity:.6; }
+.profile-user-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:#142f29; font-size:var(--font-heading, 36rpx); font-weight:600; }
+.profile-feedback { position:relative; display:flex; align-items:center; gap:28rpx; width:100%!important; max-width:none; min-height:104rpx; margin:24rpx 0 0!important; padding:24rpx 32rpx; color:#24483e; font-size:var(--font-label, 32rpx); line-height:1.5; text-align:left; box-shadow:0 4rpx 12rpx rgba(39,46,25,.035); }
+.profile-feedback::after { border:0; }
+.feedback-icon { width:48rpx; height:48rpx; flex-shrink:0; }
+.feedback-label { flex:1; font-weight:600; letter-spacing:2rpx; }
+.feedback-arrow { font-size:var(--font-title, 40rpx); line-height:1; }
+.profile-feedback:active { background:#eeefe6; }
 
 @import '/styles/felt.wxss';

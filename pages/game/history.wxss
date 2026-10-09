@@ -4,9 +4,9 @@
 
 .history-heading {
   position:relative;
-  height:280rpx;
+  min-height:168rpx;
   margin:0 -24rpx 20rpx;
-  padding:42rpx 32rpx 0;
+  padding:36rpx 32rpx 20rpx;
   overflow:hidden;
 }
 
@@ -333,5 +333,5 @@
 .swipe-row .card { margin:0; z-index:1; transform:translate3d(0,0,0); }
 .swipe-delete { position:absolute; right:0; top:0; bottom:0; width:72px; min-width:0; max-width:72px; height:100%; line-height:1.5; margin:0; padding:0; display:flex; align-items:center; justify-content:center; border-radius:0 24rpx 24rpx 0; background:#ad5149; color:#fff; font-size:var(--font-body, 28rpx); }
 .swipe-delete::after { border:0; }
-.header-title { color:#e7ece3; font-size:var(--font-small, 24rpx); font-weight:400; }
+.header-title { color:#697268; font-size:var(--font-small, 24rpx); font-weight:400; }
 @media (prefers-reduced-motion:reduce) { .swipe-row .card { transition:none; } }
