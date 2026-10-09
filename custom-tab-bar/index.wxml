@@ -5,3 +5,18 @@
     <text>{{item.label}}</text>
   </button>
 </view>
+<view wx:if="{{newGameVisible}}" class="new-game-mask" catchtouchmove="blockModalTouch" catchtap="blockModalTouch">
+  <view class="new-game-dialog" role="dialog" aria-modal="true" aria-label="结算当前对局并新建？">
+    <image class="dialog-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true" />
+    <view class="dialog-content">
+      <text class="dialog-title">结算当前对局并新建？</text>
+      <text class="dialog-warning">当前对局将立即结束</text>
+      <text class="dialog-description">按现有点数结算并保存到历史记录，
+然后进入新对局设置。</text>
+      <view class="dialog-actions">
+        <button class="dialog-cancel" bindtap="cancelNewGame">取消</button>
+        <button class="dialog-confirm btn-primary" bindtap="confirmNewGame">结算并新建</button>
+      </view>
+    </view>
+  </view>
+</view>

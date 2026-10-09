@@ -8,13 +8,13 @@ const tabs = [
   { route:'pages/profile/profile', label:'我的', icon:'profile' }
 ]
 
-function openNewGame(afterSettled, complete = () => {}) {
+function openNewGame(afterSettled, complete = () => {}, showConfirmation = options => wx.showModal(options)) {
   const saved = GameStorage.current()
   const open = () => wx.navigateTo({ url:'/pages/game/setup', complete })
   if (!saved || !saved.gameState || saved.gameState.gameOver) return open()
-  wx.showModal({
-    title:'新建对局', content:'当前对局将结算并保存到历史记录，是否继续？',
-    confirmText:'新建对局',
+  showConfirmation({
+    title:'结算当前对局并新建？', content:'当前对局将立即结束，按现有点数结算并保存到历史记录。',
+    confirmText:'结算并新建',
     success(res) {
       if (!res.confirm) return complete()
       try { GameStorage.finishSavedGame(saved) } catch (error) { complete(); throw error }

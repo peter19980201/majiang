@@ -49,11 +49,11 @@ const first = navigation; tap(2); assert.equal(navigation, first, 'double tap op
 navigation.complete(); assert.equal(bar._opening, false)
 current = { gameState:{ gameOver:false } }; navigation = null
 tap(2); tap(2)
-assert(modal); assert.equal(navigation, null)
-modal.success({ cancel:true, confirm:false })
+assert.equal(bar.data.newGameVisible, true); assert.equal(navigation, null)
+bar.cancelNewGame(); assert.equal(bar.data.newGameVisible, false)
 assert(current); assert.equal(settled, 0); assert.equal(bar._opening, false)
-tap(2); modal.fail(); assert.equal(bar._opening, false)
-tap(2); modal.success({ confirm:true })
+tap(2); barDefinition.lifetimes.detached.call(bar); assert.equal(bar._opening, false)
+tap(2); bar.confirmNewGame(); bar.confirmNewGame(); assert.equal(bar.data.newGameVisible, false)
 assert.equal(settled, 1); assert.equal(navigation.url, '/pages/game/setup'); navigation.complete()
 const home = load('pages/index/index.js')
 home.route = 'pages/index/index'; home.getTabBar = () => bar
@@ -164,3 +164,18 @@ assert(!read('pages/game/history.wxml').includes('class="history-art"'))
 for (const route of navigationConfig.pages) {
   assert.equal((read(route + '.wxml').match(/src="\/assets\/home\/profile-motto.png"/g) || []).length, 1, route + ' includes the shared calligraphy once')
 }
+
+assert(tabMarkup.includes('结算当前对局并新建？'))
+assert(tabMarkup.includes('当前对局将立即结束'))
+assert(tabMarkup.includes('结算并新建'))
+assert(tabMarkup.includes('catchtouchmove="blockModalTouch"'))
+// A failed save must not navigate and must release the opening guard.
+current = { gameState:{ gameOver:false } }; navigation = null
+const finish = storage.finishSavedGame
+storage.finishSavedGame = () => { throw new Error('storage unavailable') }
+tap(2)
+assert.throws(() => bar.confirmNewGame(), /storage unavailable/)
+assert.equal(navigation, null)
+assert.equal(bar._opening, false)
+assert.equal(bar.data.newGameVisible, false)
+storage.finishSavedGame = finish

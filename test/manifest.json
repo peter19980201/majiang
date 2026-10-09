@@ -251,6 +251,7 @@
     },
     {
       "id": "main-navigation",
+      "description": "主导航及自定义结算新建确认：取消、防重复、卸载与保存失败保护",
       "file": "suites/main-navigation.js",
       "group": "ui",
       "features": [
