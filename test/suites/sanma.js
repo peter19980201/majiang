@@ -127,7 +127,7 @@ assert.equal(Reports.build({config:{gameType:'free'}}).type,'自由记分')
 // Three-player boards retain the four cardinal positions, leaving north vacant.
 const boardTemplate=fs.readFileSync(path.join(__dirname,'../../pages/game/board.wxml'),'utf8')
 const boardStyles=fs.readFileSync(path.join(__dirname,'../../pages/game/board.wxss'),'utf8')
-assert.match(boardTemplate,/rotate\(\{\{players\[dealerIdx\]\.seatWind \* 90\}\}deg\)/)
+assert.match(boardTemplate,/rotate\(\{\{roundFeedbackAngle !== null \? roundFeedbackAngle : players\[dealerIdx\]\.seatWind \* 90\}\}deg\)/)
 for(const [direction,label] of [['east','东'],['south','南'],['west','西'],['north','北']]) {
  assert.ok(boardTemplate.includes(`<text class="compass-${direction}">${label}</text>`))
 }

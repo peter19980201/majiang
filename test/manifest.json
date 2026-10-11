@@ -315,6 +315,21 @@
         "F07"
       ],
       "timeoutMs": 60000
+    },
+    {
+      "id": "round-feedback",
+      "description": "三麻四麻居中局次滚动、右边缘连续覆盖与指针同步、点数滚动、点棒净转移、两阶段时序及计分隔离、生命周期清理",
+      "file": "suites/round-feedback.js",
+      "group": "ui",
+      "features": [
+        "F10",
+        "F11",
+        "F12",
+        "F14",
+        "F28",
+        "F29"
+      ],
+      "timeoutMs": 10000
     }
   ],
   "optional": [

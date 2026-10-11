@@ -104,7 +104,7 @@ page {
   margin-top:8rpx;
 }
 
-.player-points.negative {
+.player-points.negative,.player-points-final.negative,.round-points-frame.negative {
   color:#f3b3a3;
 }
 
@@ -644,14 +644,17 @@ page {
 .round-summary { display:flex; justify-content:space-around; align-items:center; gap:16rpx; font-size:var(--font-body, 28rpx); white-space:nowrap; }
 .round-summary .round-label { display:flex; align-items:center; font-size:var(--font-score, 64rpx); line-height:1; color:#e8cc74; }
 .round-divider { width:1rpx; height:62rpx; background:#668776; }
-.round-progress { display:flex; margin-top:24rpx; }
-.progress-stop { position:relative; flex:1; display:flex; flex-direction:column; align-items:center; font-size:var(--font-small, 24rpx); gap:10rpx; color:#f0f3e8; }
+.round-progress { position:relative; overflow:hidden; margin-top:24rpx; padding-top:5rpx; }
+.round-progress-track { display:flex; position:relative; width:200%; left:-33.333333%; transform:translateX(0); }
+.round-progress-track.progress-moving { transform:translateX(-16.666667%); transition:transform 280ms cubic-bezier(.77,0,.175,1); }
+.progress-stop { position:relative; flex:0 0 16.666667%; display:flex; flex-direction:column; align-items:center; font-size:var(--font-small, 24rpx); gap:10rpx; color:#bdc9b9; }
 .progress-stop::before { content:''; position:absolute; height:4rpx; background:#456c55; top:10rpx; left:-50%; width:100%; }
-.progress-stop:first-child::before { display:none; }
+.progress-stop:first-child::before,.progress-empty::before,.progress-empty + .progress-stop::before { display:none; }
+.progress-empty { visibility:hidden; }
 .progress-dot { position:relative; z-index:1; width:23rpx; height:23rpx; border-radius:50%; background:#496e58; }
 .progress-stop.current { color:#eed476; font-weight:600; }
-.current .progress-dot { background:linear-gradient(135deg,#ffeb9b,#e0b855); }
-.passed .progress-dot { background:#9aab74; }
+.progress-current-marker { position:absolute; top:5rpx; left:50%; width:23rpx; height:23rpx; border-radius:50%; background:linear-gradient(135deg,#ffeb9b,#e0b855); transform:translateX(-50%) scale(1.3); pointer-events:none; z-index:2; }
+@media (prefers-reduced-motion:reduce) { .round-progress-track.progress-moving { transition:none; } }
 .players-cross { flex:1; min-height:570rpx; display:block; margin:0; border:3rpx solid #dfc66c; border-radius:22rpx; box-shadow:inset 0 0 0 7rpx #0c4937,inset 0 0 0 8rpx #8b9058; background:rgba(0,61,41,.2); }
 .players-cross::before,.players-cross::after { content:''; position:absolute; background:rgba(208,206,138,.12); }
 .players-cross::before { left:50%; top:14%; bottom:14%; width:1rpx; }
@@ -845,4 +848,51 @@ page {
 
 /* Three players keep the shared cardinal seats; the north seat stays empty. */
 .mode-3 .win-choices { grid-template-columns:repeat(3,minmax(0,1fr)); }
+/* Local feedback never moves a seat or captures a tap. */
+.round-panel { position:relative; }
+.round-feedback-glow,.round-winner-glow { position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0; border:2rpx solid #efd582; background:rgba(239,213,130,.08); box-shadow:0 0 20rpx rgba(239,213,130,.2); }
+.round-score-delta { position:absolute; bottom:100%; right:12rpx; margin-bottom:8rpx; padding:4rpx 12rpx; border-radius:10rpx; background:#123e32; font-size:var(--font-label, 32rpx); font-weight:600; white-space:nowrap; pointer-events:none; opacity:0; z-index:3; }
+.delta-gain { color:#f3dd91; }
+.delta-loss { color:#ffb5a9; }
+.round-feedback-running .round-score-delta { animation:round-score-float 1600ms cubic-bezier(.23,1,.32,1) both; }
+.round-feedback-running .round-winner-glow { animation:round-soft-glow 1600ms ease-out both; }
+.round-feedback-transition .round-feedback-glow { animation:round-soft-glow 800ms ease-out both; }
+.round-feedback-transition .compass-direction { transition:transform 280ms cubic-bezier(.77,0,.175,1); }
+@keyframes round-score-float {
+  0% { opacity:0; transform:translateY(8rpx); }
+  20%,65% { opacity:1; transform:translateY(0); }
+  100% { opacity:0; transform:translateY(-14rpx); }
+}
+@keyframes round-soft-glow {
+  0%,100% { opacity:0; }
+  25%,55% { opacity:1; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .round-feedback-running .round-score-delta { animation:none; opacity:1; transform:none; }
+  .round-feedback-running .round-winner-glow,.round-feedback-transition .round-feedback-glow { animation:none; opacity:.65; }
+  .round-feedback-transition .compass-direction { transition:none; }
+}
+/* CSS reels avoid per-frame logic/view bridge updates. */
+.player-points-counter { position:relative; line-height:1.2; height:1.2em; }
+.round-points-window { display:none; position:absolute; top:0; left:0; height:1.2em; width:8em; overflow:hidden; pointer-events:none; }
+.round-feedback-counting .player-points-final { opacity:0; }
+.round-feedback-counting .round-points-window { display:block; }
+.round-points-frame { display:block; height:1.2em; line-height:1.2; }
+.round-feedback-running .round-points-reel { animation:round-points-roll 1600ms steps(16,end) both; }
+@keyframes round-points-roll { from { transform:translateY(0); } to { transform:translateY(-94.117647%); } }
+.round-flight-layer { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:4; }
+.round-flight { position:absolute; inset:0; pointer-events:none; }
+.round-flying-sticks { position:absolute; width:58rpx; height:24rpx; margin-left:-29rpx; margin-top:-12rpx; opacity:0; }
+.round-flying-stick { position:absolute; top:0; left:0; width:52rpx; height:9rpx; border:1rpx solid #c8b77e; border-radius:3rpx; background:#fff6d9; box-shadow:0 2rpx 4rpx rgba(0,0,0,.2); transform:rotate(-18deg); }
+.round-flying-stick view { width:5rpx; height:5rpx; border-radius:50%; background:#ac4030; margin:2rpx auto; }
+.flying-stick-second { top:12rpx; left:7rpx; transform:rotate(-8deg); }
+.round-feedback-running .round-flight { transition:transform 1200ms cubic-bezier(.23,1,.32,1) 180ms; }
+.round-feedback-running .round-flying-sticks { animation:round-stick-visibility 1600ms linear both; }
+@keyframes round-stick-visibility { 0%,100% { opacity:0; } 12%,80% { opacity:1; } }
+@media (prefers-reduced-motion:reduce) {
+  .round-feedback-counting .player-points-final { opacity:1; }
+  .round-feedback-counting .round-points-window,.round-flight-layer { display:none; }
+  .round-feedback-running .round-points-reel,.round-feedback-running .round-flying-sticks { animation:none; }
+  .round-feedback-running .round-flight { transition:none; }
+}
 @import '/styles/felt.wxss';

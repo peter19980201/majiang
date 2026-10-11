@@ -1,20 +1,44 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
-<view class="container mode-{{playerCount}}">
+<view class="container mode-{{playerCount}} {{roundFeedbackRunning ? 'round-feedback-running' : ''}} {{roundFeedbackTransition ? 'round-feedback-transition' : ''}} {{roundFeedback.length && !roundFeedbackTransition ? 'round-feedback-counting' : ''}}">
   <image class="table-art" src="/assets/art/table-texture.jpg" mode="aspectFill" aria-hidden="true"></image>
   <view class="table-stage">
   <view class="round-panel">
+    <view wx:for="{{roundFeedback}}" wx:for-item="effect" wx:key="id" wx:if="{{effect.roundChanged}}" class="round-feedback-glow" aria-hidden="true"></view>
     <text class="round-cycle" wx:if="{{roundCycle > 1}}">第{{roundCycle}}轮</text>
     <view wx:if="{{playerCount === 3}}" class="round-cycle">三麻 · 自由记分</view><view class="round-summary"><view class="round-label"><text>{{roundWindName === '東' ? '东' : roundWindName}}</text><text class="round-number">{{roundNum}}</text><text>局</text></view><text class="round-divider"></text><text>{{honba}}本场</text><text class="round-divider"></text><text>供托 {{fmt.points(riichiSticks * 1000)}} 点</text></view>
-    <view class="round-progress"><view class="progress-stop {{roundNum - 1 === index ? 'current' : ''}} {{roundNum - 1 > index ? 'passed' : ''}}" wx:for="{{playerCount}}" wx:key="index"><view class="progress-dot"></view><text>{{roundWindName === '東' ? '东' : roundWindName}}{{index + 1}}</text></view></view>
+    <view class="round-progress" aria-label="当前{{roundProgressItems[roundProgressMoving ? 3 : 2].label}}局">
+      <view class="round-progress-track {{roundProgressMoving ? 'progress-moving' : ''}}">
+        <view class="progress-stop {{index === (roundProgressMoving ? 3 : 2) ? 'current' : ''}} {{item.empty ? 'progress-empty' : ''}}" wx:for="{{roundProgressItems}}" wx:key="id">
+          <view class="progress-dot"></view><text>{{item.label}}</text>
+        </view>
+      </view>
+      <view class="progress-current-marker" aria-hidden="true"></view>
+    </view>
   </view>
   <view class="players-cross">
+    <view class="round-flight-layer" aria-hidden="true">
+      <block wx:for="{{roundFeedback}}" wx:for-item="effect" wx:key="id">
+        <view wx:for="{{effect.flights}}" wx:for-item="flight" wx:key="id" class="round-flight" style="transform:translate({{roundFeedbackRunning ? flight.toX : flight.fromX}}%,{{roundFeedbackRunning ? flight.toY : flight.fromY}}%)">
+          <view class="round-flying-sticks"><view class="round-flying-stick"><view></view></view><view class="round-flying-stick flying-stick-second"><view></view></view></view>
+        </view>
+      </block>
+    </view>
     <view class="table-corner corner-tl"></view><view class="table-corner corner-tr"></view><view class="table-corner corner-bl"></view><view class="table-corner corner-br"></view>
-    <view class="compass"><view class="compass-direction" style="transform:rotate({{players[dealerIdx].seatWind * 90}}deg)"><view class="compass-pointer"></view></view><text class="compass-east">东</text><text class="compass-south">南</text><text class="compass-west">西</text><text class="compass-north">北</text></view>
+    <view class="compass"><view class="compass-direction" style="transform:rotate({{roundFeedbackAngle !== null ? roundFeedbackAngle : players[dealerIdx].seatWind * 90}}deg)"><view class="compass-pointer"></view></view><text class="compass-east">东</text><text class="compass-south">南</text><text class="compass-west">西</text><text class="compass-north">北</text></view>
     <view class="player-card seat-{{item.seatWind}} {{index * 1 === dealerIdx ? 'dealer' : ''}}" wx:for="{{players}}" wx:key="index">
+      <block wx:for="{{roundFeedback}}" wx:for-item="effect" wx:for-index="effectIndex" wx:key="id">
+        <view wx:if="{{effect.winners[index]}}" class="round-winner-glow" aria-hidden="true"></view>
+        <text wx:if="{{effect.deltas[index]}}" class="round-score-delta {{effect.deltas[index] > 0 ? 'delta-gain' : 'delta-loss'}}" aria-hidden="true">{{effect.deltas[index] > 0 ? '+' : '−'}}{{fmt.points(effect.deltas[index] > 0 ? effect.deltas[index] : -effect.deltas[index])}}</text>
+      </block>
       <view class="player-wind-badge"><tile tid="{{27 + item.seatWind}}" size="large"></tile></view>
-      <view class="player-data"><text class="player-name">{{item.name}}</text><text class="player-points {{item.points < 0 ? 'negative' : ''}}">{{fmt.points(item.points)}}</text></view>
+      <view class="player-data"><text class="player-name">{{item.name}}</text><view class="player-points player-points-counter">
+        <text class="player-points-final {{item.points < 0 ? 'negative' : ''}}">{{fmt.points(item.points)}}</text>
+        <view wx:for="{{roundFeedback}}" wx:for-item="effect" wx:for-index="effectIndex" wx:key="id" class="round-points-window" aria-hidden="true">
+          <view class="round-points-reel"><text wx:for="{{effect.rolls[index]}}" wx:for-item="pointsFrame" wx:for-index="frameIndex" wx:key="id" class="round-points-frame {{pointsFrame.points < 0 ? 'negative' : ''}}">{{fmt.points(pointsFrame.points)}}</text></view>
+        </view>
+      </view></view>
       <text class="dealer-mark" wx:if="{{index * 1 === dealerIdx}}">庄</text>
     </view>
   </view>

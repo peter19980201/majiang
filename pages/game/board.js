@@ -8,9 +8,17 @@ const { settle } = require('../../utils/game-settlement')
 const GameStorage = require('../../utils/game-storage')
 const RonEntry = require('../../utils/ron-entry')
 const RoundTransaction = require('../../utils/round-transaction')
+const RoundFeedback = require('../../utils/round-feedback')
 
 const boardDefinition = {
+  ...RoundFeedback.methods,
   data: {
+    roundFeedback: [],
+    roundProgressItems: [],
+    roundProgressMoving: false,
+    roundFeedbackRunning: false,
+    roundFeedbackTransition: false,
+    roundFeedbackAngle: null,
     // 配置
     config: null,
     gameId: '',
@@ -131,6 +139,7 @@ const boardDefinition = {
   },
 
   _prepareEntry() {
+    this._clearRoundFeedback()
     const state = this._entryState()
     this.setData({ entryHonba: state.honba, entryRiichiSticks: state.riichiSticks,
       entryDealerIdx: state.dealerIdx,
@@ -229,6 +238,8 @@ const boardDefinition = {
       wx.showToast({ title: prepared.error, icon: 'none' })
       return
     }
+    const wasEditing = !!this._editingRecord
+    this._clearRoundFeedback()
     this._editingRecord = null
     this.setData({ ...prepared.state,
       editingLastRound: false, showRonModal: false, showTsumoModal: false, showDrawModal: false,
@@ -237,6 +248,7 @@ const boardDefinition = {
     else {
       this._removeSavedSettlement()
       this._autoSave()
+      if (!wasEditing) this._playRoundFeedback(this.data.roundHistory[this.data.roundHistory.length - 1])
     }
   },
 
@@ -260,6 +272,7 @@ const boardDefinition = {
 
   _refreshHistoryCards() {
     const playerCount = Mode.count(this.data.config)
+    this.setData({ roundProgressItems: RoundFeedback.progress(this.data), roundProgressMoving: false })
     this.setData({ playerCount, totalPoints: this.data.players.reduce((s, p) => s + p.points, this.data.riichiSticks * 1000), abortReasons: playerCount === 3 ? ['九种九牌', '四杠散了'] : GameRules.ABORT_REASONS })
     const historyCards = this.data.roundHistory.map((record, index, records) =>
       RoundView.card(record, index === records.length - 1))
@@ -306,6 +319,7 @@ const boardDefinition = {
     if (this._editingRecord || !record || !record.correctionAvailable) return
     if (this.data.roundHistory[this.data.roundHistory.length - 1] !== record) return
     if (!this._canWriteGame()) return
+    this._clearRoundFeedback()
     this.setData({ ...Records.clone(record.before), roundHistory: this.data.roundHistory.slice(0, -1),
       finalResult: [], gameOver: false,
       roundRiichi: Mode.zeros(this.data.config) })
@@ -570,7 +584,12 @@ const boardDefinition = {
     receive(e.detail)
   },
 
+  onHide() {
+    this._clearRoundFeedback()
+  },
+
   onUnload() {
+    this._clearRoundFeedback(false)
     clearTimeout(this._inputOverlayTimer)
     this._inputOverlaySequence = (this._inputOverlaySequence || 0) + 1
   },
@@ -703,6 +722,7 @@ const boardDefinition = {
 
   // === 结算 ===
   doSettlement() {
+    this._clearRoundFeedback()
     this._refreshHistoryCards()
     // 已结算过则只打开结算页，不重复计算和保存
     if (this.data.finalResult.length > 0) {
