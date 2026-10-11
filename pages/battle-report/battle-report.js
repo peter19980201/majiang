@@ -3,14 +3,14 @@ const { withShare } = require('../../utils/share')
 const Reports = require('../../utils/battle-report')
 const Painter = require('../../utils/battle-report-canvas')
 Page(withShare({
-  data: { report: null, imagePath: '', error: '', loading: true, saving: false },
+  data: { report: null, imagePath: '', error: '', loading: true, saving: false, posterReady:false },
   onLoad(options) { this._id = options.id },
   onReady() { this.generate() },
   generate() {
     const record = GameStorage.history().find(r => String(r.id) === String(this._id))
     if (!record) { this.setData({ error: '未找到这场对局，请返回历史记录重新打开', loading: false, imagePath: '', report: null }); return }
     const report = Reports.build(record)
-    this.setData({ report, loading: true, error: '', imagePath: '' })
+    this.setData({ report, loading: true, error: '', imagePath: '', posterReady:false })
     wx.createSelectorQuery().in(this).select('#reportCanvas').fields({ node: true }).exec(res => {
       const canvas = res[0] && res[0].node
       if (!canvas) { this.setData({ error: '画布加载失败，请重试', loading: false }); return }
@@ -28,6 +28,8 @@ Page(withShare({
       art.src = '/assets/report/poster-paper.jpg'
     })
   },
+  onPosterLoad() { this.setData({posterReady:true}) },
+  onPosterError() { this.setData({posterReady:false,error:'图片加载失败，请重新生成'}) },
   save() {
     if (!this.data.imagePath || this.data.saving) return
     this.setData({ saving: true })

@@ -65,9 +65,9 @@
     <view class="fu-card">
       <view class="fu-header" bindtap="toggleFuDetail">
         <text class="fu-title">符数明细</text>
-        <text class="fu-arrow">{{showFuDetail ? '收起 ∧' : '展开 ∨'}}</text>
+        <view class="fu-arrow"><text>{{showFuDetail ? '收起' : '展开'}}</text><text class="motion-chevron {{showFuDetail ? 'motion-open' : ''}}"> ›</text></view>
       </view>
-      <view class="fu-detail" wx:if="{{showFuDetail}}">
+      <view class="motion-collapse {{showFuDetail ? 'motion-open' : ''}}" aria-hidden="{{!showFuDetail}}"><view class="motion-collapse-inner"><view class="fu-detail">
         <view class="fu-row" wx:for="{{result.fuDetail}}" wx:key="index">
           <text class="fu-name">{{item.name}}</text>
           <text class="fu-val">{{item.fu}}符</text>
@@ -76,7 +76,7 @@
           <text class="fu-name">合计 (取整)</text>
           <text class="fu-val">{{result.fu}}符</text>
         </view>
-      </view>
+      </view></view></view>
     </view>
   </view>
 

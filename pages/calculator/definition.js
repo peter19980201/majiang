@@ -1,12 +1,15 @@
 const Migrations = require('../../utils/game-migrations')
 const { withShare } = require('../../utils/share')
 const T = require('../../utils/tiles')
+const TileMotion = require('../../utils/tile-motion')
 const RED_FLAGS = { 4: 'redM5', 13: 'redP5', 22: 'redS5' }
 const CALCULATOR_INPUT_KEYS = ['nuki', 'hand', 'handRed', 'agariRed', 'redPlacementInferred', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
   'haitei', 'rinshan', 'chankan', 'tenhou', 'chihou', 'dora', 'uraDora', 'redM5', 'redP5', 'redS5']
 
 module.exports = withShare({
+  ...TileMotion.methods,
   data: {
+    tileFlights: [], hiddenHandSlots: [], hiddenAgari: false, handShift: [], handShiftMoving: false,
     playerCount: 4, nuki: 0,
     hand: [],
     handRed: [],
@@ -93,6 +96,7 @@ module.exports = withShare({
   },
 
   restoreInput(input) {
+    this.clearTileMotion()
     input = Migrations.calculatorInput(input)
     const restored = {}
     CALCULATOR_INPUT_KEYS.forEach(key => {
@@ -111,6 +115,7 @@ module.exports = withShare({
     if (this.data.boardMode) return
     const playerCount = Number(e.currentTarget.dataset.count) === 3 ? 3 : 4
     if (playerCount === this.data.playerCount) return
+    this.clearTileMotion()
     // Clear the draft explicitly on mode change to avoid keeping invalid tiles/melds.
     this.setData({ playerCount, hand: [], handRed: [], melds: [], agariTile: null, agariRed: false,
       nuki: 0, dora: [], uraDora: [], jikaze: 27, editingMeldTiles: [], showMeldModal: false,
@@ -170,35 +175,44 @@ module.exports = withShare({
         wx.showToast({ title: '手牌已满', icon: 'none' })
         return
       }
-      this.setData({ hand: this.data.hand.concat([id]), handRed: this.data.hand.map((_, i) => !!this.data.handRed[i]).concat([red]) })
+      const targetIndex = this.data.hand.length
+      const flight = this._reserveTileFlight(targetIndex)
+      this.setData({ hand: this.data.hand.concat([id]), handRed: this.data.hand.map((_, i) => !!this.data.handRed[i]).concat([red]), ...flight.mask }, () => this._flyTile(id, red, targetIndex, flight.ticket))
     } else if (target === 'agari') {
-      this.setData({ agariTile: id, agariRed: red })
+      this.clearTileMotion()
+      const flight = this._reserveTileFlight('agari')
+      this.setData({ agariTile: id, agariRed: red, ...flight.mask }, () => this._flyTile(id, red, 'agari', flight.ticket))
     }
     this.updateRemaining()
   },
 
   removeHandTile(e) {
+    this.clearTileMotion()
     const idx = parseInt(e.currentTarget.dataset.index)
     const hand = this.data.hand.filter((_, i) => i !== idx)
-    this.setData({ hand, handRed: this.data.hand.map((_, i) => !!this.data.handRed[i]).filter((_, i) => i !== idx) })
+    this.setData({ hand, handRed: this.data.hand.map((_, i) => !!this.data.handRed[i]).filter((_, i) => i !== idx) }, () => this._shiftHandAfterRemoval(idx))
     this.updateRemaining()
   },
 
   clearHand() {
+    this.clearTileMotion()
     this.setData({ hand: [], handRed: [] })
     this.updateRemaining()
   },
 
   removeAgari() {
+    this.clearTileMotion()
     this.setData({ agariTile: null, agariRed: false })
     this.updateRemaining()
   },
 
   switchTarget(e) {
+    this.clearTileMotion()
     this.setData({ inputTarget: e.currentTarget.dataset.target })
   },
 
   switchSuit(e) {
+    this.clearTileMotion()
     this.setData({ pickerSuit: e.currentTarget.dataset.suit })
   },
 
@@ -206,6 +220,7 @@ module.exports = withShare({
 
   // === 副露弹窗 ===
   showMeldPanel() {
+    this.clearTileMotion()
     this.setData({ showMeldModal: true, editingMeldType: '', editingMeldTiles: [] })
   },
 
@@ -284,6 +299,7 @@ module.exports = withShare({
   },
 
   removeMeld(e) {
+    this.clearTileMotion()
     const idx = parseInt(e.currentTarget.dataset.index)
     const melds = this.data.melds.filter((_, i) => i !== idx)
     this.setData({ melds })
@@ -335,6 +351,7 @@ module.exports = withShare({
 
   // === 计算 ===
   doCalculate() {
+    this.clearTileMotion()
     const { hand, melds, agariTile } = this.data
     const maxHand = 13 - melds.length * 3
 

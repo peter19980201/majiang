@@ -1,6 +1,6 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
-<view class="container calculator"><view class="seg-ctrl" wx:if="{{!boardMode}}"><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view><text wx:if="{{!boardMode}}" class="dora-hint">切换人数会清空已录入手牌</text><view class="section" wx:if="{{playerCount === 3}}"><text class="section-title">拔北 {{nuki}} 张</text><view class="seg-ctrl"><text class="seg" bindtap="changeNuki" data-delta="-1">−</text><text class="seg" bindtap="changeNuki" data-delta="1">＋</text></view><text class="dora-hint">拔北只加宝牌番，不单独成役；番符录入请计入总番数。</text></view>
+<view class="container calculator" bindtouchmove="cancelTileMotionOnTouch"><view class="seg-ctrl motion-segments" wx:if="{{!boardMode}}"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{playerCount === 4 ? 0 : 100}}%)"></view><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view><text wx:if="{{!boardMode}}" class="dora-hint">切换人数会清空已录入手牌</text><view class="section" wx:if="{{playerCount === 3}}"><text class="section-title">拔北 {{nuki}} 张</text><view class="seg-ctrl"><text class="seg" bindtap="changeNuki" data-delta="-1">−</text><text class="seg" bindtap="changeNuki" data-delta="1">＋</text></view><text class="dora-hint">拔北只加宝牌番，不单独成役；番符录入请计入总番数。</text></view>
   <view class="quick-links" wx:if="{{!boardMode}}"><navigator class="quick-link" url="/pages/quick-score/quick-score?playerCount={{playerCount}}">番符快捷算分 ›</navigator><navigator class="quick-link" url="/pages/quick-score/quick-score?tab=table&amp;playerCount={{playerCount}}">点数速查表 ›</navigator></view>
 <text class="dora-hint" wx:if="{{boardMode && playerCount === 3}}">三麻 · 自摸损 · 本场200点</text>
   <!-- 手牌展示区 -->
@@ -13,7 +13,7 @@
     </view>
     <view class="hand-slots">
       <view wx:for="{{maxHandCount}}" wx:key="index" class="hand-slot">
-        <view wx:if="{{index < hand.length}}" class="hand-slot-filled" bindtap="removeHandTile" data-index="{{index}}">
+        <view wx:if="{{index < hand.length}}" id="hand-flight-{{index}}" class="hand-slot-filled {{hiddenHandSlots[index] ? 'tile-motion-hidden' : ''}} {{handShiftMoving ? 'hand-shift-moving' : ''}}" style="transform:translate({{handShift[index].x || 0}}px,{{handShift[index].y || 0}}px)" bindtap="removeHandTile" data-index="{{index}}">
           <tile tid="{{hand[index]}}" size="slot" style="display:block;width:100%;height:100%" extra="{{handRed[index] ? 'red5' : ''}}"></tile>
         </view>
         <view wx:else class="hand-slot-empty">❀</view>
@@ -27,7 +27,7 @@
     <view class="section flex-1">
       <text class="section-title">和了牌</text>
       <view class="tile-display-area agari-area">
-        <view wx:if="{{agariTile !== null}}" class="agari-slot" bindtap="removeAgari">
+        <view wx:if="{{agariTile !== null}}" id="agari-flight-target" class="agari-slot {{hiddenAgari ? 'tile-motion-hidden' : ''}}" bindtap="removeAgari">
           <tile tid="{{agariTile}}" size="slot" style="display:block;width:100%;height:100%" extra="{{agariRed ? 'red5' : ''}}"></tile>
         </view>
         <view wx:else class="agari-slot"><view class="hand-slot-empty">❀</view></view>
@@ -82,40 +82,40 @@
     <view class="picker-row-lg" wx:if="{{pickerSuit === 'man'}}">
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index}}" bindtap="selectTile">
-        <tile tid="{{index}}" size="large" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <view class="picker-flight-source" id="pick-{{index}}-plain"><tile tid="{{index}}" size="large" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile></view>
         <text class="remain-badge-lg">剩{{tileRemaining[index]}}</text>
       </view>
       <view wx:if="{{playerCount !== 3}}" class="picker-tile-lg" bindtap="selectTile" data-id="4" data-red="{{true}}">
-        <tile tid="{{4}}" size="large" extra="red5{{redM5 ? ' red5-on' : ''}}"></tile>
+        <view class="picker-flight-source" id="pick-{{4}}-red"><tile tid="{{4}}" size="large" extra="red5{{redM5 ? ' red5-on' : ''}}"></tile></view>
         <text class="remain-badge-lg red-badge {{redM5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
     <view class="picker-row-lg" wx:if="{{pickerSuit === 'pin'}}">
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 9}}" bindtap="selectTile">
-        <tile tid="{{index + 9}}" size="large" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <view class="picker-flight-source" id="pick-{{index + 9}}-plain"><tile tid="{{index + 9}}" size="large" extra="{{tileRemaining[index+9] <= 0 ? 'disabled' : 'clickable'}}"></tile></view>
         <text class="remain-badge-lg">剩{{tileRemaining[index + 9]}}</text>
       </view>
       <view class="picker-tile-lg" bindtap="selectTile" data-id="13" data-red="{{true}}">
-        <tile tid="{{13}}" size="large" extra="red5{{redP5 ? ' red5-on' : ''}}"></tile>
+        <view class="picker-flight-source" id="pick-{{13}}-red"><tile tid="{{13}}" size="large" extra="red5{{redP5 ? ' red5-on' : ''}}"></tile></view>
         <text class="remain-badge-lg red-badge {{redP5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
     <view class="picker-row-lg" wx:if="{{pickerSuit === 'sou'}}">
       <view class="picker-tile-lg" wx:for="{{9}}" wx:key="*this"
             data-id="{{index + 18}}" bindtap="selectTile">
-        <tile tid="{{index + 18}}" size="large" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <view class="picker-flight-source" id="pick-{{index + 18}}-plain"><tile tid="{{index + 18}}" size="large" extra="{{tileRemaining[index+18] <= 0 ? 'disabled' : 'clickable'}}"></tile></view>
         <text class="remain-badge-lg">剩{{tileRemaining[index + 18]}}</text>
       </view>
       <view class="picker-tile-lg" bindtap="selectTile" data-id="22" data-red="{{true}}">
-        <tile tid="{{22}}" size="large" extra="red5{{redS5 ? ' red5-on' : ''}}"></tile>
+        <view class="picker-flight-source" id="pick-{{22}}-red"><tile tid="{{22}}" size="large" extra="red5{{redS5 ? ' red5-on' : ''}}"></tile></view>
         <text class="remain-badge-lg red-badge {{redS5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
     </view>
     <view class="picker-row-lg jihai-row-lg" wx:if="{{pickerSuit === 'jihai'}}">
       <view class="picker-tile-lg" wx:for="{{7}}" wx:key="*this"
             data-id="{{index + 27}}" bindtap="selectTile">
-        <tile tid="{{index + 27}}" size="large" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile>
+        <view class="picker-flight-source" id="pick-{{index + 27}}-plain"><tile tid="{{index + 27}}" size="large" extra="{{tileRemaining[index+27] <= 0 ? 'disabled' : 'clickable'}}"></tile></view>
         <text class="remain-badge-lg">剩{{tileRemaining[index + 27]}}</text>
       </view>
     </view>
@@ -248,7 +248,7 @@
 
 
   <!-- 副露弹窗 -->
-  <view class="modal-mask" wx:if="{{showMeldModal}}" bindtap="closeMeldPanel" >
+  <view class="modal-mask motion-sheet-mask {{showMeldModal ? 'motion-open' : ''}}" aria-hidden="{{!showMeldModal}}" bindtap="closeMeldPanel" >
     <view class="modal-content" catchtap="stopBubble">
       <view class="modal-handle"></view>
       <view class="sheet-heading"><text class="modal-title">添加副露</text><text class="sheet-close" bindtap="closeMeldPanel">×</text></view>
@@ -310,7 +310,7 @@
   </view>
 
   <!-- 记分板模式: 结果弹窗 -->
-  <view class="modal-mask" wx:if="{{showBoardResult}}" bindtap="cancelBoardResult" >
+  <view class="modal-mask motion-sheet-mask {{showBoardResult ? 'motion-open' : ''}}" aria-hidden="{{!showBoardResult}}" bindtap="cancelBoardResult" >
     <view class="modal-content board-result" catchtap="stopBubble" >
       <view class="modal-handle"></view>
       <text class="modal-title">计算结果</text>
@@ -342,4 +342,5 @@
   <view class="calc-bottom"><view class="calc-btn btn-primary" bindtap="doCalculate">
     <text>计算点数</text>
   </view></view>
+  <view wx:for="{{tileFlights}}" wx:key="id" class="tile-flight" aria-hidden="true" style="left:{{item.left}}px;top:{{item.top}}px;width:{{item.width}}px;height:{{item.height}}px;transform:translate({{item.arrived ? item.dx : 0}}px,{{item.arrived ? item.dy : 0}}px) scale({{item.arrived ? item.sx : 1}},{{item.arrived ? item.sy : 1}})"><tile tid="{{item.tid}}" size="slot" extra="{{item.red ? 'red5' : ''}}" style="display:block;width:100%;height:100%" /></view>
 </view>

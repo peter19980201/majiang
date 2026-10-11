@@ -1,12 +1,12 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
-<view class="settlement-page" wx:if="{{report}}">
+<view class="settlement-page {{celebrate ? 'settlement-celebrate' : ''}}" wx:if="{{report}}">
   <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="settlement-scroll" bounces="{{false}}" scroll-y>
     <view class="settlement-content">
       <view class="heading"><text class="title">本场成绩</text><view class="subtitle"><text>{{report.type}} · {{report.status}}</text><text>{{report.date}}</text></view></view>
       <view class="ranking">
         <view class="row table-head"><text class="rank">排名</text><text class="name">玩家</text><text class="points">最终点数</text><text class="score">得点</text></view>
-        <view class="row {{index === 0 ? 'first' : ''}}" wx:for="{{report.rows}}" wx:key="rank">
+        <view style="animation-delay:{{index * 60}}ms" class="row ranking-player {{index === 0 ? 'first' : ''}}" wx:for="{{report.rows}}" wx:key="rank">
           <text class="rank">{{item.rank}}位</text>
           <view class="name"><tile wx:if="{{item.seatTile !== null}}" tid="{{item.seatTile}}" size="small"/><text>{{item.name}}</text></view>
           <text class="points">{{item.pointsText}}</text><text class="score {{item.finalPt < 0 ? 'negative' : ''}}">{{item.finalText}}</text>

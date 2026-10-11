@@ -10,7 +10,7 @@ Page(withShare({
     keyword: '',
     filterMenzen: false,
     filteredYaku: [],
-    expandedIndex: -1
+    expandedIndex: -1, expandedYaku:{}
   },
 
   onLoad() {
@@ -63,7 +63,10 @@ Page(withShare({
 
   onExpandTap(e) {
     const idx = parseInt(e.currentTarget.dataset.idx)
-    this.setData({ expandedIndex: this.data.expandedIndex === idx ? -1 : idx })
+    const item = this.data.filteredYaku[idx]
+    if (!item) return
+    this.setData({ expandedIndex: this.data.expandedIndex === idx ? -1 : idx,
+      expandedYaku: { ...this.data.expandedYaku, [item._index]:true } })
   },
 
   applyFilter() {

@@ -57,7 +57,7 @@
     <view id="record-list-top"></view>
     <view class="board-empty" wx:if="{{roundHistory.length === 0}}"><view class="empty-sticks" aria-hidden="true"><view class="empty-stick stick-left"><text class="stick-black">••</text></view><view class="empty-stick stick-center"><view class="stick-red"></view></view><view class="empty-stick stick-right"><text class="stick-black">••</text></view></view><text class="empty-title">暂无记录</text><text class="empty-subtitle">完成本局后，结果将显示在这里</text></view>
     <view class="record-timeline" wx:if="{{roundHistory.length}}">
-      <view class="timeline-entry" wx:for="{{recordTimeline}}" wx:key="recordIndex">
+      <view class="timeline-entry {{item.recordId === revealedRecordId ? 'record-arriving' : ''}}" wx:for="{{recordTimeline}}" wx:key="recordId">
         <view class="timeline-round"><view class="timeline-dot"></view><text>{{item.roundTitle}} · {{item.honbaLabel}}</text></view>
         <view class="history-item timeline-card" bindtap="openRoundDetail" data-index="{{item.recordIndex}}" hover-class="timeline-pressed" hover-start-time="0" hover-stay-time="120" role="button" aria-label="查看{{item.round}}详情">
           <view class="timeline-avatar"><view wx:if="{{item.type === 'draw'}}" class="timeline-draw">◎</view><block wx:else><tile wx:for="{{item.seatTiles}}" wx:for-item="seatTile" wx:key="*this" tid="{{seatTile}}" size="normal"/><text wx:if="{{!item.seatTiles.length}}" class="timeline-draw">和</text></block></view>

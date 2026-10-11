@@ -10,7 +10,9 @@ module.exports = function embeddedEntry(definition) {
     properties: { config: { type: Object, value: {} } },
     data: JSON.parse(JSON.stringify(definition.data)),
     methods,
+    pageLifetimes: { show() { this._tileMotionInactive = false }, hide() { if (definition.onHide) definition.onHide.call(this) } },
     lifetimes: {
+      detached() { if (definition.onUnload) definition.onUnload.call(this) },
       attached() {
         const { options = {}, restore } = this.properties.config
         this.initializeInput(options)

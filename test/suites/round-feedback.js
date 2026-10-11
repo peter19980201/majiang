@@ -173,3 +173,12 @@ for(const count of [3,4]){
  assert.ok(Math.abs(trackLeft+2.5*stopWidth-50)<.0001)
  assert.ok(Math.abs(trackLeft+3.5*stopWidth+shift-50)<.0001)
 }
+
+// A newly committed record animates on its first reveal, not on every drawer open.
+const arrival=board(3);ron(arrival)
+const latestId=arrival.data.roundHistory[0].id
+assert.equal(arrival.data.freshRecordId,latestId);assert.equal(arrival.data.revealedRecordId,'')
+arrival.toggleRecords();assert.equal(arrival.data.revealedRecordId,latestId);assert.equal(arrival.data.freshRecordId,'')
+arrival.toggleRecords();arrival.toggleRecords();assert.equal(arrival.data.revealedRecordId,'')
+ron(arrival,2);assert.equal(arrival.data.revealedRecordId,arrival.data.roundHistory[1].id)
+arrival.undoLastRound();assert.equal(arrival.data.revealedRecordId,'');arrival.onUnload()

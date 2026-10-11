@@ -1,2 +1,2 @@
-<view class="seg-ctrl" wx:if="{{!boardMode}}"><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view>
+<view class="seg-ctrl motion-segments" wx:if="{{!boardMode}}"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{playerCount === 4 ? 0 : 100}}%)"></view><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view>
 <include src="table.wxml"/>

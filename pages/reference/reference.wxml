@@ -1,7 +1,7 @@
 <image class="page-landscape page-landscape-tab" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container rules-page">
-  <view class="seg-ctrl rules-tabs"><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button></view>
+  <view class="seg-ctrl rules-tabs motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{rulesTab === 'yaku' ? 0 : 100}}%)"></view><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button></view>
   <view hidden="{{rulesTab !== 'yaku'}}">
   <!-- 搜索栏 -->
   <view class="search-bar">
@@ -42,13 +42,14 @@
           <text class="badge han" wx:if="{{!item.isYakuman}}">{{item.han}}番</text>
           <text class="badge han open" wx:if="{{!item.isYakuman && item.hanOpen !== null && item.hanOpen !== item.han}}">副露{{item.hanOpen}}番</text>
           <text class="badge yakuman" wx:if="{{item.isYakuman && item.yakumanTimes === 1}}">役满</text>
-          <text class="badge yakuman double" wx:if="{{item.isYakuman && item.yakumanTimes === 2}}">双倍役满</text><text class="yaku-chevron">{{expandedIndex === index ? '∧' : '›'}}</text>
+          <text class="badge yakuman double" wx:if="{{item.isYakuman && item.yakumanTimes === 2}}">双倍役满</text><text class="yaku-chevron motion-chevron {{expandedIndex === index ? 'motion-open' : ''}}">›</text>
         </view>
       </view>
       <!-- 简述 -->
-      <text wx:if="{{expandedIndex === index}}" class="yaku-desc">{{item.desc}}</text>
+      <view class="motion-collapse {{expandedIndex === index ? 'motion-open' : ''}}" aria-hidden="{{expandedIndex !== index}}"><view class="motion-collapse-inner"><view wx:if="{{expandedYaku[item._index]}}">
+      <text class="yaku-desc">{{item.desc}}</text>
       <!-- 展开详情 -->
-      <view class="yaku-detail" wx:if="{{expandedIndex === index}}">
+      <view class="yaku-detail">
         <view class="detail-section">
           <text class="detail-label">成立条件</text>
           <text class="detail-text">{{item.condition}}</text>
@@ -63,6 +64,7 @@
           <text class="example-note" wx:if="{{item.example.note}}">{{item.example.note}}</text>
         </view>
       </view>
+      </view></view></view>
     </view>
   </view>
 

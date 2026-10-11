@@ -1,22 +1,22 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
-<view class="container quick-page"><view class="seg-ctrl" wx:if="{{!boardMode}}"><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view>
+<view class="container quick-page"><view class="seg-ctrl motion-segments" wx:if="{{!boardMode}}"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{playerCount === 4 ? 0 : 100}}%)"></view><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view>
 <text class="hint" wx:if="{{boardMode && playerCount === 3}}">三麻 · 自摸损 · 本场200点</text>
-  <view class="seg-ctrl top-tabs"><view class="seg {{tab === 'calc' ? 'active' : ''}}" bindtap="selectTab" data-tab="calc">番符算分</view><view class="seg {{tab === 'table' ? 'active' : ''}}" bindtap="selectTab" data-tab="table">点数速查表</view></view>
+  <view class="seg-ctrl top-tabs motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{tab === 'calc' ? 0 : 100}}%)"></view><view class="seg {{tab === 'calc' ? 'active' : ''}}" bindtap="selectTab" data-tab="calc">番符算分</view><view class="seg {{tab === 'table' ? 'active' : ''}}" bindtap="selectTab" data-tab="table">点数速查表</view></view>
   <block wx:if="{{tab === 'calc'}}">
     <view class="section">
       <text class="section-title">{{boardMode ? '本局场况' : '和牌场况'}}</text>
       <text wx:if="{{boardMode}}" class="context">{{isOya ? '庄家' : '闲家'}} · {{agariType === 'ron' ? '荣和' : '自摸'}} · {{honba}}本场</text>
       <block wx:else>
-        <view class="seg-ctrl"><view class="seg {{!isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="false">闲家</view><view class="seg {{isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="true">庄家</view></view>
-        <view class="seg-ctrl gap"><view class="seg {{agariType === 'ron' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="ron">荣和</view><view class="seg {{agariType === 'tsumo' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="tsumo">自摸</view></view>
+        <view class="seg-ctrl motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{isOya ? 100 : 0}}%)"></view><view class="seg {{!isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="false">闲家</view><view class="seg {{isOya ? 'active' : ''}}" bindtap="select" data-key="isOya" data-value="true">庄家</view></view>
+        <view class="seg-ctrl gap motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{agariType === 'ron' ? 0 : 100}}%)"></view><view class="seg {{agariType === 'ron' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="ron">荣和</view><view class="seg {{agariType === 'tsumo' ? 'active' : ''}}" bindtap="select" data-key="agariType" data-value="tsumo">自摸</view></view>
         <view class="honba-row"><text class="honba-label">本场数</text><view class="stepper"><button class="step-btn" bindtap="changeHonba" data-delta="-1" disabled="{{honba === 0}}">−</button><text class="step-val">{{honba}}</text><button class="step-btn" bindtap="changeHonba" data-delta="1" disabled="{{honba === 99}}">+</button></view></view>
       </block>
       <text wx:if="{{boardMode}}" class="hint">由对局自动带入。供托 {{fmt.points(boardSticks * 1000)}} 点，由记分板结算归属。</text>
     </view>
     <view class="section">
-      <view class="seg-ctrl"><view class="seg {{kind === 'hanfu' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="hanfu">番符</view><view class="seg {{kind === 'yakuman' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="yakuman">役满</view></view>
+      <view class="seg-ctrl motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{kind === 'hanfu' ? 0 : 100}}%)"></view><view class="seg {{kind === 'hanfu' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="hanfu">番符</view><view class="seg {{kind === 'yakuman' ? 'active' : ''}}" bindtap="select" data-key="kind" data-value="yakuman">役满</view></view>
       <block wx:if="{{kind === 'hanfu'}}">
         <text class="field-label">番数</text>
         <view class="option-grid"><button wx:for="{{hanOptions}}" wx:key="value" class="option {{han === item.value ? 'selected' : ''}}" bindtap="select" data-key="han" data-value="{{item.value}}">{{item.label}}</button></view>

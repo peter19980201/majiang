@@ -55,4 +55,13 @@ page { background:#123f33; color:#103c32; }
 
 .win-points .win-han-fu { font-size:var(--font-caption, 22rpx); color:#6c706e; font-weight:400; margin:0 10rpx 0 0; }
 
+
+
+.ranking-player { position:relative; }
+.settlement-celebrate .ranking-player { animation:ranking-arrive 300ms cubic-bezier(.23,1,.32,1) both; }
+.settlement-celebrate .ranking-player.first::after { content:''; position:absolute; inset:0; border:2rpx solid #e6ca7c; border-radius:inherit; pointer-events:none; animation:ranking-glow 500ms ease-out 160ms both; }
+@keyframes ranking-arrive { from { opacity:0; transform:translateY(10rpx); } to { opacity:1; transform:translateY(0); } }
+@keyframes ranking-glow { 0%,100% { opacity:0; } 45% { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .settlement-celebrate .ranking-player,.settlement-celebrate .ranking-player.first::after { animation:none; } .settlement-celebrate .ranking-player.first::after { display:none; } }
+
 @import '/styles/felt.wxss';

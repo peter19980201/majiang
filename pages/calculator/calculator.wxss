@@ -561,4 +561,17 @@
 .hand-table .meld-label { color:#dae5d5; }
 .hand-table .meld-del { color:#f1cbb6; }
 
+
+
+.calculator { position:relative; }
+.picker-flight-source { display:inline-flex; line-height:0; }
+.tile-flight { position:absolute; z-index:600; pointer-events:none; transform-origin:0 0; transition:transform 240ms cubic-bezier(.23,1,.32,1); }
+.tile-motion-hidden { opacity:0; }
+.hand-shift-moving { transition:transform 160ms cubic-bezier(.23,1,.32,1); }
+@media (prefers-reduced-motion:reduce) {
+ .tile-flight { display:none; transition:none; }
+ .tile-motion-hidden { opacity:1; }
+ .hand-shift-moving { transition:none; }
+}
+
 @import '/styles/felt.wxss';

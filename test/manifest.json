@@ -330,6 +330,24 @@
         "F29"
       ],
       "timeoutMs": 10000
+    },
+    {
+      "id": "ui-motion",
+      "description": "全页动效、精确选牌飞行、首帧隐藏及测量失败恢复",
+      "file": "suites/ui-motion.js",
+      "group": "ui",
+      "features": [
+        "F02",
+        "F03",
+        "F06",
+        "F08",
+        "F14",
+        "F16",
+        "F21",
+        "F26",
+        "F30"
+      ],
+      "timeoutMs": 10000
     }
   ],
   "optional": [

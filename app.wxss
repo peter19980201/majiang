@@ -34,3 +34,5 @@ page { position:relative; z-index:0; }
 page { background:#f6f4ed!important; }
 
 .page-motto-art { position:fixed; top:40rpx; right:22rpx; width:204rpx; height:108rpx; z-index:-1; pointer-events:none; }
+
+@import '/styles/motion.wxss';

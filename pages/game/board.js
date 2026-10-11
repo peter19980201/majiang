@@ -45,6 +45,7 @@ const boardDefinition = {
     roundHistory: [],
     historyCards: [],
     recordsExpanded: false,
+    freshRecordId: '', revealedRecordId: '',
     // 弹窗
     recordTimeline: [],
     recordsScrollTarget: '',
@@ -248,7 +249,11 @@ const boardDefinition = {
     else {
       this._removeSavedSettlement()
       this._autoSave()
-      if (!wasEditing) this._playRoundFeedback(this.data.roundHistory[this.data.roundHistory.length - 1])
+      if (!wasEditing) {
+        const latest = this.data.roundHistory[this.data.roundHistory.length - 1]
+        this.setData(this.data.recordsExpanded ? {revealedRecordId:latest.id,freshRecordId:''} : {freshRecordId:latest.id,revealedRecordId:''})
+        this._playRoundFeedback(latest)
+      }
     }
   },
 
@@ -267,7 +272,8 @@ const boardDefinition = {
 
   toggleRecords() {
     const recordsExpanded = !this.data.recordsExpanded
-    this.setData({ recordsExpanded, recordsScrollTarget: recordsExpanded ? 'record-list-top' : '' })
+    this.setData({ recordsExpanded, recordsScrollTarget: recordsExpanded ? 'record-list-top' : '',
+      revealedRecordId: recordsExpanded ? this.data.freshRecordId : '', freshRecordId: recordsExpanded ? '' : this.data.freshRecordId })
   },
 
   _refreshHistoryCards() {
@@ -281,7 +287,7 @@ const boardDefinition = {
       const players = record.before ? record.before.players : this.data.players
       const indices = record.winners ? record.winners.map(winner => winner.idx) :
         [record.input && Number.isInteger(record.input.selectedWinner) ? record.input.selectedWinner : players.findIndex(p => p.name === record.winner)]
-      return { ...card, recordIndex: index, seatTiles: indices.filter(i => players[i]).map(i => 27 + players[i].seatWind) }
+      return { ...card, recordId:record.id, recordIndex: index, seatTiles: indices.filter(i => players[i]).map(i => 27 + players[i].seatWind) }
     }).reverse()
     this.setData({ historyCards, recordTimeline })
   },
@@ -321,7 +327,7 @@ const boardDefinition = {
     if (!this._canWriteGame()) return
     this._clearRoundFeedback()
     this.setData({ ...Records.clone(record.before), roundHistory: this.data.roundHistory.slice(0, -1),
-      finalResult: [], gameOver: false,
+      finalResult: [], gameOver: false, freshRecordId:'', revealedRecordId:'',
       roundRiichi: Mode.zeros(this.data.config) })
     this._removeSavedSettlement()
     this._autoSave()

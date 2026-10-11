@@ -5,7 +5,7 @@
     <text>{{item.label}}</text>
   </button>
 </view>
-<view wx:if="{{newGameVisible}}" class="new-game-mask" catchtouchmove="blockModalTouch" catchtap="blockModalTouch">
+<view class="new-game-mask {{newGameVisible ? 'motion-open' : ''}}" aria-hidden="{{!newGameVisible}}" catchtouchmove="blockModalTouch" catchtap="blockModalTouch">
   <view class="new-game-dialog" role="dialog" aria-modal="true" aria-label="结算当前对局并新建？">
     <image class="dialog-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true" />
     <view class="dialog-content">
