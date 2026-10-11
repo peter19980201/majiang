@@ -7,7 +7,6 @@
     <text class="home-subtitle">符数 · 番数 · 点数</text>
   </view>
   <view class="resume-card">
-    <image class="card-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image>
     <block wx:if="{{currentGame}}">
       <text class="resume-badge">{{currentGame.gameState.config.playerCount === 3 ? '三麻 · ' : ''}}对局进行中</text>
       <text class="resume-round">{{currentGame.gameState.roundCycle > 1 ? '第' + currentGame.gameState.roundCycle + '轮 · ' : ''}}{{currentGame.gameState.roundWindName}}{{currentGame.gameState.roundNum}}局 · {{currentGame.gameState.honba}}本场</text>
@@ -20,8 +19,8 @@
     </view>
   </view>
   <view class="home-calculators">
-    <navigator class="menu-item" url="/pages/calculator/calculator"><image class="calculator-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image><text class="menu-icon">計</text><text class="menu-name">手牌算分</text><text class="menu-desc">输入手牌，计算番符与点数</text><text class="menu-arrow">›</text></navigator>
-    <navigator class="menu-item" url="/pages/quick-score/quick-score"><image class="calculator-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true"></image><text class="menu-icon">番</text><text class="menu-name">番符算分</text><text class="menu-desc">输入番符，计算支付点数</text><text class="menu-arrow">›</text></navigator>
+    <navigator class="menu-item" url="/pages/calculator/calculator"><text class="menu-icon">計</text><text class="menu-name">手牌算分</text><text class="menu-desc">输入手牌，计算番符与点数</text><text class="menu-arrow">›</text></navigator>
+    <navigator class="menu-item" url="/pages/quick-score/quick-score"><text class="menu-icon">番</text><text class="menu-name">番符算分</text><text class="menu-desc">输入番符，计算支付点数</text><text class="menu-arrow">›</text></navigator>
   </view>
   <view class="home-footer"><text>参考规则：雀魂</text></view>
 </view>

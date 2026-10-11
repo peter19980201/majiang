@@ -12,7 +12,7 @@ for (const file of ['styles/theme.wxss', 'styles/score-table.wxss',
   'pages/calculator/calculator.wxss', 'pages/game/board.wxss', 'pages/settlement/settlement.wxss']) {
   assert(read(file).trim().endsWith("@import '/styles/felt.wxss';"), `${file}: local background overrides must not remove cloth`)
 }
-for (const selector of ['.seg.active', '.btn-primary', '.payment-card', '.win-choice.selected']) {
+for (const selector of ['.seg.active', '.btn-primary', '.payment-card', '.win-choice.selected', '.home .resume-card', '.home-calculators .menu-item']) {
   assert(material.includes(selector), `${selector}: shared material`)
 }
 assert(/\.confirm-button\.confirm-disabled[^{}]+\{\s*background-image:none;/.test(material), 'disabled controls must lose the active cloth')
@@ -41,3 +41,7 @@ for (const file of ['app.wxss', 'components/calculator-entry/index.wxss', 'compo
   assert(resolved.includes('data:image/jpeg;base64,'), file + ' imports local cloth')
 }
 console.log('Animated green selection plates: felt material and isolated-host imports verified; motion cannot erase texture.')
+
+const homeMarkup = read('pages/index/index.wxml')
+assert(!/class="(?:card-art|calculator-art)"/.test(homeMarkup), 'old light artwork must not cover the home cloth')
+assert(!read('pages/index/index.wxss').includes('.menu-item::after'), 'paper overlay must not cover the home cloth')

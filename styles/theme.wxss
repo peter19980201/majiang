@@ -61,6 +61,8 @@
 }
 
 .seg-ctrl {
+  box-sizing:border-box;
+  border:1rpx solid #b8c4b8;
   display:flex;
   background:#eeeee7;
   border-radius:14rpx;

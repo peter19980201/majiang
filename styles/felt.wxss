@@ -1,6 +1,8 @@
 /* Reuse the board cloth. Data URI supports WXSS backgrounds without network requests.
  * Keep this material below disabled-state overrides and out of decorative artwork.
  */
+.home .resume-card,
+.home-calculators .menu-item,
 .btn-primary,
 .modal-btn.confirm,
 .seg.active,

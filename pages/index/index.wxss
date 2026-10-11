@@ -203,7 +203,7 @@
 .resume-actions .resume-end { color:#7a5141; border-color:#cbb8a5; }
 .resume-empty { position:relative; z-index:1; flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; gap:18rpx; }
 .home-calculators { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18rpx; margin-top:22rpx; }
-/* Both entry cards share the same quiet paper-and-bamboo treatment. */
+/* The three home panels share the board cloth material. */
 .home-calculators .menu-item {
   position:relative;
   overflow:hidden;
@@ -218,22 +218,6 @@
   background:#f8f8ef;
   border-color:#d9ddcf;
   box-shadow:0 3rpx 8rpx rgba(39,46,25,.08);
-}
-.calculator-art {
-  position:absolute;
-  left:0;
-  top:88rpx;
-  width:100%;
-  height:220rpx;
-  opacity:.65;
-  pointer-events:none;
-}
-.home-calculators .menu-item::after {
-  content:'';
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg,#f8f8ef 0%,rgba(248,248,239,.95) 30%,rgba(248,248,239,0) 65%);
-  pointer-events:none;
 }
 .home-calculators .menu-icon,
 .home-calculators .menu-name,
@@ -257,5 +241,17 @@
 .home-calculators .menu-desc { margin-top:4rpx; font-size:var(--font-caption, 22rpx); line-height:1.6; }
 .home-calculators .menu-item:active { opacity:.8; }
 .home-footer { justify-content:center; }
+
+/* Light foregrounds keep both empty and active game states readable on felt. */
+.home .resume-card,.home-calculators .menu-item { color:#fff8e6; border-color:#718c72; box-shadow:inset 0 0 0 1rpx rgba(233,223,179,.12),0 4rpx 12rpx rgba(13,48,36,.14); }
+.resume-card .menu-desc,.home-calculators .menu-desc { color:#c9d7c5; }
+.home-calculators .menu-name { color:#fff8e6; }
+.home-calculators .menu-icon { color:#ead7a0; border-color:#9f9d72; background:rgba(9,40,29,.35); }
+.home-calculators .menu-arrow { color:#ead7a0; }
+.resume-card .resume-name { color:#d5dfce; }
+.resume-card .resume-points,.resume-card .resume-round { color:#fff8e6; }
+.resume-card .resume-player { border-right-color:#6c876d; }
+.resume-card .resume-badge { color:#ead7a0; border:1rpx solid #9f9d72; }
+.resume-card .resume-actions .btn-primary { border-color:#b5b387; color:#fff8e6; }
 
 @import '/styles/felt.wxss';
