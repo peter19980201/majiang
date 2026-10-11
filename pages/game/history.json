@@ -2,6 +2,7 @@
   "navigationBarTitleText": "",
   "usingComponents": {
     "tile": "/components/tile/tile",
-    "settlement-view": "/components/settlement-view/index"
+    "settlement-view": "/components/settlement-view/index",
+    "drawer-handle": "/components/drawer-handle/index"
   }
 }

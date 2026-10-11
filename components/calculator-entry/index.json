@@ -1,1 +1,7 @@
-{"component":true,"usingComponents":{"tile":"/components/tile/tile"}}
+{
+  "component": true,
+  "usingComponents": {
+    "tile": "/components/tile/tile",
+    "drawer-handle": "/components/drawer-handle/index"
+  }
+}

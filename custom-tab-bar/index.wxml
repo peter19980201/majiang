@@ -23,7 +23,7 @@
 
 <view class="mode-picker-mask {{modePickerVisible ? 'is-open' : ''}}" aria-hidden="{{!modePickerVisible}}" catchtap="closeModePicker" catchtouchmove="blockModalTouch">
   <view class="mode-picker-sheet" role="dialog" aria-modal="true" aria-label="选择对局人数" catchtap="blockModalTouch">
-    <view class="mode-picker-grip"></view>
+    <drawer-handle bind:activate="closeModePicker" />
     <view class="mode-picker-heading"><text>新建对局</text><button class="mode-picker-close" bindtap="closeModePicker" aria-label="关闭人数选择">×</button></view>
     <view class="mode-picker-options">
       <button class="mode-picker-option btn-primary" data-count="3" bindtap="selectGameMode"><text class="mode-picker-name">三麻</text><text class="mode-picker-note">三人对局</text></button>

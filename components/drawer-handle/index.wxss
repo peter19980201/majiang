@@ -1,0 +1,4 @@
+:host { display:block; flex-shrink:0; position:relative; z-index:1; }
+.handle-hit { height:44px; width:100%; display:flex; align-items:center; justify-content:center; box-sizing:border-box; }
+.handle-line { width:72rpx; height:9rpx; border-radius:9rpx; background:#bfc2b8; pointer-events:none; }
+.handle-hit:active .handle-line { background:#88978b; }

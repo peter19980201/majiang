@@ -1,1 +1,6 @@
-{"component":true}
+{
+  "component": true,
+  "usingComponents": {
+    "drawer-handle": "/components/drawer-handle/index"
+  }
+}

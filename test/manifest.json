@@ -354,6 +354,19 @@
         "F30"
       ],
       "timeoutMs": 10000
+    },
+    {
+      "id": "drawer-handle",
+      "file": "suites/drawer-handle.js",
+      "group": "ui",
+      "features": [
+        "F14",
+        "F16",
+        "F26",
+        "F30"
+      ],
+      "timeoutMs": 10000,
+      "description": "抽屉横线仅点击关闭、记录点击展开收起、拖动不关闭及原关闭入口保留"
     }
   ],
   "optional": [

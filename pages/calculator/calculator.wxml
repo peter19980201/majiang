@@ -250,7 +250,7 @@
   <!-- 副露弹窗 -->
   <view class="modal-mask motion-sheet-mask {{showMeldModal ? 'motion-open' : ''}}" aria-hidden="{{!showMeldModal}}" bindtap="closeMeldPanel" >
     <view class="modal-content" catchtap="stopBubble">
-      <view class="modal-handle"></view>
+      <drawer-handle bind:activate="closeMeldPanel" />
       <view class="sheet-heading"><text class="modal-title">添加副露</text><text class="sheet-close" bindtap="closeMeldPanel">×</text></view>
       <view class="meld-type-grid" wx:if="{{!editingMeldType}}">
         <view wx:if="{{playerCount !== 3}}" class="meld-type-btn" bindtap="startMeldInput" data-type="chi">
@@ -312,7 +312,7 @@
   <!-- 记分板模式: 结果弹窗 -->
   <view class="modal-mask motion-sheet-mask {{showBoardResult ? 'motion-open' : ''}}" aria-hidden="{{!showBoardResult}}" bindtap="cancelBoardResult" >
     <view class="modal-content board-result" catchtap="stopBubble" >
-      <view class="modal-handle"></view>
+      <drawer-handle bind:activate="cancelBoardResult" />
       <text class="modal-title">计算结果</text>
       <view class="br-score-section">
         <text class="br-level" wx:if="{{boardResult.level}}">{{boardResult.level}}</text>

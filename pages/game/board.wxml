@@ -49,7 +49,7 @@
   <view class="record-dock-space"></view>
   <!-- 局历史 -->
   <view class="section record-section {{recordsExpanded ? '' : 'records-collapsed'}}">
-    <view class="record-handle" bindtap="toggleRecords"><view class="record-grip"></view></view>
+    <drawer-handle expanded="{{recordsExpanded}}" bind:activate="toggleRecords" />
     <view class="section-header record-header" bindtap="toggleRecords" role="button" aria-expanded="{{recordsExpanded}}" aria-label="本局记录，{{recordsExpanded ? '点击收起' : '点击展开'}}"><text class="section-title">本局记录</text><text class="record-count">{{roundHistory.length}} 条</text><view class="record-chevron {{recordsExpanded ? 'points-down' : ''}}"></view></view>
     <view class="record-body" aria-hidden="{{!recordsExpanded}}">
     <view class="record-context"><view class="record-context-label"><view class="record-status-dot"></view><text>当前对局</text></view><view class="record-context-values"><text class="record-current-round">{{roundCycle > 1 ? '第' + roundCycle + '轮 · ' : ''}}{{roundWindName === '東' ? '东' : roundWindName}}{{roundNum}}局 · {{honba}}本场</text><text class="record-sticks">供托 {{fmt.points(riichiSticks * 1000)}} 点</text></view></view>
@@ -80,7 +80,7 @@
   <!-- 荣和弹窗 -->
   <view class="modal-mask entry-mask {{showRonModal ? 'entry-visible' : ''}}" aria-hidden="{{!showRonModal}}" bindtap="closeRon">
     <view class="win-sheet" catchtap="stopBubble">
-      <view class="win-grip"></view>
+      <drawer-handle bind:activate="closeRon" />
       <view class="win-heading"><text class="win-title">{{editingLastRound ? '修改荣和' : '荣和'}}</text><button class="win-close" bindtap="closeRon" aria-label="关闭荣和">×</button></view>
       <text class="win-subtitle">{{entryRoundLabel}} · 供托 {{fmt.points(entryRiichiSticks * 1000)}} 点</text>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y>
@@ -118,7 +118,7 @@
   <!-- 自摸弹窗 -->
   <view class="modal-mask entry-mask {{showTsumoModal ? 'entry-visible' : ''}}" aria-hidden="{{!showTsumoModal}}" bindtap="closeTsumo">
     <view class="win-sheet" catchtap="stopBubble">
-      <view class="win-grip"></view>
+      <drawer-handle bind:activate="closeTsumo" />
       <view class="win-heading"><text class="win-title">{{editingLastRound ? '修改自摸' : '自摸'}}</text><button class="win-close" bindtap="closeTsumo" aria-label="关闭自摸">×</button></view>
       <text class="win-subtitle">{{entryRoundLabel}} · 供托 {{fmt.points(entryRiichiSticks * 1000)}} 点</text>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y><view class="win-form">
@@ -144,7 +144,7 @@
   <!-- 流局弹窗 -->
   <view class="modal-mask entry-mask {{showDrawModal ? 'entry-visible' : ''}}" aria-hidden="{{!showDrawModal}}" bindtap="closeDraw">
     <view class="win-sheet" catchtap="stopBubble">
-      <view class="win-grip"></view>
+      <drawer-handle bind:activate="closeDraw" />
       <view class="win-heading"><text class="win-title">{{editingLastRound ? '修改流局' : '流局'}}</text><button class="win-close" bindtap="closeDraw" aria-label="关闭流局">×</button></view>
       <text class="win-subtitle">{{entryRoundLabel}} · 供托 {{fmt.points(entryRiichiSticks * 1000)}} 点</text>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y><view class="win-form">
@@ -165,7 +165,7 @@
   </view>
   <view class="modal-mask entry-mask input-overlay {{inputOverlayVisible ? 'entry-visible' : ''}}" aria-hidden="{{!inputOverlayVisible}}" bindtap="closeInputOverlay">
     <view class="win-sheet" catchtap="stopBubble">
-      <view class="win-grip"></view>
+      <drawer-handle bind:activate="closeInputOverlay" />
       <view class="win-heading"><text class="win-title input-overlay-title">{{inputOverlayKind === 'quick' ? '输入番符' : '录入手牌'}}</text><button class="win-close" bindtap="closeInputOverlay" aria-label="返回和牌窗口">×</button></view>
       <text class="win-subtitle">{{entryRoundLabel}} · {{inputOverlayConfig.options.agariType === 'tsumo' ? '自摸' : '荣和'}}</text>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y>
@@ -178,7 +178,7 @@
     <view class="win-sheet detail-sheet" catchtap="stopBubble">
       <image class="detail-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
       <image class="detail-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-hidden="true" />
-      <view class="win-grip"></view>
+      <drawer-handle bind:activate="closeRoundDetail" />
       <view class="win-heading"><text class="win-title input-overlay-title">本局详情</text><button class="win-close" bindtap="closeRoundDetail" aria-label="返回本局记录">×</button></view>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y>
         <round-detail record="{{roundDetailRecord}}" bind:editRound="editDetailRound" bind:deleteRound="deleteDetailRound"/>

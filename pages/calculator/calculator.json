@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "",
   "usingComponents": {
-    "tile": "/components/tile/tile"
+    "tile": "/components/tile/tile",
+    "drawer-handle": "/components/drawer-handle/index"
   }
 }

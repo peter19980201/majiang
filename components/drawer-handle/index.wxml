@@ -1,0 +1,1 @@
+<view class="handle-hit" role="button" aria-label="{{expanded ? '收起抽屉' : '展开本局记录'}}" catchtap="tap" bindtouchstart="start" bindtouchmove="move" bindtouchend="end" bindtouchcancel="cancel"><view class="handle-line" aria-hidden="true"></view></view>
