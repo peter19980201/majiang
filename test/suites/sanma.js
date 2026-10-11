@@ -121,7 +121,7 @@ const table=page('pages/quick-score/quick-score.js');table.onLoad({playerCount:3
 const standalone=page('pages/calculator/calculator.js');standalone.onLoad({});standalone.setPlayerCount(event({count:3}));assert.equal(standalone.data.tileRemaining[4],0);standalone.startMeldInput(event({type:'chi'}));assert.equal(standalone.data.editingMeldType,'')
 for(let i=0;i<5;i++)standalone.changeNuki(event({delta:1}));assert.equal(standalone.data.nuki,4);assert.equal(standalone.data.tileRemaining[30],0)
 standalone.setPlayerCount(event({count:4}));assert.equal(standalone.data.nuki,0);assert.equal(standalone.data.tileRemaining[4],4)
-const setup=page('pages/game/setup.js');setup.setPlayerCount(event({count:3}));assert.equal(setup.data.players.length,3);assert.equal(setup.data.startPoints,35000);setup.setPlayerCount(event({count:4}));assert.equal(setup.data.players.length,4);assert.equal(setup.data.startPoints,25000)
+const setup=page('pages/game/setup.js');setup.onLoad({playerCount:'3'});assert.equal(setup.data.players.length,3);assert.equal(setup.data.startPoints,35000);setup.onLoad({playerCount:'4'});assert.equal(setup.data.players.length,4);assert.equal(setup.data.startPoints,25000)
 assert.equal(Reports.build({config:{playerCount:3,gameType:'free'}}).type,'三麻 · 自由记分')
 assert.equal(Reports.build({config:{gameType:'free'}}).type,'自由记分')
 // Three-player boards retain the four cardinal positions, leaving north vacant.

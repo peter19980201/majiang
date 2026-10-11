@@ -18,3 +18,26 @@ for (const selector of ['.seg.active', '.btn-primary', '.payment-card', '.win-ch
 assert(/\.confirm-button\.confirm-disabled[^{}]+\{\s*background-image:none;/.test(material), 'disabled controls must lose the active cloth')
 assert(!/(?:^|[;{])\s*(?:position|z-index|pointer-events)\s*:/m.test(material), 'material must not add click-blocking layers')
 console.log('Felt surfaces: original table asset, local loading, page/component imports and disabled-state reset passed.')
+
+// The animated selection plate owns the texture; labels stay transparent.
+const plateSelector = '.motion-segments > .motion-selection'
+assert(material.slice(0, material.indexOf('{')).split(',').map(s => s.trim()).includes(plateSelector), 'sliding green selection plate must share the felt material')
+const motion = read('styles/motion.wxss')
+const plateRules = motion.match(/\.motion-segments > \.motion-selection\s*\{([^}]+)\}/)[1]
+assert(!/(?:^|;)\s*background\s*:/.test(plateRules), 'later motion import must not reset the texture via background shorthand')
+assert(!/background-image\s*:/.test(plateRules), 'motion must preserve shared texture')
+assert(/background-color\s*:#1d5142/.test(plateRules))
+// Resolve each isolated component's imports: page globals do not cross the boundary.
+function importedStyles(file, stack = []) {
+  assert(!stack.includes(file), 'cyclic style import: ' + file)
+  return read(file).replace(/@import\s+['"]([^'"]+)['"];?/g, (_, target) => {
+    const resolved = target.startsWith('/') ? target.slice(1) : path.posix.normalize(path.posix.join(path.posix.dirname(file), target))
+    return importedStyles(resolved, [...stack, file])
+  })
+}
+for (const file of ['app.wxss', 'components/calculator-entry/index.wxss', 'components/quick-score-entry/index.wxss', 'components/points-table/index.wxss']) {
+  const resolved = importedStyles(file)
+  assert(resolved.includes(plateSelector + ','), file + ' imports textured plate selector')
+  assert(resolved.includes('data:image/jpeg;base64,'), file + ' imports local cloth')
+}
+console.log('Animated green selection plates: felt material and isolated-host imports verified; motion cannot erase texture.')

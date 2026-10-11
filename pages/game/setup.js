@@ -17,12 +17,10 @@ Page(withShare({
     ]
   },
 
-  setPlayerCount(e) {
-    const playerCount = Number(e.currentTarget.dataset.count)
-    if (![3, 4].includes(playerCount) || playerCount === this.data.playerCount) return
-    const players = this.data.players.slice(0, playerCount)
-    while (players.length < playerCount) players.push('北家')
-    this.setData({ playerCount, players, startPoints: playerCount === 3 ? 35000 : 25000,
+  onLoad(options = {}) {
+    const playerCount = Number(options.playerCount) === 3 ? 3 : 4
+    this.setData({ playerCount, players: ['東家', '南家', '西家', '北家'].slice(0, playerCount),
+      startPoints: playerCount === 3 ? 35000 : 25000,
       returnPoints: playerCount === 3 ? 40000 : 30000 })
   },
   setSanmaUma(e) { this.setData({ sanmaUma: Number(e.currentTarget.dataset.val) }) },

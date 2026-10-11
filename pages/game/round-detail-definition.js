@@ -1,6 +1,6 @@
 const { withShare } = require('../../utils/share')
 module.exports = withShare({
-  data: { record: null, busy: false },
+  data: { record: null, busy: false, embedded: false },
 
   onLoad() {
     this.channel = this.getOpenerEventChannel()

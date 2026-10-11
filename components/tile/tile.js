@@ -16,7 +16,7 @@ Component({
     size: { type:String,value:'normal' },
     extra: { type:String,value:'' }
   },
-  data: { face:'', number:'', suit:'', isRed:false, faceSrc:'', label:'', bodySrc:'' },
+  data: { face:'', number:'', suit:'', isRed:false, label:'', bodySrc:'' },
   observers: {
     'tid, extra': function(id,extra) { this.updateDisplay(id,extra) }
   },
@@ -27,16 +27,14 @@ Component({
       if (this._displayId === id && this._displayExtra === extra) return
       this._displayId = id
       this._displayExtra = extra
-      if (id < 0 || id > 33) { this.setData({ face:'',faceSrc:'',bodySrc:'',number:'',suit:'',label:'',isRed:false }); return }
+      if (id < 0 || id > 33) { this.setData({ face:'',bodySrc:'',number:'',suit:'',label:'',isRed:false }); return }
       const number=['一','二','三','四','五','六','七','八','九'][id%9]
       const face=id<9?'man':id<18?'pin':id<27?'sou':'honor'
-      const rank=id%9+1
       const isRed=(extra||'').indexOf('red5')!==-1
       const bodyName = isRed && RED_FIVES[id] ? RED_FIVES[id] : ENGRAVED_TILES[id]
       const bodySrc = bodyName ? '/assets/tiles/engraved-v1/'+bodyName+'.png' : ''
-      const faceSrc = face==='pin'||face==='sou' ? '/assets/tiles/'+face+'-'+rank+(isRed&&rank===5?'-red':'')+'.svg' : ''
       const label = face==='honor' ? ['東','南','西','北','白','發','中'][id-27] : number+({man:'万',pin:'筒',sou:'索'})[face]
-      this.setData({ bodySrc,faceSrc,label,face,number,suit:face==='honor'?['東','南','西','北','白','發','中'][id-27]:'',isRed })
+      this.setData({ bodySrc,label,face,number,suit:face==='honor'?['東','南','西','北','白','發','中'][id-27]:'',isRed })
     }
   }
 })

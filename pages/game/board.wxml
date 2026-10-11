@@ -175,7 +175,9 @@
     </view>
   </view>
   <view class="modal-mask entry-mask detail-overlay {{roundDetailVisible ? 'entry-visible' : ''}}" aria-hidden="{{!roundDetailVisible}}" bindtap="closeRoundDetail">
-    <view class="win-sheet" catchtap="stopBubble">
+    <view class="win-sheet detail-sheet" catchtap="stopBubble">
+      <image class="detail-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
+      <image class="detail-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-hidden="true" />
       <view class="win-grip"></view>
       <view class="win-heading"><text class="win-title input-overlay-title">本局详情</text><button class="win-close" bindtap="closeRoundDetail" aria-label="返回本局记录">×</button></view>
       <scroll-view enhanced="{{true}}" show-scrollbar="{{false}}" class="win-scroll" scroll-y>

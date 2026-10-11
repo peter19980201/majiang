@@ -4,6 +4,7 @@
 .btn-primary,
 .modal-btn.confirm,
 .seg.active,
+.motion-segments > .motion-selection,
 .rules-tabs .seg.active,
 .table-row.table-head,
 .save,

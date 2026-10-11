@@ -8,9 +8,9 @@ const tabs = [
   { route:'pages/profile/profile', label:'我的', icon:'profile' }
 ]
 
-function openNewGame(afterSettled, complete = () => {}, showConfirmation = options => wx.showModal(options)) {
+function openNewGame(afterSettled, complete = () => {}, showConfirmation = options => wx.showModal(options), playerCount) {
   const saved = GameStorage.current()
-  const open = () => wx.navigateTo({ url:'/pages/game/setup', complete })
+  const open = () => wx.navigateTo({ url:'/pages/game/setup' + ([3, 4].includes(playerCount) ? '?playerCount=' + playerCount : ''), complete })
   if (!saved || !saved.gameState || saved.gameState.gameOver) return open()
   showConfirmation({
     title:'结算当前对局并新建？', content:'当前对局将立即结束，按现有点数结算并保存到历史记录。',

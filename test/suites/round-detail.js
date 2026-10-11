@@ -147,3 +147,40 @@ detail.setData({ record: { ...detail.data.record, round: '另一局' } })
 confirmedOldModal.success({ confirm: true })
 assert.strictEqual(detail.data.busy, false)
 assert.deepStrictEqual(board.data.roundHistory, current)
+
+// Page decorations must never enter the isolated drawer's normal flow, even
+// on its first render before attached runs. Standalone details retain them.
+const fs = require('fs')
+let componentDefinition
+global.Component = value => { componentDefinition = value }
+require('../../components/round-detail/index')
+assert.strictEqual(componentDefinition.data.embedded, true)
+const standalone = page('pages/game/round-detail.js')
+assert.strictEqual(standalone.data.embedded, false)
+const detailMarkup = fs.readFileSync(path.resolve(__dirname, '../../pages/game/round-detail.wxml'), 'utf8')
+for (const className of ['page-landscape', 'page-motto-art']) {
+  const imageTag = detailMarkup.match(new RegExp('<image[^>]*class="' + className + '"[^>]*>'))
+  assert(imageTag, className + ' remains available to standalone pages')
+  assert(imageTag[0].includes('wx:if="{{!embedded}}"'), className + ' must not occupy drawer space')
+}
+assert(detailMarkup.includes('class="detail-page" wx:if="{{record}}"'), 'detail content remains available in both hosts')
+// Embedded details keep the same artwork in a host-owned, non-scrolling layer.
+const boardMarkup = fs.readFileSync(path.resolve(__dirname, '../../pages/game/board.wxml'), 'utf8')
+const boardStyles = fs.readFileSync(path.resolve(__dirname, '../../pages/game/board.wxss'), 'utf8')
+const sheetStart = boardMarkup.indexOf('class="win-sheet detail-sheet"')
+const scrollStart = boardMarkup.indexOf('<scroll-view', sheetStart)
+const drawerBackdrop = boardMarkup.slice(sheetStart, scrollStart)
+for (const [name, asset, mode] of [
+  ['detail-landscape', 'profile-landscape.jpg', 'aspectFill'],
+  ['detail-motto-art', 'profile-motto.png', 'aspectFit']
+]) {
+  assert(drawerBackdrop.includes(`class="${name}" src="/assets/home/${asset}" mode="${mode}"`), 'drawer must display ' + asset + ' outside its scrolling content')
+  const rules = boardStyles.match(new RegExp('\\.' + name + ' \\{([^}]+)\\}'))[1]
+  assert(rules.includes('position:absolute'))
+  assert(rules.includes('pointer-events:none'))
+  assert(rules.includes('z-index:0'))
+}
+assert(boardStyles.includes('.detail-motto-art { position:absolute; top:112rpx;'), 'calligraphy clears the header close button')
+assert(boardStyles.includes('.detail-overlay .detail-sheet { position:relative;'), 'artwork is anchored to drawer bounds')
+assert(boardStyles.includes('.detail-sheet .win-grip,.detail-sheet .win-heading,.detail-sheet .win-scroll { position:relative; z-index:1; }'), 'content and controls stay above artwork')
+console.log('Detail backdrop: page and drawer retain artwork; drawer images stay outside scrolling flow and below controls.')

@@ -131,7 +131,8 @@
         "F22",
         "F28"
       ],
-      "timeoutMs": 60000
+      "timeoutMs": 60000,
+      "description": "详情抽屉编辑删除、旧记录保护及独立页背景不进入内嵌布局"
     },
     {
       "id": "share",
@@ -175,7 +176,8 @@
         "F19",
         "F20"
       ],
-      "timeoutMs": 60000
+      "timeoutMs": 60000,
+      "description": "页面状态及34种牌面、3种赤五完整PNG资源映射；旧SVG清理回归"
     },
     {
       "id": "winning-hands-expanded",
@@ -252,7 +254,7 @@
     },
     {
       "id": "main-navigation",
-      "description": "主导航及自定义结算新建确认：取消、防重复、卸载与保存失败保护",
+      "description": "主导航、加号人数抽屉、三四麻创建参数及已有对局结算确认/取消/失败保护",
       "file": "suites/main-navigation.js",
       "group": "ui",
       "features": [
@@ -261,7 +263,9 @@
         "F08",
         "F17",
         "F19",
-        "F26"
+        "F26",
+        "F28",
+        "F30"
       ],
       "timeoutMs": 10000
     },
@@ -270,9 +274,11 @@
       "file": "suites/felt-surfaces.js",
       "group": "ui",
       "features": [
-        "F27"
+        "F27",
+        "F30"
       ],
-      "timeoutMs": 10000
+      "timeoutMs": 10000,
+      "description": "统一绿底台呢及滑动选中底板纹理、样式覆盖与内嵌组件导入"
     },
     {
       "id": "home-end-game",

@@ -9,7 +9,7 @@
 .motion-sheet-mask.modal-mask.motion-open { visibility:visible; pointer-events:auto; background:rgba(8,25,20,.5); transition:background-color 220ms ease-out; }
 .motion-sheet-mask.modal-mask.motion-open .modal-content { transform:translateY(0); }
 .motion-segments { position:relative; isolation:isolate; gap:0!important; padding:4rpx!important; }
-.motion-segments > .motion-selection { position:absolute; left:4rpx; top:4rpx; bottom:4rpx; width:calc(50% - 4rpx); border-radius:10rpx; background:#1d5142; box-shadow:0 2rpx 5rpx rgba(0,30,20,.12); pointer-events:none; z-index:0; transition:transform 180ms cubic-bezier(.23,1,.32,1); }
+.motion-segments > .motion-selection { position:absolute; left:4rpx; top:4rpx; bottom:4rpx; width:calc(50% - 4rpx); border-radius:10rpx; background-color:#1d5142; box-shadow:0 2rpx 5rpx rgba(0,30,20,.12); pointer-events:none; z-index:0; transition:transform 180ms cubic-bezier(.23,1,.32,1); }
 .motion-segments > .seg,.motion-segments > .uma-btn { position:relative; z-index:1; flex:1; background:transparent!important; border-color:transparent; transition:color 180ms ease-out; }
 .motion-segments > .seg.active,.motion-segments > .uma-btn.active { background:transparent!important; background-image:none!important; color:#fffbea; }
 @media (prefers-reduced-motion:reduce) {

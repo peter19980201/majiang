@@ -1,0 +1,172 @@
+[
+  {
+    "file": "assets/home/profile-landscape.jpg",
+    "beforeBytes": 285640,
+    "afterBytes": 190722,
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "method": "JPEG quality 85, original dimensions"
+  },
+  {
+    "file": "assets/home/resume.jpg",
+    "beforeBytes": 91378,
+    "afterBytes": 41023,
+    "dimensions": [
+      1050,
+      612
+    ],
+    "method": "JPEG quality 85, original dimensions"
+  },
+  {
+    "file": "assets/home/profile-motto.png",
+    "beforeBytes": 91212,
+    "afterBytes": 72763,
+    "dimensions": [
+      640,
+      320
+    ],
+    "method": "lossless PNG"
+  },
+  {
+    "file": "assets/home/header.jpg",
+    "beforeBytes": 106913,
+    "afterBytes": 55825,
+    "dimensions": [
+      1125,
+      468
+    ],
+    "method": "JPEG quality 85, original dimensions"
+  },
+  {
+    "file": "assets/report/poster-paper.jpg",
+    "beforeBytes": 363407,
+    "afterBytes": 206680,
+    "dimensions": [
+      1024,
+      1536
+    ],
+    "method": "JPEG quality 85, original dimensions"
+  },
+  {
+    "file": "assets/tiles/pin-4.svg",
+    "beforeBytes": 1030,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-5.svg",
+    "beforeBytes": 1181,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-4.svg",
+    "beforeBytes": 958,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-5.svg",
+    "beforeBytes": 1271,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-5-red.svg",
+    "beforeBytes": 1181,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-7.svg",
+    "beforeBytes": 1753,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-6.svg",
+    "beforeBytes": 1404,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-7.svg",
+    "beforeBytes": 1613,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-6.svg",
+    "beforeBytes": 1512,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-3.svg",
+    "beforeBytes": 735,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-2.svg",
+    "beforeBytes": 548,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-3.svg",
+    "beforeBytes": 789,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-2.svg",
+    "beforeBytes": 512,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-1.svg",
+    "beforeBytes": 309,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-1.svg",
+    "beforeBytes": 661,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-5-red.svg",
+    "beforeBytes": 1271,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-8.svg",
+    "beforeBytes": 1994,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-9.svg",
+    "beforeBytes": 2055,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/sou-8.svg",
+    "beforeBytes": 1834,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  },
+  {
+    "file": "assets/tiles/pin-9.svg",
+    "beforeBytes": 2235,
+    "afterBytes": 0,
+    "method": "removed obsolete face artwork"
+  }
+]

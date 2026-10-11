@@ -100,26 +100,27 @@ assert.strictEqual(example.length,14)
 assert.strictEqual(tiles.tilesToCounts(example).filter(n => n === 2).length,7)
 console.log('Seven-pairs illustration: 14 tiles, seven distinct pairs.')
 
-// The rendered assets, not only component metadata, have the right mark counts.
+// Every supported tile resolves to its exact full-body artwork. Legacy SVG faces
+// are no longer rendered; verify the shipped PNG mapping instead.
 const fs = require('fs')
-for (const suit of ['pin','sou']) for (let rank=1;rank<=9;rank++) {
-  const variants = rank===5 ? ['', '-red'] : ['']
-  for (const variant of variants) {
-    const svg = fs.readFileSync(path.resolve(__dirname,`../../assets/tiles/${suit}-${rank}${variant}.svg`),'utf8')
-    const marks = svg.match(suit==='pin' ? /data-pip=/g : /data-bamboo=/g) || []
-    assert.strictEqual(marks.length,rank,`${suit} ${rank}${variant} face markings`)
-  }
-}
+const names = ['man','pin','sou'].flatMap(suit =>
+  Array.from({length:9},(_,i)=>`${suit}-${i+1}`)).concat(
+    ['honor-east','honor-south','honor-west','honor-north','honor-white','honor-green','honor-red'])
 for (let id=0;id<34;id++) {
   tile.updateDisplay(id,'')
-  if (id>=9 && id<27) assert(fs.existsSync(path.resolve(__dirname,'../..'+tile.data.faceSrc)))
-  else assert.strictEqual(tile.data.faceSrc,'')
+  assert.strictEqual(tile.data.bodySrc,`/assets/tiles/engraved-v1/${names[id]}.png`)
+  const png = fs.readFileSync(path.resolve(__dirname,'../..'+tile.data.bodySrc))
+  assert.strictEqual(png.subarray(1,4).toString(),'PNG')
+  assert.strictEqual(png.readUInt32BE(16),168)
+  assert.strictEqual(png.readUInt32BE(20),231)
 }
-tile.updateDisplay(13,'red5')
-assert(tile.data.faceSrc.endsWith('pin-5-red.svg'))
+for (const [id,suit] of [[4,'man'],[13,'pin'],[22,'sou']]) {
+  tile.updateDisplay(id,'red5')
+  assert.strictEqual(tile.data.bodySrc,`/assets/tiles/engraved-v1/${suit}-5-red.png`)
+}
 tile.updateDisplay(27,'')
 assert.strictEqual(tile.data.label,'東')
-assert.strictEqual(tile.data.faceSrc,'')
+assert(!fs.readFileSync(path.resolve(__dirname,'../../components/tile/tile.wxml'),'utf8').includes('faceSrc'))
 const reference = page('pages/reference/reference.js')
 reference.onLoad()
 const pairs = reference.allYaku.find(y=>y.name==='七对子')._pairGroups

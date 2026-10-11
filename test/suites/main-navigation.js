@@ -44,17 +44,43 @@ tap(3); assert.equal(navigation.url, '/pages/reference/reference')
 tap(4); assert.equal(navigation.url, '/pages/profile/profile')
 bar.selectRoute('pages/game/setup'); assert.equal(bar.data.selected, route)
 navigation = null
-tap(2); assert.equal(navigation.type, 'push'); assert.equal(navigation.url, '/pages/game/setup')
-const first = navigation; tap(2); assert.equal(navigation, first, 'double tap opens only once')
-navigation.complete(); assert.equal(bar._opening, false)
-current = { gameState:{ gameOver:false } }; navigation = null
+const choose = count => bar.selectGameMode({ currentTarget:{ dataset:{ count } } })
 tap(2); tap(2)
+assert.equal(bar.data.modePickerVisible, true)
+assert.equal(navigation, null, 'plus opens a picker without navigating')
+choose(2); assert.equal(navigation, null); assert.equal(bar.data.modePickerVisible, true)
+bar.closeModePicker(); choose(3); assert.equal(navigation, null, 'stale hidden picker events do nothing')
+tap(2); choose(3)
+assert.equal(bar.data.modePickerVisible, false)
+assert.equal(navigation.url, '/pages/game/setup?playerCount=3')
+const first = navigation; choose(4); tap(2); assert.equal(navigation, first, 'double tap opens only once')
+navigation.complete(); assert.equal(bar._opening, false)
+tap(2); choose(4); assert.equal(navigation.url, '/pages/game/setup?playerCount=4'); navigation.complete()
+// Failed navigation releases the guard, allowing a fresh selection.
+tap(2); choose(3); navigation.complete({errMsg:'navigateTo:fail'})
+assert.equal(bar._opening, false)
+current = { gameState:{ gameOver:false } }; navigation = null
+tap(2); assert.equal(bar.data.newGameVisible, false); assert.equal(settled, 0)
+bar.closeModePicker(); assert(current); assert.equal(settled, 0)
+tap(2); choose(3)
 assert.equal(bar.data.newGameVisible, true); assert.equal(navigation, null)
 bar.cancelNewGame(); assert.equal(bar.data.newGameVisible, false)
 assert(current); assert.equal(settled, 0); assert.equal(bar._opening, false)
-tap(2); barDefinition.lifetimes.detached.call(bar); assert.equal(bar._opening, false)
-tap(2); bar.confirmNewGame(); bar.confirmNewGame(); assert.equal(bar.data.newGameVisible, false)
-assert.equal(settled, 1); assert.equal(navigation.url, '/pages/game/setup'); navigation.complete()
+tap(2); choose(4); barDefinition.lifetimes.detached.call(bar); assert.equal(bar._opening, false)
+assert.equal(bar.data.modePickerVisible, false)
+tap(2); barDefinition.pageLifetimes.hide.call(bar); assert.equal(bar.data.modePickerVisible, false)
+tap(2); choose(3); bar.confirmNewGame(); bar.confirmNewGame(); assert.equal(bar.data.newGameVisible, false)
+assert.equal(settled, 1); assert.equal(navigation.url, '/pages/game/setup?playerCount=3'); navigation.complete()
+// Query options initialize the existing form, with safe four-player legacy fallback.
+for (const [option, count, startPoints, returnPoints] of [['3',3,35000,40000],['4',4,25000,30000],[undefined,4,25000,30000],['5',4,25000,30000]]) {
+  const setup = load('pages/game/setup.js'); setup.onLoad({playerCount:option})
+  assert.equal(setup.data.playerCount,count); assert.equal(setup.data.players.length,count)
+  assert.equal(setup.data.startPoints,startPoints); assert.equal(setup.data.returnPoints,returnPoints)
+}
+assert(!read('pages/game/setup.wxml').includes('bindtap="setPlayerCount"'))
+assert(read('custom-tab-bar/index.wxml').includes('data-count="3" bindtap="selectGameMode"'))
+assert(read('custom-tab-bar/index.wxml').includes('data-count="4" bindtap="selectGameMode"'))
+assert(read('custom-tab-bar/index.wxss').includes('.is-open .mode-picker-sheet { transform:translateY(0); }'))
 const home = load('pages/index/index.js')
 home.route = 'pages/index/index'; home.getTabBar = () => bar
 current = { gameState:{ gameOver:false, players:[] } }; home.onShow()
@@ -156,13 +182,13 @@ assert(fs.statSync(path.join(root,'assets/home/profile-motto.png')).size < 25000
 for (const route of navigationConfig.pages) {
   const markup = read(route + '.wxml')
   assert(markup.includes('class="page-landscape'), route + ' shares the landscape backdrop')
-  assert.equal((markup.match(/src="\/assets\/home\/profile-landscape.jpg"/g) || []).length, 1, route + ' mounts background once')
+  assert.equal((markup.match(/src="\/assets\/home\/profile-landscape.jpg"/g) || []).length, route === 'pages/game/board' ? 2 : 1, route + ' mounts one background per page or detail drawer')
 }
 assert(!read('pages/index/index.wxml').includes('class="header-art"'))
 assert(!read('pages/game/history.wxml').includes('class="history-art"'))
 
 for (const route of navigationConfig.pages) {
-  assert.equal((read(route + '.wxml').match(/src="\/assets\/home\/profile-motto.png"/g) || []).length, 1, route + ' includes the shared calligraphy once')
+  assert.equal((read(route + '.wxml').match(/src="\/assets\/home\/profile-motto.png"/g) || []).length, route === 'pages/game/board' ? 2 : 1, route + ' includes one calligraphy per page or detail drawer')
 }
 
 assert(tabMarkup.includes('结算当前对局并新建？'))
@@ -173,9 +199,12 @@ assert(tabMarkup.includes('catchtouchmove="blockModalTouch"'))
 current = { gameState:{ gameOver:false } }; navigation = null
 const finish = storage.finishSavedGame
 storage.finishSavedGame = () => { throw new Error('storage unavailable') }
-tap(2)
+tap(2); choose(4)
 assert.throws(() => bar.confirmNewGame(), /storage unavailable/)
 assert.equal(navigation, null)
 assert.equal(bar._opening, false)
 assert.equal(bar.data.newGameVisible, false)
 storage.finishSavedGame = finish
+
+assert(/\.mode-picker-option\s*\{[^}]*color:#fffdf6/.test(read('custom-tab-bar/index.wxss')), 'isolated picker buttons need explicit light text')
+assert(/\.mode-picker-close\s*\{[^}]*width:54rpx!important/.test(read('custom-tab-bar/index.wxss')), 'native button default width must not stretch close control')

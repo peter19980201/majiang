@@ -1,7 +1,7 @@
 const definition = require('../../pages/game/round-detail-definition')
 Component({
   properties: { record: { type: Object, value: null, observer() { this.setData({ busy: false }) } } },
-  data: { busy: false },
+  data: { busy: false, embedded: true },
   lifetimes: { attached() { this._embedded = true } },
   methods: {
     _returnWithAction: definition._returnWithAction,

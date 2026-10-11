@@ -104,7 +104,7 @@ assert.match(css,/prefers-reduced-motion/)
 assert.ok(calc.includes('id="hand-flight-{{index}}"'));assert.ok(calc.includes('id="pick-{{4}}-red"'));assert.ok(calc.includes('id="agari-flight-target"'))
 assert.ok(calc.includes('motion-sheet-mask'));assert.ok(!calc.includes('wx:if="{{showMeldModal}}"'))
 assert.match(read('pages/calculator/calculator.wxss'),/\.tile-flight\s*\{[^}]*pointer-events:none/)
-for(const f of ['pages/game/setup.wxml','pages/calculator/calculator.wxml','pages/quick-score/quick-score.wxml','pages/reference/reference.wxml','components/points-table/table.wxml'])assert.ok(read(f).includes('motion-selection'),f)
+for(const f of ['pages/calculator/calculator.wxml','pages/quick-score/quick-score.wxml','pages/reference/reference.wxml','components/points-table/table.wxml'])assert.ok(read(f).includes('motion-selection'),f)
 assert.ok(read('custom-tab-bar/index.wxml').includes("newGameVisible ? 'motion-open'"))
 global.setTimeout=originalTimeout;global.clearTimeout=originalClear
 console.log('UI motion: measured geometry, rapid input, red fives, invalid input, cancellation, embedded cleanup, details, settlement and poster readiness passed.')

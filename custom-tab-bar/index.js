@@ -1,12 +1,13 @@
 const { tabs, openNewGame } = require('../utils/main-navigation')
 Component({
-  data: { tabs, selected:'pages/index/index', newGameVisible:false },
+  data: { tabs, selected:'pages/index/index', newGameVisible:false, modePickerVisible:false },
   lifetimes: {
     attached() { this.syncRoute() },
-    detached() { this.cancelNewGame() }
+    detached() { this.closeModePicker(); this.cancelNewGame() }
   },
   pageLifetimes: {
-    show() { this.syncRoute() }
+    show() { this.syncRoute() },
+    hide() { this.closeModePicker(); this.cancelNewGame() }
   },
   methods: {
     showNewGameConfirmation(options) {
@@ -22,6 +23,16 @@ Component({
       this.setData({ newGameVisible:false })
       pending.success({ confirm, cancel:!confirm })
     },
+    closeModePicker() { this.setData({ modePickerVisible:false }) },
+    selectGameMode(e) {
+      const playerCount = Number(e.currentTarget.dataset.count)
+      if (!this.data.modePickerVisible || this._opening || ![3, 4].includes(playerCount)) return
+      this._opening = true
+      this.closeModePicker()
+      try {
+        openNewGame(null, () => { this._opening = false }, options => this.showNewGameConfirmation(options), playerCount)
+      } catch (error) { this._opening = false; throw error }
+    },
     blockModalTouch() {},
     syncRoute() {
       const pages = getCurrentPages()
@@ -35,10 +46,7 @@ Component({
       if (!tab) return
       if (!tab.route) {
         if (this._opening) return
-        this._opening = true
-        // Modal or navigation must finish before a second tap can open another page.
-        try { openNewGame(null, () => { this._opening = false }, options => this.showNewGameConfirmation(options)) }
-        catch (error) { this._opening = false; throw error }
+        this.setData({ modePickerVisible:true })
         return
       }
       if (tab.route === this.data.selected) return
