@@ -30,7 +30,7 @@ function calculate(input) {
   return { ...score, yaku: [], source: 'hanfu',
     quickInput: { kind: input.kind, han: isYakuman ? 0 : input.han, fu,
       yakumanTimes: isYakuman ? input.yakumanTimes : 0 },
-    payment: Score.calculatePayment(score.basePoints, input.isOya, input.agariType === 'tsumo', input.honba) }
+    payment: Score.calculatePayment(score.basePoints, input.isOya, input.agariType === 'tsumo', input.honba, input.playerCount === 3 ? 3 : 4) }
 }
 
 function label(result) {
@@ -38,9 +38,9 @@ function label(result) {
     `${result.han >= 13 ? '13番以上' : result.han + '番'}${result.fu ? ' ' + result.fu + '符' : ''}${result.level ? ' · ' + result.level : ''}`
 }
 
-function table(isOya, agariType) {
+function table(isOya, agariType, playerCount = 4) {
   return FU.map(fu => ({ fu, cells: [1, 2, 3, 4].map(han => {
-    const result = calculate({ kind: 'hanfu', han, fu, isOya, agariType, honba: 0 })
+    const result = calculate({ kind: 'hanfu', han, fu, isOya, agariType, playerCount, honba: 0 })
     if (result.error) return { han, text: '—', note: result.error }
     const p = result.payment
     return { han, text: agariType === 'ron' ? String(p.total) :

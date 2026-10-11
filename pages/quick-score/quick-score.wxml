@@ -1,7 +1,8 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
-<view class="container quick-page">
+<view class="container quick-page"><view class="seg-ctrl" wx:if="{{!boardMode}}"><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view>
+<text class="hint" wx:if="{{boardMode && playerCount === 3}}">三麻 · 自摸损 · 本场200点</text>
   <view class="seg-ctrl top-tabs"><view class="seg {{tab === 'calc' ? 'active' : ''}}" bindtap="selectTab" data-tab="calc">番符算分</view><view class="seg {{tab === 'table' ? 'active' : ''}}" bindtap="selectTab" data-tab="table">点数速查表</view></view>
   <block wx:if="{{tab === 'calc'}}">
     <view class="section">
@@ -27,7 +28,7 @@
     <view class="error-note" wx:if="{{error}}">{{error}}</view>
     <view class="payment-card" wx:if="{{result}}">
       <text class="score-caption">{{summary}}</text><view class="score-total">{{fmt.points(result.payment.total)}}<text class="score-unit">点</text></view>
-      <text class="payment-line">{{result.payment.description}}</text><text class="payment-note">已含 {{honba}} 本场的 {{honba * 300}} 点，不含供托</text>
+      <text class="payment-line">{{result.payment.description}}</text><text class="payment-note">已含 {{honba}} 本场的 {{honba * (playerCount - 1) * 100}} 点，不含供托</text>
       <text class="payment-note">番符录入 · 未记录役种</text>
     </view>
     <view class="confirm-row" wx:if="{{boardMode}}"><button class="btn-secondary confirm-button" bindtap="goBack">返回</button><button class="btn-primary confirm-button {{!result || busy ? 'confirm-disabled' : ''}}" disabled="{{!result || busy}}" bindtap="confirm">{{busy ? '已发送结果' : '确认并返回记分'}} </button></view>

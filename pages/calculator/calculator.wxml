@@ -1,7 +1,8 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
-<view class="container calculator">
-  <view class="quick-links" wx:if="{{!boardMode}}"><navigator class="quick-link" url="/pages/quick-score/quick-score">番符快捷算分 ›</navigator><navigator class="quick-link" url="/pages/quick-score/quick-score?tab=table">点数速查表 ›</navigator></view>
+<view class="container calculator"><view class="seg-ctrl" wx:if="{{!boardMode}}"><text class="seg {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="seg {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view><text wx:if="{{!boardMode}}" class="dora-hint">切换人数会清空已录入手牌</text><view class="section" wx:if="{{playerCount === 3}}"><text class="section-title">拔北 {{nuki}} 张</text><view class="seg-ctrl"><text class="seg" bindtap="changeNuki" data-delta="-1">−</text><text class="seg" bindtap="changeNuki" data-delta="1">＋</text></view><text class="dora-hint">拔北只加宝牌番，不单独成役；番符录入请计入总番数。</text></view>
+  <view class="quick-links" wx:if="{{!boardMode}}"><navigator class="quick-link" url="/pages/quick-score/quick-score?playerCount={{playerCount}}">番符快捷算分 ›</navigator><navigator class="quick-link" url="/pages/quick-score/quick-score?tab=table&amp;playerCount={{playerCount}}">点数速查表 ›</navigator></view>
+<text class="dora-hint" wx:if="{{boardMode && playerCount === 3}}">三麻 · 自摸损 · 本场200点</text>
   <!-- 手牌展示区 -->
   <view class="hand-table">
   <image class="hand-table-texture" src="/assets/art/table-texture.jpg" mode="aspectFill"/>
@@ -84,7 +85,7 @@
         <tile tid="{{index}}" size="large" extra="{{tileRemaining[index] <= 0 ? 'disabled' : 'clickable'}}"></tile>
         <text class="remain-badge-lg">剩{{tileRemaining[index]}}</text>
       </view>
-      <view class="picker-tile-lg" bindtap="selectTile" data-id="4" data-red="{{true}}">
+      <view wx:if="{{playerCount !== 3}}" class="picker-tile-lg" bindtap="selectTile" data-id="4" data-red="{{true}}">
         <tile tid="{{4}}" size="large" extra="red5{{redM5 ? ' red5-on' : ''}}"></tile>
         <text class="remain-badge-lg red-badge {{redM5 ? 'red-badge-on' : ''}}">赤</text>
       </view>
@@ -147,7 +148,7 @@
           <text class="seg {{jikaze === 27 ? 'active' : ''}}" bindtap="setJikaze" data-val="27">東</text>
           <text class="seg {{jikaze === 28 ? 'active' : ''}}" bindtap="setJikaze" data-val="28">南</text>
           <text class="seg {{jikaze === 29 ? 'active' : ''}}" bindtap="setJikaze" data-val="29">西</text>
-          <text class="seg {{jikaze === 30 ? 'active' : ''}}" bindtap="setJikaze" data-val="30">北</text>
+          <text wx:if="{{playerCount !== 3}}" class="seg {{jikaze === 30 ? 'active' : ''}}" bindtap="setJikaze" data-val="30">北</text>
         </view>
       </view>
       <view class="setting-item">
@@ -252,7 +253,7 @@
       <view class="modal-handle"></view>
       <view class="sheet-heading"><text class="modal-title">添加副露</text><text class="sheet-close" bindtap="closeMeldPanel">×</text></view>
       <view class="meld-type-grid" wx:if="{{!editingMeldType}}">
-        <view class="meld-type-btn" bindtap="startMeldInput" data-type="chi">
+        <view wx:if="{{playerCount !== 3}}" class="meld-type-btn" bindtap="startMeldInput" data-type="chi">
           <text class="meld-type-icon">吃</text>
           <text class="meld-type-desc">顺子 (3张)</text>
         </view>

@@ -16,7 +16,7 @@ Page(withShare({
       const fmt = value => String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       const paymentRows = payment.type === 'tsumo_ko'
         ? [{ label:'庄家支付', value:fmt(payment.oyaPayment) },{ label:'闲家各付', value:fmt(payment.koPayment) }]
-        : [{ label:payment.type === 'tsumo_oya' ? '三家各付' : '放铳者支付', value:fmt(payment.type === 'tsumo_oya' ? payment.koPayment : payment.total) }]
+        : [{ label:payment.type === 'tsumo_oya' ? (result.input && result.input.playerCount === 3 ? '两家各付' : '三家各付') : '放铳者支付', value:fmt(payment.type === 'tsumo_oya' ? payment.koPayment : payment.total) }]
       this.setData({ result, totalDisplay:fmt(payment.total), paymentRows })
     }
   },

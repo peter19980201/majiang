@@ -117,7 +117,8 @@ function isGreen(id) {
  * ドラ指示牌 → ドラ牌
  * 指示牌的下一张为ドラ
  */
-function doraFromIndicator(id) {
+function doraFromIndicator(id, playerCount = 4) {
+  if (playerCount === 3 && (id === 0 || id === 8)) return id === 0 ? 8 : 0
   if (id >= 27) {
     // 字牌循环: 東→南→西→北→東, 白→发→中→白
     if (id <= 30) {
@@ -139,9 +140,9 @@ function doraFromIndicator(id) {
  * @param {boolean[]} redFlags 每张牌是否为赤牌的标记
  * @returns {number} ドラ总数
  */
-function countDora(allTiles, indicators, redFlags) {
+function countDora(allTiles, indicators, redFlags, playerCount = 4) {
   let count = 0
-  const doraIds = indicators.map(doraFromIndicator)
+  const doraIds = indicators.map(id => doraFromIndicator(id, playerCount))
   for (let i = 0; i < allTiles.length; i++) {
     for (const d of doraIds) {
       if (allTiles[i] === d) count++

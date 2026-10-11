@@ -32,9 +32,10 @@ function build(record) {
   bigHands.sort((a, b) => b.weight - a.weight)
   const dateParts = String(record.date || '').match(/^(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/)
   const date = dateParts ? `${dateParts[1]}.${dateParts[2].padStart(2, '0')}.${dateParts[3].padStart(2, '0')}` : String(record.date || '')
-  const type = config.gameType === 'free' ? '自由记分' : config.gameType === 'tonpuu' ? '东风战' : '半庄战'
+  const type = (Number(config.playerCount) === 3 ? '三麻 · ' : '') +
+    (config.gameType === 'free' ? '自由记分' : config.gameType === 'tonpuu' ? '东风战' : '半庄战')
   const early = Boolean(record.abandoned || record.gameState && record.gameState.endedEarly)
-  return { id: record.id, type, title: config.gameType === 'free' ? '对局战报' : config.gameType === 'tonpuu' ? '东风战报' : '半庄战报',
+  return { id: record.id, type, title: config.gameType === 'free' ? (Number(config.playerCount) === 3 ? '三麻对局战报' : '对局战报') : config.gameType === 'tonpuu' ? '东风战报' : '半庄战报',
     date, status: early && config.gameType !== 'free' ? '提前结束' : '已结束',
     rows, rules: `${points(config.startPoints)} 起点 · ${points(config.returnPoints)} 返点`,
     uma: `顺位马 ${rows.map(p => p.umaText).join(' / ')}`, ruleSummary: Rules.summary(config),

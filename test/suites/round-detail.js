@@ -54,6 +54,9 @@ assert.deepStrictEqual(board.data.roundHistory, original)
 
 detail = open()
 detail.deleteRecord()
+const pendingDelete = modal
+detail.deleteRecord()
+assert.strictEqual(modal, pendingDelete, 'repeated taps must not queue another native confirmation')
 modal.success({ confirm: false })
 assert.strictEqual(board.data.roundHistory.length, 1)
 assert.strictEqual(detail.data.busy, false)
@@ -131,3 +134,16 @@ assert.strictEqual(board.data.recordsScrollTarget, 'record-list-top')
 board.openRoundDetail({ currentTarget: { dataset: { index: board.data.recordTimeline[0].recordIndex } } })
 assert.strictEqual(board.data.roundDetailRecord.name, current[1].winner)
 console.log('Timeline passed: newest-first display, original detail indices and reset-to-top on every opening.')
+
+// A failed native modal can be retried; an old confirmation cannot delete a new detail.
+detail = open()
+detail.deleteRecord()
+modal.complete()
+const failedModal = modal
+detail.deleteRecord()
+assert.notStrictEqual(modal, failedModal)
+const confirmedOldModal = modal
+detail.setData({ record: { ...detail.data.record, round: '另一局' } })
+confirmedOldModal.success({ confirm: true })
+assert.strictEqual(detail.data.busy, false)
+assert.deepStrictEqual(board.data.roundHistory, current)

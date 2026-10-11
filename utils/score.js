@@ -80,8 +80,8 @@ function calculateScore(fu, han, yakuList) {
  * @param {number} honba 本场数
  * @returns {Object} 分账详情
  */
-function calculatePayment(basePoints, isOya, isTsumo, honba) {
-  const honbaBonus = honba * 300 // 荣和时放铳者额外支付
+function calculatePayment(basePoints, isOya, isTsumo, honba, playerCount = 4) {
+  const honbaBonus = honba * (playerCount - 1) * 100 // 荣和时放铳者额外支付
   const honbaBonusTsumo = honba * 100 // 自摸时每家额外支付
 
   if (isTsumo) {
@@ -90,7 +90,7 @@ function calculatePayment(basePoints, isOya, isTsumo, honba) {
       const each = roundUp100(basePoints * 2) + honbaBonusTsumo
       return {
         type: 'tsumo_oya',
-        total: each * 3,
+        total: each * (playerCount - 1),
         koPayment: each,
         description: `子家各付 ${each}点`
       }
@@ -100,7 +100,7 @@ function calculatePayment(basePoints, isOya, isTsumo, honba) {
       const oya = roundUp100(basePoints * 2) + honbaBonusTsumo
       return {
         type: 'tsumo_ko',
-        total: ko * 2 + oya,
+        total: ko * (playerCount - 2) + oya,
         koPayment: ko,
         oyaPayment: oya,
         description: `亲家付 ${oya}点 / 子家各付 ${ko}点`

@@ -46,8 +46,9 @@ function draw(ctx, report, artwork) {
   ctx.strokeStyle='#d8d8c9';ctx.lineWidth=1;roundRect(67,354,616,378,16);ctx.stroke()
   const xs=[120,260,450,609]
   ;['顺位','玩家','点数','得点'].forEach((s,i)=>line(s,xs[i],395,25))
+  const rowHeight = report.rows.length === 3 ? 105 : 79
   report.rows.forEach((r,i)=>{
-    const top=416+i*79, baseline=top+53
+    const top=416+i*rowHeight, baseline=top+53
     ctx.strokeStyle='#deded1';ctx.beginPath();ctx.moveTo(67,top);ctx.lineTo(683,top);ctx.stroke()
     if(i===0){
       const gradient=ctx.createLinearGradient(99,top+16,139,top+64);gradient.addColorStop(0,'#dbc780');gradient.addColorStop(1,'#a48029')

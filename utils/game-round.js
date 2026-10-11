@@ -1,4 +1,5 @@
 // One round is evaluated on an isolated state, without Page, setData, storage or wx.
+const Mode = require('./player-mode')
 const Records = require('./game-records')
 const { sortedYaku } = require('./yaku-records')
 const GameRules = require('./game-rules')
@@ -11,16 +12,16 @@ function roundLabel(state) {
 
 function drawTransfers(tenpai, abortive = false) {
   const count = tenpai.filter(Boolean).length
-  return tenpai.map(ready => !abortive && count > 0 && count < 4 ?
-    (ready ? 3000 / count : -3000 / (4 - count)) : 0)
+  return tenpai.map(ready => !abortive && count > 0 && count < tenpai.length ?
+    (ready ? ((tenpai.length - 1) * 1000) / count : -((tenpai.length - 1) * 1000) / (tenpai.length - count)) : 0)
 }
 
-// Each qualifier receives mangan from all three opponents, including other qualifiers.
+// Each qualifier receives mangan from all other players, including other qualifiers.
 // Draw treatment: no honba payment, deposits carry over, dealer tenpai governs continuation.
 function nagashiTransfers(selected, dealerIdx) {
-  if (!Array.isArray(selected) || selected.length !== 4 || selected.some(v => typeof v !== 'boolean') ||
-      !Number.isInteger(dealerIdx) || dealerIdx < 0 || dealerIdx > 3) throw new InvalidRound('请选择有效的流局满贯达成者')
-  const deltas = [0, 0, 0, 0]
+  if (!Array.isArray(selected) || ![3, 4].includes(selected.length) || selected.some(v => typeof v !== 'boolean') ||
+      !Number.isInteger(dealerIdx) || dealerIdx < 0 || dealerIdx >= selected.length) throw new InvalidRound('请选择有效的流局满贯达成者')
+  const deltas = selected.map(() => 0)
   selected.forEach((qualifies, winner) => {
     if (!qualifies) return
     deltas.forEach((_, payer) => {
@@ -41,10 +42,10 @@ function applyMultiRon(state) {
   const { ronEntries, selectedLoser, players: current } = state
   const validSeat = idx => Number.isInteger(idx) && idx >= 0 && idx < current.length
   if (!validSeat(selectedLoser) ||
-      ronEntries.length < 2 || ronEntries.length > 3 ||
+      ronEntries.length < 2 || ronEntries.length >= current.length ||
       new Set(ronEntries.map(entry => entry.idx)).size !== ronEntries.length ||
       ronEntries.some(entry => !validSeat(entry.idx) || entry.idx === selectedLoser)) {
-    throw new InvalidRound('请选择放铳者及两至三位和了者')
+    throw new InvalidRound(Mode.count(state.config) === 3 ? '请选择放铳者及两位和了者' : '请选择放铳者及两至三位和了者')
   }
   if (ronEntries.some(entry => !Number.isSafeInteger(Number(entry.points)) ||
       Number(entry.points) <= 0 || Number(entry.points) % 100 !== 0)) {
@@ -53,7 +54,7 @@ function applyMultiRon(state) {
   const players = current.map(p => ({ ...p }))
   const sticks = state.riichiSticks + applyRiichi(state, players)
   const winners = ronEntries.map(entry => ({ idx: entry.idx, name: players[entry.idx].name,
-    points: Number(entry.points), payment: Number(entry.points) + state.honba * 300,
+    points: Number(entry.points), payment: Number(entry.points) + state.honba * Mode.honba(state.config),
     source: entry.calcResult && entry.calcResult.source === 'hanfu' ? 'hanfu' : entry.calcResult ? 'calculator' : 'manual',
     han: entry.calcResult ? entry.calcResult.han : null, fu: entry.calcResult ? entry.calcResult.fu : null,
     level: entry.calcResult ? entry.calcResult.level : '',
@@ -63,13 +64,13 @@ function applyMultiRon(state) {
     players[selectedLoser].points -= winner.payment
   })
   const nearest = winners.slice().sort((a, b) =>
-    ((a.idx - selectedLoser + 4) % 4) - ((b.idx - selectedLoser + 4) % 4))[0]
+    ((a.idx - selectedLoser + current.length) % current.length) - ((b.idx - selectedLoser + current.length) % current.length))[0]
   players[nearest.idx].points += sticks * 1000
   Object.assign(state, { players, riichiSticks: 0 })
   state.roundHistory.push({ type: 'ron', round: roundLabel(state), winner: winners.map(p => p.name).join('、'),
     winners, loser: players[selectedLoser].name, points: winners.reduce((sum, p) => sum + p.payment, 0),
     basePayment: winners.reduce((sum, p) => sum + p.points, 0),
-    honbaBonus: state.honba * 300 * winners.length,
+    honbaBonus: state.honba * Mode.honba(state.config) * winners.length,
     riichiCollected: sticks, riichiRecipient: nearest.name,
     desc: winners.map(p => `${p.name} ${p.payment}点`).join(' / ') + `；供托归${nearest.name}` })
   advanceRound(state, winners.some(p => p.idx === state.dealerIdx))
@@ -78,7 +79,7 @@ function applyMultiRon(state) {
 function applyRiichi(state, players) {
   const riichi = state.roundRiichi
   let newSticks = 0
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < players.length; i++) {
     if (riichi[i]) {
       players[i].points -= 1000
       newSticks++
@@ -101,7 +102,7 @@ function applyManualRon(state) {
     throw new InvalidRound('和了者和放铳者不能相同')
   }
 
-  applyWin(state, { type: 'ron', total: pts + state.honba * 300 })
+  applyWin(state, { type: 'ron', total: pts + state.honba * Mode.honba(state.config) })
 }
 
 function applyCalcRon(state, calcResult) {
@@ -139,7 +140,7 @@ function applyWin(state, payment, calcResult) {
   players[selectedWinner].points += total + allSticks * 1000
   const record = {
     type: payment.type, round: roundLabel(state), winner: players[selectedWinner].name,
-    points: total, basePayment: total - honba * 300, honbaBonus: honba * 300,
+    points: total, basePayment: total - honba * Mode.honba(state.config), honbaBonus: honba * Mode.honba(state.config),
     riichiCollected: allSticks
   }
   if (isTsumo) {
@@ -172,7 +173,7 @@ function applyManualTsumo(state) {
   const bonus = state.honba * 100
   applyWin(state, { type: 'tsumo', koPayment: koPayment + bonus,
     oyaPayment: oyaPayment + bonus,
-    total: (isOya ? koPayment * 3 : koPayment * 2 + oyaPayment) + bonus * 3 })
+    total: (isOya ? koPayment * (state.players.length - 1) : koPayment * (state.players.length - 2) + oyaPayment) + bonus * (state.players.length - 1) })
 }
 
 function applyDraw(state) {
@@ -180,7 +181,7 @@ function applyDraw(state) {
     const selected = state.nagashiWinners
     const transfers = nagashiTransfers(selected, state.dealerIdx)
     if (!selected.some(Boolean)) throw new InvalidRound('请至少选择一位流局满贯达成者')
-    if (!Array.isArray(state.drawTenpai) || state.drawTenpai.length !== 4 || state.drawTenpai.some(v => typeof v !== 'boolean')) {
+    if (!Array.isArray(state.drawTenpai) || state.drawTenpai.length !== state.players.length || state.drawTenpai.some(v => typeof v !== 'boolean')) {
       throw new InvalidRound('请确认听牌情况')
     }
     const round = roundLabel(state)
@@ -188,7 +189,8 @@ function applyDraw(state) {
     const sticks = applyRiichi(state, players)
     transfers.forEach((delta, idx) => { players[idx].points += delta })
     const achievers = players.flatMap((p, idx) => selected[idx] ? [{ idx, name: p.name,
-      payment: idx === state.dealerIdx ? 12000 : 8000 }] : [])
+      payment: idx === state.dealerIdx ? (Mode.count(state.config) - 1) * 4000 :
+        4000 + (Mode.count(state.config) - 2) * 2000 }] : [])
     state.roundHistory.push({ type: 'draw', nagashi: true, round, achievers,
       tenpai: state.drawTenpai[state.dealerIdx] ? '庄家听牌，连庄' : '庄家不听，轮庄',
       desc: achievers.map(p => `${p.name} 流局满贯 ${p.payment}点`).join('；') + '；不计本场点，供托留至下一局',
@@ -198,7 +200,7 @@ function applyDraw(state) {
     return
   }
   if (state.drawType === 'abortive') {
-    if (!GameRules.ABORT_REASONS.includes(state.abortReason)) {
+    if (!GameRules.ABORT_REASONS.includes(state.abortReason) || (Mode.count(state.config) === 3 && !['九种九牌', '四杠散了'].includes(state.abortReason))) {
       throw new InvalidRound('请选择流局原因')
     }
     if (state.abortReason === '四家立直' && !state.roundRiichi.every(Boolean)) {
@@ -254,6 +256,12 @@ function evaluate(before, input, action, calcResult) {
       calcResult.calculatorInput.riichi || calcResult.calculatorInput.doubleRiichi)
   }
   try {
+    if (Mode.count(state.config) === 3) {
+      if (state.players.length !== 3 || !Number.isInteger(state.dealerIdx) || state.dealerIdx < 0 || state.dealerIdx > 2) throw new InvalidRound('三麻座位数据无效')
+      if (!Array.isArray(state.roundRiichi) || state.roundRiichi.length !== 3 || state.roundRiichi.some(v => typeof v !== 'boolean')) throw new InvalidRound('三麻立直选择无效')
+      if (action === 'draw' && (!Array.isArray(state.drawTenpai) || state.drawTenpai.length !== 3 || state.drawTenpai.some(v => typeof v !== 'boolean'))) throw new InvalidRound('三麻听牌选择无效')
+      if (action === 'draw' && state.drawType === 'nagashi' && (!Array.isArray(state.nagashiWinners) || state.nagashiWinners.length !== 3)) throw new InvalidRound('三麻流局满贯选择无效')
+    }
     actions[action](state, calcResult)
     return { state, record: state.roundHistory[0] }
   } catch (error) {

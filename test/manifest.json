@@ -128,7 +128,8 @@
       "group": "ui",
       "features": [
         "F14",
-        "F22"
+        "F22",
+        "F28"
       ],
       "timeoutMs": 60000
     },
@@ -295,6 +296,25 @@
         "F26"
       ],
       "timeoutMs": 10000
+    },
+    {
+      "id": "sanma",
+      "description": "三麻计分、存档兼容及四方牌桌北位留空回归",
+      "file": "suites/sanma.js",
+      "group": "game",
+      "features": [
+        "F28",
+        "F08",
+        "F09",
+        "F10",
+        "F11",
+        "F12",
+        "F14",
+        "F15",
+        "F16",
+        "F07"
+      ],
+      "timeoutMs": 60000
     }
   ],
   "optional": [

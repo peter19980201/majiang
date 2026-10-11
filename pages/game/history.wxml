@@ -43,7 +43,7 @@
       <view class="card-header">
         <view class="card-info">
           <text class="card-date">{{item.date}}</text>
-          <text class="card-type">{{item.config.gameType === 'free' ? '自由记分' : item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
+          <text class="card-type">{{item.config.playerCount === 3 ? '三麻 · 自由记分' : item.config.gameType === 'free' ? '自由记分' : item.config.gameType === 'hanchan' ? '半庄' : '东风'}}</text>
           <text class="card-abandoned" wx:if="{{item.abandoned}}">中断</text>
         </view>
       </view>

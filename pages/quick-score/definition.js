@@ -3,7 +3,7 @@ const Quick = require('../../utils/quick-score')
 
 module.exports = withShare({
   data: {
-    tab: 'calc', boardMode: false, kind: 'hanfu', han: 3, fu: 40, yakumanTimes: 1,
+    playerCount: 4, tab: 'calc', boardMode: false, kind: 'hanfu', han: 3, fu: 40, yakumanTimes: 1,
     isOya: false, agariType: 'ron', honba: 0, boardSticks: 0,
     hanOptions: Array.from({ length: 13 }, (_, i) => ({ value: i + 1, label: i === 12 ? '13番+' : `${i + 1}番` })),
     fuOptions: Quick.FU, yakumanOptions: [1, 2, 3, 4, 5, 6],
@@ -17,6 +17,7 @@ module.exports = withShare({
     }
   },
   initializeInput(options = {}) {
+    this.setData({ playerCount: Number(options.playerCount) === 3 ? 3 : 4 })
     if (options.tab === 'table') this.setData({ tab: 'table' })
     if (options.mode === 'board') {
       this.setData({ boardMode: true, isOya: Number(options.jikaze) === 27,
@@ -35,6 +36,12 @@ module.exports = withShare({
     wx.navigateBack({ fail: () => this.setData({ error: '已发送记分结果，请返回对局查看。勿重复记分。' }) })
   },
   dismissInput() { wx.navigateBack() },
+  setPlayerCount(e) {
+    if (this.data.boardMode) return
+    this.setData({ playerCount: Number(e.currentTarget.dataset.count) === 3 ? 3 : 4 })
+    this.refresh()
+    this.refreshTable()
+  },
   select(e) {
     const { key, value } = e.currentTarget.dataset
     if (!['kind', 'han', 'fu', 'yakumanTimes', 'isOya', 'agariType'].includes(key)) return
@@ -66,11 +73,11 @@ module.exports = withShare({
   refreshTable() {
     const { tableOya: isOya, tableType: agariType } = this.data
     const limits = [5, 6, 8, 11, 13].map(han => {
-      const r = Quick.calculate({ kind: 'hanfu', han, fu: 0, isOya, agariType, honba: 0 })
+      const r = Quick.calculate({ kind: 'hanfu', han, fu: 0, isOya, agariType, playerCount: this.data.playerCount, honba: 0 })
       return { name: { 5: '5番', 6: '6–7番', 8: '8–10番', 11: '11–12番', 13: '13番以上' }[han],
         level: r.level, payment: r.payment.description }
     })
-    this.setData({ rows: Quick.table(isOya, agariType), limits })
+    this.setData({ rows: Quick.table(isOya, agariType, this.data.playerCount), limits })
   },
   confirm() {
     if (!this.data.boardMode || this.data.busy) return

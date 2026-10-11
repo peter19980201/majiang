@@ -1,3 +1,4 @@
+const Mode = require('./player-mode')
 const Records = require('./game-records')
 const GameRound = require('./game-round')
 const Migrations = require('./game-migrations')
@@ -29,7 +30,7 @@ function prepare(original, entryState, editingRecord, action, source, calcResult
     calculatorInput: calcResult && calcResult.calculatorInput ? Records.clone(calcResult.calculatorInput) : null }
   if (calcResult) {
     const payment = calcResult.payment
-    if (record.type === 'ron') record.input.inputPoints = String(payment.total - before.honba * 300)
+    if (record.type === 'ron') record.input.inputPoints = String(payment.total - before.honba * Mode.honba(before.config))
     else {
       record.input.inputKoPayment = String(payment.koPayment - before.honba * 100)
       record.input.inputOyaPayment = payment.oyaPayment === undefined ? '' : String(payment.oyaPayment - before.honba * 100)

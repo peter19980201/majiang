@@ -2,6 +2,7 @@
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
 <view class="container">
+  <view class="section"><text class="section-title">对局人数</text><view class="uma-grid"><text class="uma-btn {{playerCount === 4 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="4">四麻</text><text class="uma-btn {{playerCount === 3 ? 'active' : ''}}" bindtap="setPlayerCount" data-count="3">三麻</text></view></view>
   <!-- 点数设置 -->
   <view class="section">
     <view class="section-header"><text class="section-title">点棒设置</text><text class="section-note">每次调整 5,000 点</text></view>
@@ -24,15 +25,16 @@
   </view>
 
   <!-- 顺位马 -->
-  <view class="section">
+  <view class="section" wx:if="{{playerCount === 4}}">
     <text class="section-title">顺位马</text>
-    <view class="uma-grid">
+    <view class="uma-grid" wx:if="{{playerCount === 4}}">
       <text class="uma-btn {{uma === item.value ? 'active' : ''}}"
             wx:for="{{umaOptions}}" wx:key="value"
             bindtap="setUma" data-val="{{item.value}}">{{item.label}}</text>
     </view>
   </view>
 
+  <view class="section" wx:if="{{playerCount === 3}}"><text class="section-title">三人顺位马</text><view class="uma-grid sanma-uma"><text wx:for="{{sanmaUmaOptions}}" wx:key="*this" class="uma-btn {{sanmaUma === item ? 'active' : ''}}" bindtap="setSanmaUma" data-val="{{item}}">+{{item}} / 0 / −{{item}}</text></view></view>
   <!-- 玩家昵称 -->
   <view class="section">
     <text class="section-title">玩家设置</text>

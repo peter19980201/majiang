@@ -59,6 +59,8 @@ function state(value) {
   object(value, '对局状态')
   version(value)
   const result = clone(value)
+  if (result.config && result.config.playerCount !== undefined && ![3, 4].includes(result.config.playerCount)) throw new Error('对局人数无效')
+  if (result.config && result.config.playerCount === 3 && (!Array.isArray(result.players) || result.players.length !== 3)) throw new Error('三麻须有三位玩家')
   if (result.roundCycle === undefined) result.roundCycle = 1
   if (!Number.isInteger(result.roundCycle) || result.roundCycle < 1) throw new Error('轮次格式错误')
   if (result.players !== undefined) {

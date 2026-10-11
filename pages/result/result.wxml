@@ -36,7 +36,7 @@
         </view>
       </view>
       <!-- Context tags -->
-      <view class="context-tags">
+      <view class="context-tags"><text class="ctx-tag" wx:if="{{result.input.playerCount === 3}}">三麻 · 拔北{{result.input.nuki}}张</text>
         <text class="ctx-tag">{{windNames[result.input.bakaze]}}场</text>
         <text class="ctx-tag">{{windNames[result.input.jikaze]}}家</text>
         <text class="ctx-tag">{{result.input.agariType === 'tsumo' ? '自摸' : '荣和'}}</text>

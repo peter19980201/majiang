@@ -3,6 +3,7 @@ const GameRound = require('../../utils/game-round')
 const Records = require('../../utils/game-records')
 const RoundView = require('../../utils/round-view')
 const GameRules = require('../../utils/game-rules')
+const Mode = require('../../utils/player-mode')
 const { settle } = require('../../utils/game-settlement')
 const GameStorage = require('../../utils/game-storage')
 const RonEntry = require('../../utils/ron-entry')
@@ -115,7 +116,7 @@ const boardDefinition = {
         points: config.startPoints,
         seatWind: i  // 固定座位: 0=東, 1=南, 2=西, 3=北
       }))
-      this.setData({ config, players, dealerIdx: 0, gameId: Records.newGameId(), gameDate: new Date().toLocaleDateString() })
+      this.setData({ roundRiichi: Mode.zeros(config), drawTenpai: Mode.zeros(config), nagashiWinners: Mode.zeros(config), config, players, dealerIdx: 0, gameId: Records.newGameId(), gameDate: new Date().toLocaleDateString() })
       this._autoSave()
     }
   },
@@ -134,7 +135,7 @@ const boardDefinition = {
     this.setData({ entryHonba: state.honba, entryRiichiSticks: state.riichiSticks,
       entryDealerIdx: state.dealerIdx,
       entryRoundLabel: GameRound.roundLabel(state),
-      abortReasons: GameRules.ABORT_REASONS })
+      abortReasons: Mode.count(state.config) === 3 ? ['九种九牌', '四杠散了'] : GameRules.ABORT_REASONS })
   },
 
   _refreshRonChoices() {
@@ -150,8 +151,8 @@ const boardDefinition = {
     const idx = Number(e.currentTarget.dataset.idx)
     if (!Number.isInteger(idx) || !this.data.players[idx] || idx === this.data.selectedLoser) return
     const selected = this.data.ronEntries.some(entry => entry.idx === idx)
-    if (!selected && this.data.ronEntries.length >= 3) {
-      wx.showToast({ title: '最多选择三位和了者', icon: 'none' }); return
+    if (!selected && this.data.ronEntries.length >= Mode.count(this.data.config) - 1) {
+      wx.showToast({ title: Mode.count(this.data.config) === 3 ? '最多选择两位和了者' : '最多选择三位和了者', icon: 'none' }); return
     }
     const ronEntries = selected ? this.data.ronEntries.filter(entry => entry.idx !== idx) :
       this.data.ronEntries.concat([{ idx, name: this.data.players[idx].name, points: '', calculatorInput: null }])
@@ -231,7 +232,7 @@ const boardDefinition = {
     this._editingRecord = null
     this.setData({ ...prepared.state,
       editingLastRound: false, showRonModal: false, showTsumoModal: false, showDrawModal: false,
-      roundRiichi: [false, false, false, false] })
+      roundRiichi: Mode.zeros(this.data.config) })
     if (this.data.gameOver) this.doSettlement()
     else {
       this._removeSavedSettlement()
@@ -258,6 +259,8 @@ const boardDefinition = {
   },
 
   _refreshHistoryCards() {
+    const playerCount = Mode.count(this.data.config)
+    this.setData({ playerCount, totalPoints: this.data.players.reduce((s, p) => s + p.points, this.data.riichiSticks * 1000), abortReasons: playerCount === 3 ? ['九种九牌', '四杠散了'] : GameRules.ABORT_REASONS })
     const historyCards = this.data.roundHistory.map((record, index, records) =>
       RoundView.card(record, index === records.length - 1))
     const recordTimeline = historyCards.map((card, index) => {
@@ -305,7 +308,7 @@ const boardDefinition = {
     if (!this._canWriteGame()) return
     this.setData({ ...Records.clone(record.before), roundHistory: this.data.roundHistory.slice(0, -1),
       finalResult: [], gameOver: false,
-      roundRiichi: [false, false, false, false] })
+      roundRiichi: Mode.zeros(this.data.config) })
     this._removeSavedSettlement()
     this._autoSave()
   },
@@ -331,7 +334,7 @@ const boardDefinition = {
       return
     }
     this._editingRecord = Records.clone(record)
-    this.setData({ multiRonMode: false, ronEntries: [], drawType: 'exhaustive', nagashiWinners: [false, false, false, false], abortReason: '九种九牌',
+    this.setData({ multiRonMode: false, ronEntries: [], drawType: 'exhaustive', nagashiWinners: Mode.zeros(this.data.config), abortReason: '九种九牌',
       ...Records.clone(record.input), editingLastRound: true,
       showManualInput: record.input.source === 'manual',
       showRonModal: record.type === 'ron', showTsumoModal: record.type === 'tsumo',
@@ -354,7 +357,7 @@ const boardDefinition = {
   _cancelEntry() {
     this._editingRecord = null
     this.setData({ editingLastRound: false, showRonModal: false, showTsumoModal: false,
-      showDrawModal: false, roundRiichi: [false, false, false, false] })
+      showDrawModal: false, roundRiichi: Mode.zeros(this.data.config) })
   },
 
   // === 操作弹窗 ===
@@ -405,7 +408,7 @@ const boardDefinition = {
         multiRonMode: false,
         ronEntries: [],
         showManualInput: false,
-        roundRiichi: [false, false, false, false]
+        roundRiichi: Mode.zeros(this.data.config)
       })
       this._refreshRonChoices()
     }, 150)
@@ -481,11 +484,11 @@ const boardDefinition = {
     const selectedWinner = winner
     const { roundRiichi } = this.data
     const bakaze = 27 + roundWind
-    const jikaze = 27 + ((selectedWinner - dealerIdx + 4) % 4)
+    const jikaze = 27 + ((selectedWinner - dealerIdx + Mode.count(this.data.config)) % Mode.count(this.data.config))
     const winnerRiichi = roundRiichi[selectedWinner] ? 1 : 0
     // 计算总供托数 (已有 + 本局新增)
     let newSticks = 0
-    for (let i = 0; i < 4; i++) if (roundRiichi[i]) newSticks++
+    for (let i = 0; i < Mode.count(this.data.config); i++) if (roundRiichi[i]) newSticks++
     const totalSticks = riichiSticks + newSticks
 
     const that = this
@@ -503,7 +506,7 @@ const boardDefinition = {
 
     this._openInputOverlay({
       kind: quick ? 'quick' : 'hand',
-      options: { mode: 'board', agariType, bakaze, jikaze, honba, riichi: winnerRiichi, sticks: totalSticks },
+      options: { playerCount: Mode.count(this.data.config), mode: 'board', agariType, bakaze, jikaze, honba, riichi: winnerRiichi, sticks: totalSticks },
       restore: Records.clone((quick ? quickInput : calculatorInput) || null),
       onResult(data) {
         if (returnToEntry && agariType === 'tsumo') {
@@ -517,7 +520,7 @@ const boardDefinition = {
         }
         if (multi || returnToEntry) {
           const ronEntries = that.data.ronEntries.map(entry => entry.idx === selectedWinner ?
-            { ...entry, points: String(data.payment.total - honba * 300),
+            { ...entry, points: String(data.payment.total - honba * Mode.honba(that.data.config)),
               calculatorInput: data.calculatorInput || null, calcResult: data, editingPoints: false, editingMethods: false, draftPoints: '' } : entry)
           const riichi = that.data.roundRiichi.slice()
           if (data.calculatorInput) riichi[selectedWinner] = Boolean(data.calculatorInput.riichi || data.calculatorInput.doubleRiichi)
@@ -594,7 +597,7 @@ const boardDefinition = {
         multiRonMode: false,
         ronEntries: [],
         showManualInput: false,
-        roundRiichi: [false, false, false, false]
+        roundRiichi: Mode.zeros(this.data.config)
       })
     }, 150)
   },
@@ -607,7 +610,7 @@ const boardDefinition = {
     const oya = this.data.selectedWinner === this.data.entryDealerIdx ? ko : Number(this.data.inputOyaPayment)
     const valid = n => Number.isSafeInteger(n) && n > 0 && n % 100 === 0
     const ready = this.data.selectedWinner >= 0 && valid(ko) && valid(oya)
-    this.setData({ tsumoReady: ready, tsumoBaseTotal: ready ? ko * 2 + oya : 0 })
+    this.setData({ tsumoReady: ready, tsumoBaseTotal: ready ? ko * (Mode.count(this.data.config) - 2) + oya : 0 })
   },
 
   selectTsumoWinner(e) {
@@ -644,12 +647,12 @@ const boardDefinition = {
     setTimeout(() => {
       this.setData({
         showDrawModal: true,
-        drawTenpai: [false, false, false, false],
-        drawType: 'exhaustive', nagashiWinners: [false, false, false, false],
+        drawTenpai: Mode.zeros(this.data.config),
+        drawType: 'exhaustive', nagashiWinners: Mode.zeros(this.data.config),
         abortReason: '九种九牌',
         multiRonMode: false,
         ronEntries: [],
-        roundRiichi: [false, false, false, false]
+        roundRiichi: Mode.zeros(this.data.config)
       })
       this.updateDrawPreview()
     }, 150)
@@ -665,8 +668,8 @@ const boardDefinition = {
 
   toggleNagashi(e) {
     const idx = Number(e.currentTarget.dataset.idx)
-    if (!Number.isInteger(idx) || idx < 0 || idx > 3) return
-    const selected = (this.data.nagashiWinners || [false, false, false, false]).slice()
+    if (!Number.isInteger(idx) || idx < 0 || idx >= Mode.count(this.data.config)) return
+    const selected = (this.data.nagashiWinners || Mode.zeros(this.data.config)).slice()
     selected[idx] = !selected[idx]
     this.setData({ nagashiWinners: selected })
     this.updateDrawPreview()

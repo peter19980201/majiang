@@ -3,6 +3,7 @@
  * 输入手牌信息 → 输出完整计算结果
  */
 
+const Mode = require('./player-mode')
 const { countDora } = require('./tiles')
 const { decompose } = require('./decompose')
 const { judgeYaku, getAllMentsu } = require('./yaku')
@@ -22,6 +23,15 @@ const { calculateScore, calculatePayment } = require('./score')
 function calculate(input) {
   const { hand, melds = [], agariTile, context } = input
 
+  const playerCount = Mode.count(context)
+  const nuki = playerCount === 3 ? (context.nuki || 0) : 0
+  if (playerCount === 3) {
+    const tiles = hand.concat([agariTile], ...melds.map(m => m.tiles), context.dora || [], context.uraDora || [])
+    if (tiles.some(t => t >= 1 && t <= 7) || (context.redDora && context.redDora.m5)) return { error: '三麻不使用二至八万或赤五万' }
+    if (melds.some(m => m.type === 'chi')) return { error: '三麻不能吃牌' }
+    if (context.jikaze === 30) return { error: '三麻没有北家自风' }
+    if (!Number.isInteger(nuki) || nuki < 0 || nuki > 4 || tiles.filter(t => t === 30).length + nuki > 4) return { error: '拔北与已录入北牌合计不能超过四张' }
+  }
   // 合并手牌 + 和了牌用于拆解
   const handWithAgari = hand.concat([agariTile])
 
@@ -92,17 +102,18 @@ function isBetterResult(candidate, current) {
 // Dora does not depend on decomposition or winning-tile placement.
 function calculateDora(input, melds, ctx) {
   // 计算宝牌
-  const allTileIds = getAllTilesFlat(input.hand, melds, input.agariTile)
+  const nuki = Mode.count(input.context) === 3 ? (input.context.nuki || 0) : 0
+  const allTileIds = getAllTilesFlat(input.hand, melds, input.agariTile).concat(Array(nuki).fill(30))
   let doraCount = 0
   let uraDoraCount = 0
   let redDoraCount = 0
 
   if (input.context.dora && input.context.dora.length > 0) {
-    doraCount = countDora(allTileIds, input.context.dora, null)
+    doraCount = countDora(allTileIds, input.context.dora, null, Mode.count(input.context))
   }
   if (input.context.uraDora && input.context.uraDora.length > 0 &&
       (ctx.isRiichi || ctx.isDoubleRiichi)) {
-    uraDoraCount = countDora(allTileIds, input.context.uraDora, null)
+    uraDoraCount = countDora(allTileIds, input.context.uraDora, null, Mode.count(input.context))
   }
 
   // 赤宝牌
@@ -111,7 +122,7 @@ function calculateDora(input, melds, ctx) {
     redDoraCount = (rd.m5 || 0) + (rd.p5 || 0) + (rd.s5 || 0)
   }
 
-  return { doraCount, uraDoraCount, redDoraCount }
+  return { doraCount, uraDoraCount, redDoraCount, nuki }
 }
 
 function calculateForDecomposition(decomp, melds, ctx, input, dora) {
@@ -124,6 +135,7 @@ function calculateForDecomposition(decomp, melds, ctx, input, dora) {
 
   // 分别添加宝牌、里宝牌、赤宝牌
   if (!isYakuman) {
+    if (dora.nuki) yakuList.push({ name: '拔北', nameJa: '抜きドラ', han: dora.nuki })
     if (doraCount > 0) {
       yakuList.push({ name: '宝牌', nameJa: 'ドラ', han: doraCount })
     }
@@ -159,7 +171,7 @@ function calculateForDecomposition(decomp, melds, ctx, input, dora) {
     scoreResult.basePoints,
     isOya,
     ctx.isTsumo,
-    honba
+    honba, Mode.count(input.context)
   )
 
   return {

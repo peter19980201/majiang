@@ -2,11 +2,12 @@ const Migrations = require('../../utils/game-migrations')
 const { withShare } = require('../../utils/share')
 const T = require('../../utils/tiles')
 const RED_FLAGS = { 4: 'redM5', 13: 'redP5', 22: 'redS5' }
-const CALCULATOR_INPUT_KEYS = ['hand', 'handRed', 'agariRed', 'redPlacementInferred', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
+const CALCULATOR_INPUT_KEYS = ['nuki', 'hand', 'handRed', 'agariRed', 'redPlacementInferred', 'melds', 'agariTile', 'doubleRiichi', 'ippatsu',
   'haitei', 'rinshan', 'chankan', 'tenhou', 'chihou', 'dora', 'uraDora', 'redM5', 'redP5', 'redS5']
 
 module.exports = withShare({
   data: {
+    playerCount: 4, nuki: 0,
     hand: [],
     handRed: [],
     agariRed: false,
@@ -69,6 +70,8 @@ module.exports = withShare({
   },
 
   initializeInput(options = {}) {
+    this.setData({ playerCount: Number(options.playerCount) === 3 ? 3 : 4 })
+    this.updateRemaining()
     if (options.mode === 'board') {
       const bakaze = parseInt(options.bakaze) || 27
       const jikaze = parseInt(options.jikaze) || 27
@@ -104,6 +107,23 @@ module.exports = withShare({
     wx.navigateBack()
   },
 
+  setPlayerCount(e) {
+    if (this.data.boardMode) return
+    const playerCount = Number(e.currentTarget.dataset.count) === 3 ? 3 : 4
+    if (playerCount === this.data.playerCount) return
+    // Clear the draft explicitly on mode change to avoid keeping invalid tiles/melds.
+    this.setData({ playerCount, hand: [], handRed: [], melds: [], agariTile: null, agariRed: false,
+      nuki: 0, dora: [], uraDora: [], jikaze: 27, editingMeldTiles: [], showMeldModal: false,
+      showBoardResult: false, boardResult: null })
+    this.updateRemaining()
+  },
+  changeNuki(e) {
+    if (this.data.playerCount !== 3) return
+    const nuki = this.data.nuki + Number(e.currentTarget.dataset.delta)
+    if (nuki < 0 || nuki > 4 || (nuki > this.data.nuki && this.data.tileRemaining[30] <= 0)) return
+    this.setData({ nuki })
+    this.updateRemaining()
+  },
   updateRemaining() {
     const counts = new Array(34).fill(0)
     for (const t of this.data.hand) counts[t]++
@@ -116,8 +136,9 @@ module.exports = withShare({
     for (const t of this.data.dora) counts[t]++
     for (const t of this.data.uraDora) counts[t]++
 
+    if (this.data.playerCount === 3) counts[30] += this.data.nuki
     const remaining = new Array(34).fill(0)
-    for (let i = 0; i < 34; i++) remaining[i] = 4 - counts[i]
+    for (let i = 0; i < 34; i++) remaining[i] = this.data.playerCount === 3 && i >= 1 && i <= 7 ? 0 : 4 - counts[i]
 
     const maxHand = 13 - this.data.melds.length * 3
     const redFlags = { redM5: false, redP5: false, redS5: false }
@@ -195,6 +216,7 @@ module.exports = withShare({
 
   startMeldInput(e) {
     const type = e.currentTarget.dataset.type
+    if (this.data.playerCount === 3 && type === 'chi') return
     const needCount = (type === 'minkan' || type === 'ankan') ? 4 : 3
     this.setData({ editingMeldType: type, editingMeldTiles: [], meldNeedCount: needCount })
   },
@@ -358,6 +380,7 @@ module.exports = withShare({
     const result = calculate({
       hand, melds, agariTile,
       context: {
+        playerCount: this.data.playerCount, nuki: this.data.nuki,
         agariType: this.data.agariType,
         bakaze: this.data.bakaze,
         jikaze: this.data.jikaze,
@@ -398,6 +421,7 @@ module.exports = withShare({
 
     // 附加原始输入数据供结果页展示
     result.input = {
+      playerCount: this.data.playerCount, nuki: this.data.nuki,
       hand: hand.slice().sort((a, b) => a - b),
       melds,
       agariTile,

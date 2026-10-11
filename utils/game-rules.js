@@ -1,3 +1,4 @@
+const Mode = require('./player-mode')
 const DEFAULT_RULES = {
   multipleRon: true, bankruptcy: false,
   extension: false, dealerFinish: false
@@ -5,7 +6,7 @@ const DEFAULT_RULES = {
 const ABORT_REASONS = ['九种九牌', '四风连打', '四家立直', '四杠散了', '三家和']
 function rules(config) { return { ...DEFAULT_RULES, ...(config.rules || {}), multipleRon: true } }
 function summary(config) {
-  if (config.gameType === 'free') return '自由记分'
+  if (config.gameType === 'free') return Mode.count(config) === 3 ? '三麻 · 自由记分' : '自由记分'
   const enabled = rules(config)
   const labels = { bankruptcy: '飞人终局', extension: '延长战', dealerFinish: '庄家首位止' }
   const special = Object.keys(labels).filter(key => enabled[key]).map(key => labels[key])
@@ -14,14 +15,15 @@ function summary(config) {
 
 // Called after all payments (including riichi) have been applied.
 function nextRound(state, dealerContinues, isDraw, abortive = false) {
+  const playerCount = Mode.count(state.config)
   if (state.config.gameType === 'free') {
     if (dealerContinues) return { honba: isDraw ? state.honba : state.honba + 1 }
     let roundWind = state.roundWind
     let roundNum = state.roundNum + 1
     let roundCycle = state.roundCycle || 1
-    if (roundNum > 4) { roundNum = 1; roundWind++ }
+    if (roundNum > playerCount) { roundNum = 1; roundWind++ }
     if (roundWind > 3) { roundWind = 0; roundCycle++ }
-    return { dealerIdx: (state.dealerIdx + 1) % 4, roundWind, roundNum, roundCycle,
+    return { dealerIdx: (state.dealerIdx + 1) % playerCount, roundWind, roundNum, roundCycle,
       roundWindName: ['東', '南', '西', '北'][roundWind], honba: isDraw ? state.honba : 0 }
   }
   const rule = rules(state.config)
@@ -33,13 +35,13 @@ function nextRound(state, dealerContinues, isDraw, abortive = false) {
   if (rule.bankruptcy && state.players.some(p => p.points < 0)) return ended('飞人终局')
   if (!abortive) {
     if (state.roundWind >= normalEnd && rule.extension && leader.points >= target) return ended('延长战达标')
-    if (rule.dealerFinish && state.roundNum === 4 && state.roundWind >= normalEnd - 1 &&
+    if (rule.dealerFinish && state.roundNum === playerCount && state.roundWind >= normalEnd - 1 &&
         dealerContinues && leader.idx === state.dealerIdx && leader.points >= target) return ended('庄家首位止')
   }
   if (dealerContinues) return { honba: isDraw ? state.honba : state.honba + 1 }
-  const next = { dealerIdx: (state.dealerIdx + 1) % 4, roundNum: state.roundNum + 1,
+  const next = { dealerIdx: (state.dealerIdx + 1) % playerCount, roundNum: state.roundNum + 1,
     roundWind: state.roundWind, honba: isDraw ? state.honba : 0 }
-  if (next.roundNum > 4) { next.roundNum = 1; next.roundWind++ }
+  if (next.roundNum > playerCount) { next.roundNum = 1; next.roundWind++ }
   next.roundWindName = ['東', '南', '西', '北'][next.roundWind] || '終'
   if (next.roundWind >= normalEnd) {
     const canExtend = rule.extension && next.roundWind < normalEnd + 1 && leader.points < target

@@ -2,7 +2,7 @@ const { withShare } = require('../../utils/share')
 const { DEFAULT_RULES } = require('../../utils/game-rules')
 Page(withShare({
   data: {
-    gameType: 'free',
+    gameType: 'free', playerCount: 4, sanmaUma: 15, sanmaUmaOptions: [10, 15, 20, 30],
     startPoints: 25000,
     returnPoints: 30000,
     uma: '10-20',          // 顺位马
@@ -17,6 +17,15 @@ Page(withShare({
     ]
   },
 
+  setPlayerCount(e) {
+    const playerCount = Number(e.currentTarget.dataset.count)
+    if (![3, 4].includes(playerCount) || playerCount === this.data.playerCount) return
+    const players = this.data.players.slice(0, playerCount)
+    while (players.length < playerCount) players.push('北家')
+    this.setData({ playerCount, players, startPoints: playerCount === 3 ? 35000 : 25000,
+      returnPoints: playerCount === 3 ? 40000 : 30000 })
+  },
+  setSanmaUma(e) { this.setData({ sanmaUma: Number(e.currentTarget.dataset.val) }) },
   setUma(e) {
     this.setData({ uma: e.currentTarget.dataset.val })
   },
@@ -42,7 +51,7 @@ Page(withShare({
 
   startGame() {
     const config = {
-      gameType: this.data.gameType,
+      sanmaRuleVersion: this.data.playerCount === 3 ? 1 : undefined, gameType: this.data.gameType, playerCount: this.data.playerCount, sanmaUma: this.data.sanmaUma,
       startPoints: this.data.startPoints,
       returnPoints: this.data.returnPoints,
       uma: this.data.uma,

@@ -1,13 +1,13 @@
 <image class="page-landscape" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <wxs module="fmt" src="../../utils/format.wxs"></wxs>
-<view class="container">
+<view class="container mode-{{playerCount}}">
   <image class="table-art" src="/assets/art/table-texture.jpg" mode="aspectFill" aria-hidden="true"></image>
   <view class="table-stage">
   <view class="round-panel">
     <text class="round-cycle" wx:if="{{roundCycle > 1}}">第{{roundCycle}}轮</text>
-    <view class="round-summary"><view class="round-label"><text>{{roundWindName === '東' ? '东' : roundWindName}}</text><text class="round-number">{{roundNum}}</text><text>局</text></view><text class="round-divider"></text><text>{{honba}}本场</text><text class="round-divider"></text><text>供托 {{fmt.points(riichiSticks * 1000)}} 点</text></view>
-    <view class="round-progress"><view class="progress-stop {{roundNum - 1 === index ? 'current' : ''}} {{roundNum - 1 > index ? 'passed' : ''}}" wx:for="{{4}}" wx:key="index"><view class="progress-dot"></view><text>{{roundWindName === '東' ? '东' : roundWindName}}{{index + 1}}</text></view></view>
+    <view wx:if="{{playerCount === 3}}" class="round-cycle">三麻 · 自由记分</view><view class="round-summary"><view class="round-label"><text>{{roundWindName === '東' ? '东' : roundWindName}}</text><text class="round-number">{{roundNum}}</text><text>局</text></view><text class="round-divider"></text><text>{{honba}}本场</text><text class="round-divider"></text><text>供托 {{fmt.points(riichiSticks * 1000)}} 点</text></view>
+    <view class="round-progress"><view class="progress-stop {{roundNum - 1 === index ? 'current' : ''}} {{roundNum - 1 > index ? 'passed' : ''}}" wx:for="{{playerCount}}" wx:key="index"><view class="progress-dot"></view><text>{{roundWindName === '東' ? '东' : roundWindName}}{{index + 1}}</text></view></view>
   </view>
   <view class="players-cross">
     <view class="table-corner corner-tl"></view><view class="table-corner corner-tr"></view><view class="table-corner corner-bl"></view><view class="table-corner corner-br"></view>
@@ -18,7 +18,7 @@
       <text class="dealer-mark" wx:if="{{index * 1 === dealerIdx}}">庄</text>
     </view>
   </view>
-  <view class="table-total"><text>总点棒（含供托）</text><text class="total-value">{{fmt.points(players[0].points + players[1].points + players[2].points + players[3].points + riichiSticks * 1000)}}</text></view>
+  <view class="table-total"><text>总点棒（含供托）</text><text class="total-value">{{fmt.points(totalPoints)}}</text></view>
   <view class="board-actions" wx:if="{{!gameOver}}"><view class="board-action" bindtap="startRon"><text>荣和</text></view><view class="board-action" bindtap="startTsumo"><text>自摸</text></view><view class="board-action" bindtap="startDraw"><text>流局</text></view></view>
   <view class="btn-primary settlement-trigger" wx:if="{{gameOver}}" bindtap="doSettlement">查看结算</view>
   </view>
@@ -134,7 +134,7 @@
         <block wx:if="{{drawType !== 'abortive'}}"><view class="win-field-title"><text>听牌情况</text><text class="win-field-note">可多选 · 已选{{drawTenpaiCount}}家</text></view><view class="win-choices"><button class="win-choice {{drawTenpai[index] ? 'selected' : ''}}" wx:for="{{players}}" wx:key="index" bindtap="toggleTenpai" data-idx="{{index}}"><text>{{item.name}}</text><text class="win-check" wx:if="{{drawTenpai[index]}}">✓</text></button></view></block>
         <view class="win-score-title"><text>点棒变化</text><text class="win-field-note">含本局立直支出</text></view>
         <view class="win-transfer-list"><view class="win-transfer" wx:for="{{drawPreview}}" wx:key="index"><view class="win-entry-tile"><tile tid="{{27 + players[index].seatWind}}" size="large"></tile></view><text class="win-transfer-name">{{item.name}}</text><text class="win-transfer-value {{item.delta >= 0 ? 'positive' : 'negative'}}">{{item.delta > 0 ? '+' : ''}}{{fmt.points(item.delta)}}<text class="win-points-unit"> 点</text></text></view></view>
-        <view class="win-hint"><text class="win-info-icon">!</text><text>{{drawType === 'nagashi' ? '各达成者分别向其余三家收取满贯点数（达成者之间也互付）；不计本场点、不收供托、无不听罚符。本场加一，庄家听牌连庄，否则轮庄。' : drawType === 'abortive' ? '途中流局连庄加一本场，无不听罚符' : (drawTenpaiCount > 0 && drawTenpaiCount < 4 ? '不听罚符共 3,000 点，供托留至下一局' : '本局无不听罚符，供托留至下一局')}}</text></view>
+        <view class="win-hint"><text class="win-info-icon">!</text><text>{{drawType === 'nagashi' ? (playerCount === 3 ? '各达成者分别向其余两家收取满贯点数（达成者之间也互付）；不计本场点、不收供托、无不听罚符。本场加一，庄家听牌连庄，否则轮庄。' : '各达成者分别向其余三家收取满贯点数（达成者之间也互付）；不计本场点、不收供托、无不听罚符。本场加一，庄家听牌连庄，否则轮庄。') : drawType === 'abortive' ? '途中流局连庄加一本场，无不听罚符' : (drawTenpaiCount > 0 && drawTenpaiCount < playerCount ? (playerCount === 3 ? '不听罚符共 2,000 点，供托留至下一局' : '不听罚符共 3,000 点，供托留至下一局') : '本局无不听罚符，供托留至下一局')}}</text></view>
       </view></scroll-view>
       <view class="win-footer"><text class="win-footer-hint">{{drawType === 'abortive' ? abortReason : '请核对听牌情况和点棒变化'}}</text><button class="win-confirm" bindtap="confirmDraw">{{editingLastRound ? '确认修改' : '确认流局'}}</button></view>
     </view>

@@ -24,13 +24,18 @@ module.exports = withShare({
 
   deleteRecord() {
     const record = this.data.record
-    if (!record || !record.canChange || this.data.busy) return
+    if (!record || !record.canChange || this.data.busy || this._deleteConfirmationOpen) return
+    this._deleteConfirmationOpen = true
     wx.showModal({
       title: '删除本局记录',
       content: `删除${record.round}后，点棒、庄家、本场及供托将恢复到本局录入前。`,
       confirmText: '删除',
       confirmColor: '#a34e40',
-      success: res => { if (res.confirm) this._returnWithAction('deleteRound') }
+      success: res => {
+        this._deleteConfirmationOpen = false
+        if (res.confirm && this.data.record === record) this._returnWithAction('deleteRound')
+      },
+      complete: () => { this._deleteConfirmationOpen = false }
     })
   }
 })
