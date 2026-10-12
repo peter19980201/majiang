@@ -1,3 +1,4 @@
+const { examples } = require('./yaku-examples')
 /**
  * 役种速查数据 (参考雀魂规则)
  * 每个役种包含: name, nameJa, han, hanOpen(副露时番数, null=门前限定),
@@ -10,14 +11,13 @@ const YAKU_DATA = [
     name: '立直', nameJa: 'リーチ', han: 1, hanOpen: null,
     category: '1番', menzenOnly: true,
     desc: '门前听牌宣言',
-    condition: '门前状态下听牌时宣言立直，支付1000点立直棒',
-    example: { hand: '234m567p11s', melds: [], agari: '2s', note: '听1s-4s双面' }
+    condition: '门前状态下听牌时宣言立直，支付1000点立直棒'
   },
   {
     name: '一发', nameJa: 'イッパツ', han: 1, hanOpen: null,
     category: '1番', menzenOnly: true,
     desc: '立直后一巡内和了',
-    condition: '立直宣言后到自己下一次摸牌之间和了（中间无人鸣牌）'
+    condition: '立直宣言后的一巡内和了，包括下一次自己的自摸；期间不能有吃、碰或杠打断'
   },
   {
     name: '门前清自摸和', nameJa: 'メンゼンツモ', han: 1, hanOpen: null,
@@ -29,22 +29,19 @@ const YAKU_DATA = [
     name: '平和', nameJa: 'ピンフ', han: 1, hanOpen: null,
     category: '1番', menzenOnly: true,
     desc: '全顺子+非役牌雀头+双面听',
-    condition: '4组顺子、雀头不是役牌（三元牌/场风/自风）、双面听和了',
-    example: { hand: '123m456p789s23p', melds: [], agari: '1p', note: '1p-4p双面听' }
+    condition: '4组顺子、雀头不是役牌（三元牌/场风/自风）、双面听和了'
   },
   {
     name: '一杯口', nameJa: 'イーペーコー', han: 1, hanOpen: null,
     category: '1番', menzenOnly: true,
     desc: '两组相同的顺子',
-    condition: '门前状态下有两组完全相同的顺子（同花色同数字）',
-    example: { hand: '112233m456p77s', melds: [], agari: '7s', note: '11-22-33万为两组123万' }
+    condition: '门前状态下有两组完全相同的顺子（同花色同数字）'
   },
   {
     name: '断幺九', nameJa: 'タンヤオ', han: 1, hanOpen: 1,
     category: '1番', menzenOnly: false,
     desc: '手牌全部为中张牌(2-8)',
-    condition: '手牌（含副露）中不包含任何幺九牌（1、9、字牌）',
-    example: { hand: '234m567p22s', melds: [{ type: 'pon', tiles: '888s' }], agari: '2s' }
+    condition: '手牌（含副露）中不包含任何幺九牌（1、9、字牌）'
   },
   {
     name: '役牌:白', nameJa: 'ヤクハイ:ハク', han: 1, hanOpen: 1,
@@ -106,48 +103,43 @@ const YAKU_DATA = [
     name: '双立直', nameJa: 'ダブルリーチ', han: 2, hanOpen: null,
     category: '2番', menzenOnly: true,
     desc: '第一巡宣言立直',
-    condition: '自己第一次摸牌时（且之前无人鸣牌）宣言立直'
+    condition: '自己第一巡舍牌时宣言立直，且此前无人吃、碰或杠'
   },
   {
     name: '七对子', nameJa: 'チートイツ', han: 2, hanOpen: null,
     category: '2番', menzenOnly: true,
     desc: '7组对子（固定25符）',
-    condition: '手牌由7组不同的对子组成',
-    example: { hand: '1133m2277p449s東東', melds: [], agari: '9s', note: '7组对子' }
+    condition: '手牌由7组不同的对子组成'
   },
   {
     name: '三色同顺', nameJa: 'サンショクドウジュン', han: 2, hanOpen: 1,
     category: '2番', menzenOnly: false,
     desc: '三种花色的同数顺子',
-    condition: '万/筒/索三种花色各有一组相同数字的顺子',
-    example: { hand: '123m123p123s55m', melds: [], agari: '5m', note: '三花色各有123' }
+    condition: '万/筒/索三种花色各有一组相同数字的顺子'
   },
   {
     name: '一气通贯', nameJa: 'イッツー', han: 2, hanOpen: 1,
     category: '2番', menzenOnly: false,
     desc: '同花色 123+456+789',
-    condition: '同一花色中有123、456、789三组顺子',
-    example: { hand: '123456789m11p', melds: [], agari: '1p', note: '万子一气通贯' }
+    condition: '同一花色中有123、456、789三组顺子'
   },
   {
     name: '混全带幺九', nameJa: 'チャンタ', han: 2, hanOpen: 1,
     category: '2番', menzenOnly: false,
     desc: '每组面子和雀头都含幺九或字牌',
-    condition: '所有面子和雀头都包含幺九牌或字牌，且至少有字牌和顺子',
-    example: { hand: '123m789p999s東東', melds: [], agari: '東', note: '每组都有幺九/字牌' }
+    condition: '所有面子和雀头都包含幺九牌或字牌，且至少有字牌和顺子'
   },
   {
     name: '对对和', nameJa: 'トイトイ', han: 2, hanOpen: 2,
     category: '2番', menzenOnly: false,
     desc: '4组刻子+雀头',
-    condition: '手牌由4组刻子（或杠子）和1组雀头组成',
-    example: { hand: '111m99p', melds: [{ type: 'pon', tiles: '333s' }, { type: 'pon', tiles: '777p' }], agari: '9p' }
+    condition: '手牌由4组刻子（或杠子）和1组雀头组成'
   },
   {
     name: '三暗刻', nameJa: 'サンアンコ', han: 2, hanOpen: 2,
     category: '2番', menzenOnly: false,
     desc: '3组暗刻',
-    condition: '手牌中有3组暗刻（不含副露碰出的明刻）'
+    condition: '手牌中有3组暗刻或暗杠；荣和牌补成的刻子不算暗刻'
   },
   {
     name: '三色同刻', nameJa: 'サンショクドウコク', han: 2, hanOpen: 2,
@@ -179,21 +171,19 @@ const YAKU_DATA = [
     name: '二杯口', nameJa: 'リャンペーコー', han: 3, hanOpen: null,
     category: '3番', menzenOnly: true,
     desc: '两组一杯口',
-    condition: '门前状态下有两组不同的一杯口（即4组顺子两两相同）',
-    example: { hand: '112233m556677p', melds: [], agari: '7p', note: '两组一杯口' }
+    condition: '门前状态下四组顺子可分成两对，每对中的顺子完全相同，另有一组雀头'
   },
   {
     name: '纯全带幺九', nameJa: 'ジュンチャン', han: 3, hanOpen: 2,
     category: '3番', menzenOnly: false,
     desc: '每组都含数牌幺九（无字牌）',
-    condition: '所有面子和雀头都包含数牌的1或9，不能有字牌'
+    condition: '所有面子和雀头都包含数牌的1或9，不能有字牌，且至少有一组顺子'
   },
   {
     name: '混一色', nameJa: 'ホンイーソー', han: 3, hanOpen: 2,
     category: '3番', menzenOnly: false,
     desc: '一种花色的数牌+字牌',
-    condition: '手牌仅由一种花色的数牌和字牌组成',
-    example: { hand: '123456m東東南南南', melds: [], agari: '東', note: '万子+字牌' }
+    condition: '手牌仅由一种花色的数牌和字牌组成'
   },
 
   // === 6番役 ===
@@ -201,8 +191,7 @@ const YAKU_DATA = [
     name: '清一色', nameJa: 'チンイーソー', han: 6, hanOpen: 5,
     category: '6番', menzenOnly: false,
     desc: '同一花色的数牌',
-    condition: '手牌全部由同一花色的数牌组成，不含字牌',
-    example: { hand: '11123456789mm', melds: [], agari: '9m', note: '全部万子' }
+    condition: '手牌全部由同一花色的数牌组成，不含字牌'
   },
 
   // === 役满 ===
@@ -210,7 +199,7 @@ const YAKU_DATA = [
     name: '天和', nameJa: 'テンホウ', han: -1, hanOpen: null,
     category: '役满', menzenOnly: true, isYakuman: true, yakumanTimes: 1,
     desc: '庄家配牌即和',
-    condition: '庄家在第一次摸牌时（配牌14张）直接和了'
+    condition: '庄家配牌14张即和了，未进行吃、碰或杠'
   },
   {
     name: '地和', nameJa: 'チーホウ', han: -1, hanOpen: null,
@@ -222,15 +211,13 @@ const YAKU_DATA = [
     name: '国士无双', nameJa: 'コクシムソウ', han: -1, hanOpen: null,
     category: '役满', menzenOnly: true, isYakuman: true, yakumanTimes: 1,
     desc: '13种幺九牌各一+任一重复',
-    condition: '手牌包含全部13种幺九牌（1m9m1p9p1s9s東南西北白发中），其中一种为对子',
-    example: { hand: '19m19p19s東南西北白发中', melds: [], agari: '中', note: '13面听=双倍役满' }
+    condition: '手牌包含全部13种幺九牌（1m9m1p9p1s9s東南西北白发中），其中一种为对子'
   },
   {
     name: '四暗刻', nameJa: 'スーアンコ', han: -1, hanOpen: null,
     category: '役满', menzenOnly: true, isYakuman: true, yakumanTimes: 1,
     desc: '4组暗刻',
-    condition: '门前状态下有4组暗刻（自摸）。单骑听牌=双倍役满',
-    example: { hand: '111m333p555s77p', melds: [], agari: '7p', note: '单骑=双倍役满' }
+    condition: '四组暗刻或暗杠。双碰听必须自摸；单骑听雀头可荣和或自摸，本项目计双倍役满'
   },
   {
     name: '大三元', nameJa: 'ダイサンゲン', han: -1, hanOpen: -1,
@@ -278,10 +265,15 @@ const YAKU_DATA = [
     name: '九莲宝灯', nameJa: 'チューレンポウトウ', han: -1, hanOpen: null,
     category: '役满', menzenOnly: true, isYakuman: true, yakumanTimes: 1,
     desc: '1112345678999+同花色任一张',
-    condition: '门前同一花色手牌为1112345678999的基本型加上同花色任意一张。纯正（去掉和了牌刚好为基本型）=双倍役满',
-    example: { hand: '1112345678999m', melds: [], agari: '5m', note: '纯正=双倍役满' }
+    condition: '门前同一花色手牌为1112345678999的基本型加上同花色任意一张。纯正（去掉和了牌刚好为基本型）=双倍役满'
   }
 ]
+
+// example 保留首例入口；examples 包含普通与双倍变体。
+YAKU_DATA.forEach(y => {
+  y.examples = examples[y.name]
+  y.example = y.examples[0]
+})
 
 const CATEGORIES = ['1番', '2番', '3番', '6番', '役满']
 

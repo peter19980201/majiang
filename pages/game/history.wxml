@@ -6,7 +6,10 @@
   <view class="history-heading">
     <view class="history-title-row"><text class="history-title">历史对局</text><text class="history-seal">史</text></view>
   </view>
-  <input class="history-search" value="{{searchQuery}}" bindinput="onSearchInput" placeholder="输入名字，多个名字用空格分隔" placeholder-class="history-search-placeholder" aria-label="按参与者名字搜索，多个名字用空格分隔，需全部匹配" maxlength="-1" confirm-type="search" />
+  <view class="history-search-wrap">
+    <view class="history-search-icon" aria-hidden="true"></view>
+    <input class="history-search" value="{{searchQuery}}" bindinput="onSearchInput" placeholder="输入名字，多个名字用空格分隔" placeholder-class="history-search-placeholder" aria-label="按参与者名字搜索，多个名字用空格分隔，需全部匹配" maxlength="-1" confirm-type="search" />
+  </view>
   <view class="history-filters" role="tablist" aria-label="筛选历史对局">
     <button class="history-filter {{historyFilter === 'all' ? 'is-active' : ''}}" data-filter="all" bindtap="changeFilter" role="tab" aria-selected="{{historyFilter === 'all'}}">全部 <text>{{totalCount}}</text></button>
     <button class="history-filter {{historyFilter === 'favorites' ? 'is-active' : ''}}" data-filter="favorites" bindtap="changeFilter" role="tab" aria-selected="{{historyFilter === 'favorites'}}">收藏 <text>{{favoriteCount}}</text></button>

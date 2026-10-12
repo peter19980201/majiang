@@ -407,6 +407,28 @@
       ],
       "timeoutMs": 10000,
       "description": "参与者名字模糊AND搜索、空白分隔、收藏交集、空态与存档隔离"
+    },
+    {
+      "id": "yaku-examples",
+      "file": "suites/yaku-examples.js",
+      "group": "ui",
+      "features": [
+        "F07"
+      ],
+      "timeoutMs": 10000,
+      "description": "42役种45实例完整性、固定目标役与番数、听牌/情境反例、副露和了牌及页面绑定"
+    },
+    {
+      "id": "special-reference",
+      "file": "suites/special-reference.js",
+      "group": "ui",
+      "features": [
+        "F07",
+        "F24",
+        "F28"
+      ],
+      "timeoutMs": 10000,
+      "description": "加番与流局7卡片、重复档位卡片移除、原支付边界回归、状态保留与舍牌说明"
     }
   ],
   "optional": [
@@ -415,6 +437,18 @@
       "file": "winning-hands-oracle.py",
       "runtime": "python",
       "dependency": "mahjong==1.4.0"
+    },
+    {
+      "id": "yaku-examples-oracle",
+      "file": "suites/yaku-examples-oracle.py",
+      "runtime": "python",
+      "dependency": "mahjong==1.4.0",
+      "features": [
+        "F07"
+      ],
+      "description": "单独以Python运行：独立核对45个速查实例的目标役与番数；不包含于runner的--oracle入口",
+      "group": "oracle",
+      "timeoutMs": 120000
     }
   ],
   "generators": [

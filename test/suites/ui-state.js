@@ -124,7 +124,9 @@ assert.strictEqual(tile.data.label,'東')
 assert(!fs.readFileSync(path.resolve(__dirname,'../../components/tile/tile.wxml'),'utf8').includes('faceSrc'))
 const reference = page('pages/reference/reference.js')
 reference.onLoad()
-const pairs = reference.allYaku.find(y=>y.name==='七对子')._pairGroups
+const pairExample = reference.allYaku.find(y=>y.name==='七对子')._examples[0]
+const pairs = pairExample.groups.map(group => group.tiles.map(tile => tile.tid))
 assert.strictEqual(pairs.length,7)
 assert(pairs.every(pair=>pair.length===2 && pair[0]===pair[1]))
+assert.strictEqual(pairExample.groups.flatMap(group => group.tiles).filter(tile => tile.winning).length, 1)
 console.log('Rendered tile assets and seven-pairs grouping verified.')

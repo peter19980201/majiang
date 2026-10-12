@@ -1,10 +1,13 @@
 const { withShare } = require('../../utils/share')
 const { YAKU_DATA, CATEGORIES } = require('../../utils/yaku-data')
-const T = require('../../utils/tiles')
+const { SPECIAL_SECTIONS } = require('../../utils/special-reference')
+const { prepareExample } = require('../../utils/yaku-example-view')
 
 Page(withShare({
   data: {
     rulesTab: 'yaku',
+    specialSections: SPECIAL_SECTIONS,
+    expandedSpecial: '', visitedSpecial: {},
     categories: CATEGORIES,
     activeCategory: '',
     keyword: '',
@@ -14,27 +17,22 @@ Page(withShare({
   },
 
   onLoad() {
-    this.allYaku = YAKU_DATA.map((y, i) => {
-      const item = { ...y, _index: i }
-      if (y.example && y.example.hand) {
-        item._handTiles = T.parseTiles(y.example.hand)
-        if (y.example.agari) {
-          item._agariTile = T.parseTiles(y.example.agari)[0]
-        }
-      }
-      if (y.name === '七对子' && item._handTiles && item._agariTile !== undefined) {
-        const full = item._handTiles.concat(item._agariTile).sort((a,b)=>a-b)
-        item._pairGroups = []
-        for (let j=0;j<full.length;j+=2) item._pairGroups.push(full.slice(j,j+2))
-      }
-      return item
-    })
+    this.allYaku = YAKU_DATA.map((y, i) => ({
+      ...y, _index: i, _examples: y.examples.map(prepareExample)
+    }))
     this.applyFilter()
   },
 
   selectRulesTab(e) {
     const tab = e.currentTarget.dataset.tab
-    if (['yaku', 'points'].includes(tab)) this.setData({ rulesTab: tab })
+    if (['yaku', 'points', 'special'].includes(tab)) this.setData({ rulesTab: tab })
+  },
+
+  onSpecialTap(e) {
+    const id = e.currentTarget.dataset.id
+    if (!SPECIAL_SECTIONS.some(section => section.cards.some(card => card.id === id))) return
+    this.setData({ expandedSpecial: this.data.expandedSpecial === id ? '' : id,
+      visitedSpecial: { ...this.data.visitedSpecial, [id]: true } })
   },
 
   onCategoryTap(e) {

@@ -1,7 +1,7 @@
 <image class="page-landscape page-landscape-tab" src="/assets/home/profile-landscape.jpg" mode="aspectFill" aria-hidden="true" />
 <image class="page-motto-art" src="/assets/home/profile-motto.png" mode="aspectFit" aria-label="以牌会友，乐在其中" />
 <view class="container rules-page">
-  <view class="seg-ctrl rules-tabs motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{rulesTab === 'yaku' ? 0 : 100}}%)"></view><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button></view>
+  <view class="seg-ctrl rules-tabs motion-segments"><view class="motion-selection" aria-hidden="true" style="transform:translateX({{rulesTab === 'yaku' ? 0 : rulesTab === 'points' ? 100 : 200}}%)"></view><button class="seg {{rulesTab === 'yaku' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="yaku">役种速查</button><button class="seg {{rulesTab === 'points' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="points">点数速查</button><button class="seg {{rulesTab === 'special' ? 'active' : ''}}" bindtap="selectRulesTab" data-tab="special">宝牌及流局</button></view>
   <view hidden="{{rulesTab !== 'yaku'}}">
   <!-- 搜索栏 -->
   <view class="search-bar">
@@ -54,14 +54,36 @@
           <text class="detail-label">成立条件</text>
           <text class="detail-text">{{item.condition}}</text>
         </view>
-        <view class="detail-section" wx:if="{{item._handTiles}}">
+        <view class="detail-section examples-section">
           <text class="detail-label">示例牌型</text>
-          <view class="example-pairs" wx:if="{{item._pairGroups}}"><view class="example-pair" wx:for="{{item._pairGroups}}" wx:for-item="pair" wx:key="index"><tile wx:for="{{pair}}" wx:for-item="pairTile" wx:key="index" tid="{{pairTile}}" size="picker"></tile></view></view>
-          <view class="example-hand" wx:else>
-            <tile wx:for="{{item._handTiles}}" wx:for-item="t" wx:key="index" tid="{{t}}" size="normal"></tile>
-            <tile wx:if="{{item._agariTile !== undefined}}" tid="{{item._agariTile}}" size="normal" extra="agari"></tile>
+          <view class="example-card" wx:for="{{item._examples}}" wx:for-item="example" wx:key="title">
+            <view class="example-heading"><text class="example-title">{{example.title}}</text><text class="example-count">{{example.count}}张</text></view>
+            <view class="example-context"><text class="example-chip" wx:for="{{example.state}}" wx:for-item="state" wx:key="*this">{{state}}</text></view>
+            <text class="example-win">{{example.winLabel}}</text>
+            <text class="example-situation" wx:if="{{example.situation}}">{{example.situation}}</text>
+            <text class="example-section-label">手牌（含和了牌）</text>
+            <view class="example-groups">
+              <view class="example-group" wx:for="{{example.groups}}" wx:for-item="group" wx:key="index">
+                <text class="example-group-label">{{group.label}}</text>
+                <view class="example-group-tiles">
+                  <view class="example-tile-cell" wx:for="{{group.tiles}}" wx:for-item="tileData" wx:key="index">
+                    <tile tid="{{tileData.tid}}" size="picker" extra="{{tileData.winning ? 'agari' : ''}}"></tile>
+                    <text class="example-win-marker" wx:if="{{tileData.winning}}">和</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+            <view class="example-meld-area" wx:if="{{example.melds.length}}">
+              <text class="example-section-label">副露 / 杠组（暗杠不破门前）</text>
+              <view class="example-groups">
+                <view class="example-group example-meld" wx:for="{{example.melds}}" wx:for-item="meld" wx:key="index">
+                  <text class="example-group-label">{{meld.label}}</text>
+                  <view class="example-group-tiles"><tile wx:for="{{meld.tiles}}" wx:for-item="meldTile" wx:key="index" tid="{{meldTile}}" size="picker"></tile></view>
+                </view>
+              </view>
+            </view>
+            <view class="example-reason"><text class="example-section-label">本例为何成立</text><text class="example-note">{{example.note}}</text></view>
           </view>
-          <text class="example-note" wx:if="{{item.example.note}}">{{item.example.note}}</text>
         </view>
       </view>
       </view></view></view>
@@ -74,4 +96,26 @@
   </view>
   </view>
   <view hidden="{{rulesTab !== 'points'}}"><points-table /></view>
+  <view hidden="{{rulesTab !== 'special'}}" class="special-reference">
+    <view class="special-section" wx:for="{{specialSections}}" wx:for-item="section" wx:key="title">
+      <text class="special-section-title">{{section.title}}</text>
+      <text class="special-intro">{{section.intro}}</text>
+      <view class="yaku-card" wx:for="{{section.cards}}" wx:for-item="card" wx:key="id">
+        <view class="yaku-header" bindtap="onSpecialTap" data-id="{{card.id}}" role="button" aria-expanded="{{expandedSpecial === card.id}}">
+          <view class="yaku-title-area"><text class="yaku-name-cn">{{card.title}}</text><text class="special-summary">{{card.summary}}</text></view>
+          <view class="special-badges"><text class="badge">{{card.badge}}</text><text class="yaku-chevron motion-chevron {{expandedSpecial === card.id ? 'motion-open' : ''}}">›</text></view>
+        </view>
+        <view class="motion-collapse {{expandedSpecial === card.id ? 'motion-open' : ''}}" aria-hidden="{{expandedSpecial !== card.id}}"><view class="motion-collapse-inner"><view class="yaku-detail" wx:if="{{visitedSpecial[card.id]}}">
+          <view class="detail-section"><text class="detail-label">{{section.title === '宝牌说明' ? '加番条件' : '规则说明'}}</text><text class="special-paragraph" wx:for="{{card.rules}}" wx:for-item="rule" wx:key="*this">{{rule}}</text></view>
+          <view class="special-illustrations" wx:if="{{card.illustrations}}">
+            <view wx:for="{{card.illustrations}}" wx:for-item="illustration" wx:key="label"><text class="example-section-label">{{illustration.label}}</text><view class="example-group-tiles"><tile wx:for="{{illustration.tiles}}" wx:for-item="tileData" wx:key="index" tid="{{tileData.tid}}" extra="{{tileData.extra}}" size="picker" /></view></view>
+          </view>
+          <view wx:if="{{card.river}}"><text class="example-section-label">成立示例 · 舍牌河（按舍牌顺序）</text><view class="special-river"><tile wx:for="{{card.river}}" wx:for-item="riverTile" wx:key="index" tid="{{riverTile.tid}}" size="picker" /></view></view>
+          <view class="example-reason"><text class="example-section-label">{{card.id === 'nagashi' ? '本例为何成立' : '实例'}}</text><text class="example-note">{{card.example}}</text></view>
+          <view class="special-rows" wx:if="{{card.rows}}"><view class="special-row" wx:for="{{card.rows}}" wx:for-item="row" wx:key="label"><text class="special-row-label">{{row.label}}</text><text class="special-paragraph">{{row.value}}</text></view></view>
+          <view class="detail-section" wx:if="{{card.id !== 'abortive'}}"><text class="detail-label">{{section.title === '宝牌说明' ? '补充说明' : '本工具处理方式'}}</text><text class="special-paragraph" wx:for="{{card.notes}}" wx:for-item="note" wx:key="*this">{{note}}</text></view>
+        </view></view></view>
+      </view>
+    </view>
+  </view>
 </view>
