@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 const assert = require('assert')
 const path = require('path')
 const Records = require('../../utils/game-records')

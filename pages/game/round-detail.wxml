@@ -22,3 +22,5 @@
   <text class="legacy-note" wx:if="{{!record.canChange}}">{{record.latest ? '这条旧记录未保存局前数据，暂不支持修改或删除。' : '仅最新一局支持修改和删除，本局可查看详情。'}}</text>
   <view class="detail-actions"><button class="delete-button" disabled="{{!record.canChange || busy}}" bindtap="deleteRecord">删除记录</button><button class="edit-button" disabled="{{!record.canChange || busy}}" bindtap="editRecord">修改本局</button></view>
 </view>
+
+<confirmation-dialog wx:if="{{!embedded}}" id="confirmation-dialog" />

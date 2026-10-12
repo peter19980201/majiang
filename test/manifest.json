@@ -293,15 +293,17 @@
       "timeoutMs": 10000
     },
     {
-      "id": "history-swipe",
-      "file": "suites/history-swipe.js",
+      "id": "history-actions",
+      "file": "suites/history-actions.js",
       "group": "ui",
       "features": [
         "F15",
         "F16",
+        "F17",
         "F26"
       ],
-      "timeoutMs": 10000
+      "timeoutMs": 10000,
+      "description": "右上星标与垃圾桶顺序、独立点击、删除确认取消、已收藏提示及移除滑动入口"
     },
     {
       "id": "sanma",
@@ -367,6 +369,44 @@
       ],
       "timeoutMs": 10000,
       "description": "抽屉横线仅点击关闭、记录点击展开收起、拖动不关闭及原关闭入口保留"
+    },
+    {
+      "id": "history-favorites",
+      "file": "suites/history-favorites.js",
+      "group": "ui",
+      "features": [
+        "F15",
+        "F17",
+        "F26"
+      ],
+      "timeoutMs": 10000,
+      "description": "战绩收藏持久化、筛选计数、取消与删除、保存失败、同局替换、独立按钮绑定及3rpx金色/灰绿色边框、仅已结束战绩与进行中存档隔离"
+    },
+    {
+      "id": "confirmation-dialog",
+      "file": "suites/confirmation-dialog.js",
+      "group": "ui",
+      "features": [
+        "F01",
+        "F14",
+        "F15",
+        "F16",
+        "F17",
+        "F26",
+        "F30"
+      ],
+      "timeoutMs": 10000,
+      "description": "统一水墨确认弹窗、真实组件与历史删除集成、确认取消、生命周期、回调及原生调用扫描"
+    },
+    {
+      "id": "history-search",
+      "file": "suites/history-search.js",
+      "group": "ui",
+      "features": [
+        "F17"
+      ],
+      "timeoutMs": 10000,
+      "description": "参与者名字模糊AND搜索、空白分隔、收藏交集、空态与存档隔离"
     }
   ],
   "optional": [

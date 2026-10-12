@@ -8,3 +8,5 @@
   <text class="report-message">保存后可发送给微信好友或群聊</text>
   <canvas type="2d" id="reportCanvas" class="export-canvas"></canvas>
 </view>
+
+<confirmation-dialog id="confirmation-dialog" />

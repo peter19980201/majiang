@@ -1,3 +1,4 @@
+const Confirmation = require('../../utils/confirmation')
 const { withShare } = require('../../utils/share')
 const GameStorage = require('../../utils/game-storage')
 const { openNewGame } = require('../../utils/main-navigation')
@@ -16,7 +17,7 @@ Page(withShare({
       return
     }
     this._ending = true
-    wx.showModal({
+    Confirmation.show(this, {
       title:'提前结束对局',
       content:'确定提前结束当前对局吗？将按当前点数结算并保存到战绩，结束后无法继续此对局。',
       confirmText:'确认结束', cancelText:'继续对局',
@@ -47,7 +48,7 @@ Page(withShare({
   goGameSetup() {
     const currentGame = GameStorage.current()
     if (currentGame && currentGame.gameState) {
-      wx.showModal({
+      Confirmation.show(this, {
         title: '存在进行中的对局',
         content: '新建将结算当前对局并存入历史',
         confirmText: '继续',

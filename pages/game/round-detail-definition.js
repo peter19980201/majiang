@@ -1,3 +1,4 @@
+const Confirmation = require('../../utils/confirmation')
 const { withShare } = require('../../utils/share')
 module.exports = withShare({
   data: { record: null, busy: false, embedded: false },
@@ -26,7 +27,7 @@ module.exports = withShare({
     const record = this.data.record
     if (!record || !record.canChange || this.data.busy || this._deleteConfirmationOpen) return
     this._deleteConfirmationOpen = true
-    wx.showModal({
+    Confirmation.show(this, {
       title: '删除本局记录',
       content: `删除${record.round}后，点棒、庄家、本场及供托将恢复到本局录入前。`,
       confirmText: '删除',

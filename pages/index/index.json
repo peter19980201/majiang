@@ -2,5 +2,7 @@
   "navigationBarTitleText": "",
   "navigationBarBackgroundColor": "#f6f4ed",
   "navigationBarTextStyle": "black",
-  "usingComponents": {}
+  "usingComponents": {
+    "confirmation-dialog": "/components/confirmation-dialog/index"
+  }
 }

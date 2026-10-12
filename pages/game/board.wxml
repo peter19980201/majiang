@@ -186,3 +186,5 @@
     </view>
   </view>
 </view>
+
+<confirmation-dialog id="confirmation-dialog" />

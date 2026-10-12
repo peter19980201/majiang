@@ -1,3 +1,4 @@
+const Confirmation = require('../../utils/confirmation')
 const GameStorage = require('../../utils/game-storage')
 const { withShare } = require('../../utils/share')
 const Reports = require('../../utils/battle-report')
@@ -37,7 +38,7 @@ Page(withShare({
       success: () => wx.showToast({ title: '已保存到相册' }),
       fail: err => {
         const denied = /auth|deny|denied/.test(err.errMsg || '')
-        wx.showModal({ title: denied ? '需要相册权限' : '图片未保存',
+        Confirmation.show(this, { title: denied ? '需要相册权限' : '图片未保存',
           content: denied ? '可在设置中允许保存到相册，再回来重试。战报会保留在此页面。' : '你可以留在此页面稍后重试。',
           confirmText: denied ? '去设置' : '知道了', showCancel: denied,
           success: r => { if (denied && r.confirm) wx.openSetting({}) } })

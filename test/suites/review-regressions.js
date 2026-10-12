@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 // Run with node test/review-regressions.js [name-filter].
 const assert = require('assert')
 const path = require('path')
@@ -170,18 +171,15 @@ test('record: invalid calculator payments cannot change scores or storage', () =
     assert.deepStrictEqual(storage, saved)
   }
 })
-test('storage: all three settlement entries retain snapshots and unique game IDs', () => {
+test('storage: board, home and storage settlement retain snapshots and unique game IDs', () => {
   const results = []
-  for (const source of ['board', 'home', 'history']) {
+  for (const source of ['board', 'home', 'storage']) {
     const game = board()
     game.confirmRon()
     const saved = Records.clone(storage.currentGame)
     if (source === 'board') game.earlySettlement()
     if (source === 'home') page('pages/index/index.js')._settleAndSave(saved)
-    if (source === 'history') {
-      const history = page('pages/game/history.js')
-      history.onShow(); history.abandonGame()
-    }
+    if (source === 'storage') require('../../utils/game-storage').finishSavedGame(saved)
     const record = storage.gameHistory[0]
     assert.strictEqual(storage.gameHistory.length, 1)
     assert.strictEqual(storage.currentGame, undefined)

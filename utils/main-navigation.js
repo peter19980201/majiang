@@ -1,3 +1,4 @@
+const Confirmation = require('./confirmation')
 const GameStorage = require('./game-storage')
 
 const tabs = [
@@ -8,7 +9,7 @@ const tabs = [
   { route:'pages/profile/profile', label:'我的', icon:'profile' }
 ]
 
-function openNewGame(afterSettled, complete = () => {}, showConfirmation = options => wx.showModal(options), playerCount) {
+function openNewGame(afterSettled, complete = () => {}, showConfirmation = options => Confirmation.showCurrent(options), playerCount) {
   const saved = GameStorage.current()
   const open = () => wx.navigateTo({ url:'/pages/game/setup' + ([3, 4].includes(playerCount) ? '?playerCount=' + playerCount : ''), complete })
   if (!saved || !saved.gameState || saved.gameState.gameOver) return open()

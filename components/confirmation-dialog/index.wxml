@@ -1,0 +1,13 @@
+<view class="new-game-mask {{visible ? 'motion-open' : ''}}" aria-hidden="{{!visible}}" catchtouchmove="blockTouch" catchtap="blockTouch">
+  <view class="new-game-dialog" role="dialog" aria-modal="true" aria-label="{{title}}">
+    <image class="dialog-art" src="/assets/home/resume.jpg" mode="scaleToFill" aria-hidden="true" />
+    <view class="dialog-content">
+      <text class="dialog-title">{{title}}</text>
+      <text class="dialog-description">{{content}}</text>
+      <view class="dialog-actions">
+        <button wx:if="{{showCancel}}" class="dialog-cancel" bindtap="cancel">{{cancelText}}</button>
+        <button class="dialog-confirm btn-primary" bindtap="confirm">{{confirmText}}</button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,8 +1,8 @@
 {
   "navigationBarTitleText": "",
   "usingComponents": {
-    "tile": "/components/tile/tile",
     "settlement-view": "/components/settlement-view/index",
-    "drawer-handle": "/components/drawer-handle/index"
+    "drawer-handle": "/components/drawer-handle/index",
+    "confirmation-dialog": "/components/confirmation-dialog/index"
   }
 }

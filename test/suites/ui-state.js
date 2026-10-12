@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 // Run with node test/ui-state.js. No WeChat installation or dependencies required.
 const assert = require('assert')
 const path = require('path')

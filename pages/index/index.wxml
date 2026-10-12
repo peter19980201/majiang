@@ -24,3 +24,5 @@
   </view>
   <view class="home-footer"><text>参考规则：雀魂</text></view>
 </view>
+
+<confirmation-dialog id="confirmation-dialog" />

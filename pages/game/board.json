@@ -7,6 +7,7 @@
     "hand-entry": "/components/calculator-entry/index",
     "quick-entry": "/components/quick-score-entry/index",
     "round-detail": "/components/round-detail/index",
-    "drawer-handle": "/components/drawer-handle/index"
+    "drawer-handle": "/components/drawer-handle/index",
+    "confirmation-dialog": "/components/confirmation-dialog/index"
   }
 }

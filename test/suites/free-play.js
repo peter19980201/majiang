@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 const assert = require('assert')
 const Rules = require('../../utils/game-rules')
 const Records = require('../../utils/game-records')

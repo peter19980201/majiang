@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 const assert = require('assert')
 const path = require('path')
 const Records = require('../../utils/game-records')
@@ -273,8 +274,8 @@ assert.strictEqual(historyPage.data.settlementReport.id, 'game-string')
 historyPage.deleteRecord({ currentTarget: { dataset: { id: '123' } } })
 assert.deepStrictEqual(storage.gameHistory.map(h => h.id), ['game-string'])
 
-// Ending from either the home screen or history retains correction data and identity.
-for (const location of ['home', 'history']) {
+// Ending from the home screen or storage service retains correction data and identity.
+for (const location of ['home', 'storage']) {
   storage = {}
   const game = board()
   ron(game)
@@ -282,9 +283,7 @@ for (const location of ['home', 'history']) {
   if (location === 'home') {
     page('pages/index/index.js')._settleAndSave(wx.getStorageSync('currentGame'))
   } else {
-    const list = page('pages/game/history.js')
-    list.onShow()
-    list.abandonGame()
+    require('../../utils/game-storage').finishSavedGame(wx.getStorageSync('currentGame'))
   }
   assert.strictEqual(storage.gameHistory[0].id, gameId)
   assert.strictEqual(storage.gameHistory[0].gameState.endReason, '手动结束')

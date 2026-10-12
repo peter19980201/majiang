@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 const assert = require('assert')
 const Reports = require('../../utils/battle-report')
 const Painter = require('../../utils/battle-report-canvas')

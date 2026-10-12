@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 // Independent expected values: basic-point formula rounded per payer;
 // three-player tsumo-loss, 200/honba, 2000 noten pool. Four-player legacy is unchanged.
 const assert = require('node:assert/strict')

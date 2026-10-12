@@ -1,3 +1,4 @@
+require('../harness/confirmation-mock')
 const assert = require('assert')
 const Round = require('../../utils/game-round')
 const Transaction = require('../../utils/round-transaction')

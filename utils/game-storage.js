@@ -38,6 +38,15 @@ function removeHistory(id) {
   if (updated.length !== records.length) wx.setStorageSync('gameHistory', updated)
 }
 
+function toggleFavorite(id) {
+  const records = history()
+  const record = records.find(item => String(item.id) === String(id))
+  if (!record) return null
+  record.favorite = !record.favorite
+  wx.setStorageSync('gameHistory', records)
+  return record.favorite
+}
+
 function saveCurrent(data) {
   current() // Validate/upgrade an existing archive before any replacement.
   wx.setStorageSync('currentGame', Migrations.current({ date: data.gameDate, gameState: gameState(data) }))
@@ -48,7 +57,10 @@ function saveCompleted(data, abandoned = false) {
   const record = Migrations.history([{ id: state.gameId, date: state.gameDate, config: state.config,
     result: state.finalResult, rounds: state.roundHistory, gameState: state }])[0]
   if (abandoned) record.abandoned = true
-  const records = history().filter(item => String(item.id) !== String(record.id))
+  const previous = history()
+  const existing = previous.find(item => String(item.id) === String(record.id))
+  if (existing && existing.favorite) record.favorite = true
+  const records = previous.filter(item => String(item.id) !== String(record.id))
   records.unshift(record)
   current() // Never erase a current archive from an unsupported future version.
   // Remove the current game only after the completed record has been saved.
@@ -64,4 +76,4 @@ function finishSavedGame(saved) {
     finalResult: settle(state.config, state.players) }, state.config.gameType !== 'free')
 }
 
-module.exports = { current, history, clearHistory, removeHistory, saveCurrent, saveCompleted, finishSavedGame }
+module.exports = { current, history, clearHistory, removeHistory, toggleFavorite, saveCurrent, saveCompleted, finishSavedGame }

@@ -1,3 +1,4 @@
+const Confirmation = require('../../utils/confirmation')
 const { withShare } = require('../../utils/share')
 const GameRound = require('../../utils/game-round')
 const Records = require('../../utils/game-records')
@@ -341,7 +342,7 @@ const boardDefinition = {
       wx.showToast({ title: '这条旧记录暂不支持删除', icon: 'none' })
       return
     }
-    wx.showModal({ title: '删除本局记录', content: `删除${record.round}，恢复录入前的点棒和局况？`,
+    Confirmation.show(this, { title: '删除本局记录', content: `删除${record.round}，恢复录入前的点棒和局况？`,
       success: res => { if (res.confirm) this._restoreLastRound(record) }
     })
   },
@@ -393,7 +394,7 @@ const boardDefinition = {
   },
 
   earlySettlement() {
-    wx.showModal({
+    Confirmation.show(this, {
       title: '结束对局',
       content: '确定结束对局，并按当前点棒结算吗？',
       success: (res) => {
